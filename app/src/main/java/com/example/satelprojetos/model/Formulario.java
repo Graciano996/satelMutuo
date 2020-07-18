@@ -10,7 +10,10 @@ public class Formulario implements Serializable {
     private String alturaCarga;
     private String latitude;
     private String longitude;
+    private String tipoPoste;
+    private String normal;
     private String ferragemExposta;
+    private String fletido;
     private String danificado;
     private String abalrroado;
     private String trincado;
@@ -85,12 +88,36 @@ public class Formulario implements Serializable {
         this.longitude = longitude;
     }
 
+    public String getTipoPoste() {
+        return tipoPoste;
+    }
+
+    public void setTipoPoste(String tipoPoste) {
+        this.tipoPoste = tipoPoste;
+    }
+
     public String getFerragemExposta() {
         return ferragemExposta;
     }
 
     public void setFerragemExposta(String ferragemExposta) {
         this.ferragemExposta = ferragemExposta;
+    }
+
+    public String getNormal() {
+        return normal;
+    }
+
+    public void setNormal(String normal) {
+        this.normal = normal;
+    }
+
+    public String getFletido() {
+        return fletido;
+    }
+
+    public void setFletido(String fletido) {
+        this.fletido = fletido;
     }
 
     public String getDanificado() {
@@ -311,7 +338,9 @@ public class Formulario implements Serializable {
                 ", alturaCarga='" + alturaCarga + '\'' +
                 ", latitude='" + latitude + '\'' +
                 ", longitude='" + longitude + '\'' +
+                ", normal='" + normal + '\'' +
                 ", ferragemExposta='" + ferragemExposta + '\'' +
+                ", fletido='" + fletido + '\'' +
                 ", danificado='" + danificado + '\'' +
                 ", abalrroado='" + abalrroado + '\'' +
                 ", trincado='" + trincado + '\'' +

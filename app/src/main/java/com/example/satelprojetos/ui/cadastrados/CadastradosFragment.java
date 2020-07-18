@@ -118,6 +118,7 @@ public class CadastradosFragment extends Fragment {
                 for(int i=0; i<listaFormulario.size();i++){
                     formularios.child(listaFormulario.get(i).getId().toString()).setValue(listaFormulario.get(i));
                 }
+                Toast.makeText(getActivity().getApplicationContext(), "Sucesso ao enviar formulários", Toast.LENGTH_SHORT).show();
             }
         });
 

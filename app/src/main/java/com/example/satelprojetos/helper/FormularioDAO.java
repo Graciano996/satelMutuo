@@ -34,7 +34,10 @@ public class FormularioDAO implements IFormularioDAO {
         cv.put("alturaCarga", formulario.getAlturaCarga());
         cv.put("latitude", formulario.getLatitude());
         cv.put("longitude", formulario.getLongitude());
+        cv.put("tipoPoste",formulario.getTipoPoste());
+        cv.put("normal", formulario.getNormal());
         cv.put("ferragemExposta", formulario.getFerragemExposta());
+        cv.put("fletido", formulario.getFletido());
         cv.put("danificado", formulario.getDanificado());
         cv.put("abalrroado", formulario.getAbalrroado());
         cv.put("trincado", formulario.getTrincado());
@@ -81,7 +84,10 @@ public class FormularioDAO implements IFormularioDAO {
         cv.put("alturaCarga", formulario.getAlturaCarga());
         cv.put("latitude", formulario.getLatitude());
         cv.put("longitude", formulario.getLongitude());
+        cv.put("tipoPoste",formulario.getTipoPoste());
+        cv.put("normal", formulario.getNormal());
         cv.put("ferragemExposta", formulario.getFerragemExposta());
+        cv.put("fletido", formulario.getFletido());
         cv.put("danificado", formulario.getDanificado());
         cv.put("abalrroado", formulario.getAbalrroado());
         cv.put("trincado", formulario.getTrincado());
@@ -154,7 +160,10 @@ public class FormularioDAO implements IFormularioDAO {
             String alturaCarga = c.getString(c.getColumnIndex("alturaCarga"));
             String latitude = c.getString(c.getColumnIndex("latitude"));
             String longitude = c.getString(c.getColumnIndex("longitude"));
+            String tipoPoste = c.getString(c.getColumnIndex("tipoPoste"));
+            String normal = c.getString(c.getColumnIndex("normal"));
             String ferragemExposta = c.getString(c.getColumnIndex("ferragemExposta"));
+            String fletido = c.getString(c.getColumnIndex("fletido"));
             String danificado = c.getString(c.getColumnIndex("danificado"));
             String abalrroado = c.getString(c.getColumnIndex("abalrroado"));
             String trincado = c.getString(c.getColumnIndex("trincado"));
@@ -189,7 +198,10 @@ public class FormularioDAO implements IFormularioDAO {
             formulario.setAlturaCarga(alturaCarga);
             formulario.setLatitude(latitude);
             formulario.setLongitude(longitude);
+            formulario.setTipoPoste(tipoPoste);
+            formulario.setNormal(normal);
             formulario.setFerragemExposta(ferragemExposta);
+            formulario.setFletido(fletido);
             formulario.setDanificado(danificado);
             formulario.setAbalrroado(abalrroado);
             formulario.setTrincado(trincado);

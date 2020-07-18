@@ -49,6 +49,109 @@
         <item>SEM/SEM</item>
     </string-array>
 
+    <string-array name="IluminacaoTipo">
+        <item>Tipo de Estrutura</item>
+        <item>Braço</item>
+        <item>Pétala</item>
+        <item>Suporte</item>
+        <item>Refletor</item>
+    </string-array>
+
+    <string-array name="IluminacaoLampadaTipo">
+        <item>Tipo</item>
+        <item>VS 35</item>
+        <item>VS 50</item>
+        <item>VS 70</item>
+        <item>VS 80</item>
+        <item>VS 100</item>
+        <item>VS 125</item>
+        <item>VS 150</item>
+        <item>VS 250</item>
+        <item>VS 350</item>
+        <item>VS 400</item>
+        <item>VS 600</item>
+        <item> VS 700</item>
+        <item>VS 1000</item>
+        <item>VS 1500</item>
+        <item>VS 2000</item>
+        <item>VM 35</item>
+        <item>VM 50</item>
+        <item>VM 70</item>
+        <item>VM 80</item>
+        <item>VM 100</item>
+        <item>VM 125</item>
+        <item>VM 150</item>
+        <item>VM 250</item>
+        <item>VM 350</item>
+        <item>VM 400</item>
+        <item>VM 600</item>
+        <item>VM 700</item>
+        <item>VM 1000</item>
+        <item>VM 1500</item>
+        <item>VM 2000</item>
+        <item>VMET 35</item>
+        <item>VMET 70</item>
+        <item>VMET 100</item>
+        <item>VMET 150</item>
+        <item>VMET 250</item>
+        <item>VMET 400</item>
+        <item>VMET 1000</item>
+        <item>VMET 2000</item>
+        <item>LED 35</item>
+        <item>LED 50</item>
+        <item>LED 65</item>
+        <item>LED 70</item>
+        <item>LED 80</item>
+        <item>LED 100</item>
+        <item>LED 120</item>
+        <item>LED 125</item>
+        <item>LED 150</item>
+        <item>LED 200</item>
+        <item>LED 250</item>
+        <item>LED 350</item>
+        <item>LED 400</item>
+        <item>LED 600</item>
+        <item>LED 700</item>
+        <item>LED 1000</item>
+        <item>LED 1500</item>
+        <item>LED 2000</item>
+        <item>MISTA 150</item>
+        <item>MISTA 250</item>
+    </string-array>
+
+    <string-array name="AlturaCarga">
+        <item>Altura/Carga</item>
+        <item>9/200</item>
+        <item>9/400</item>
+        <item>11/200</item>
+        <item>11/400</item>
+        <item>11/600</item>
+        <item>11/1000</item>
+        <item>12/400</item>
+        <item>12/600</item>
+        <item>12/1000</item>
+        <item>15/200</item>
+        <item>SEM IDENTIFICAÇÃO</item>
+    </string-array>
+
+    <string-array name="TipoAtivacao">
+        <item>Tipo de Ativação</item>
+        <item>RELÉ</item>
+        <item>INTERRUPTOR</item>
+        <item>NÃO IDENTIFICADO</item>
+        <item>N/A</item>
+    </string-array>
+
+    <string-array name="TipoPoste">
+        <item>Tipo de Poste</item>
+        <item>Duplo T</item>
+        <item>CC-Concreto Circular</item>
+        <item>Madeira</item>
+        <item>Fibra</item>
+        <item>Metálico</item>
+        <item>Ornamental</item>
+    </string-array>
+
     <string name="cadastro_municipio">Município</string>
     <string name="sessionId" />
     <string-array name="list_municipios">

@@ -22,7 +22,7 @@ public class DbHelper extends SQLiteOpenHelper {
         String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_FORMULARIO + " (id INTEGER PRIMARY KEY AUTOINCREMENT," +
                     " data TEXT NOT NULL, endereco TEXT NOT NULL, nome TEXT NOT NULL, municipio TEXT NOT NULL," +
                 " alturaCarga TEXT NOT NULL, " +
-                " latitude TEXT NOT NULL, longitude TEXT NOT NULL, ferragemExposta TEXT NOT NULL, danificado TEXT NOT NULL, " +
+                " latitude TEXT NOT NULL, longitude TEXT NOT NULL, tipoPoste TEXT NOT NULL ,normal TEXT NOT NULL, ferragemExposta TEXT NOT NULL, fletido TEXT NOT NULL, danificado TEXT NOT NULL, " +
                 " abalrroado TEXT NOT NULL, trincado TEXT NOT NULL, ramalSubt TEXT NOT NULL, observacaoFisicas TEXT NOT NULL," +
                 " trafo TEXT NOT NULL, religador TEXT NOT NULL, medicao TEXT NOT NULL, chFusivel TEXT NOT NULL," +
                 " chFaca TEXT NOT NULL, observacaoAtivos TEXT NOT NULL, tipoPot TEXT NOT NULL, potReator TEXT NOT NULL, " +
