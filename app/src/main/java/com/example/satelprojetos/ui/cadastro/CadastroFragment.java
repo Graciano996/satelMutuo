@@ -35,11 +35,15 @@ public class CadastroFragment extends Fragment {
     private CadastroViewModel cadastroViewModel;
     private Button buttonCadastrar;
     private EditText endereco, latitude, longitude, ramalSubt, observacaoFisicas,
-             trafo, observacaoAtivos,quantidadeLampada, potReator,quantidade24H, nome, codigo, reservaTec,
-                descricaoIrregularidade, distaciaBaixa, distanciaMedia, observacaoVegetacao;
-    private Spinner municipio,alturaCarga, tipoPoste,ipEstrutura,tipoPot, placaIdent, dimensaoVegetacao, ipAtivacao;
+              observacaoAtivos,quantidadeLampada,quantidadeLampada2,quantidadeLampada3,
+            potReator,potReator2,potReator3,quantidade24H,quantidade24H2,quantidade24H3 ,nome, codigo, reservaTec,
+                descricaoIrregularidade, distaciaBaixa, distanciaMedia, observacaoVegetacao, observacaoIP;
+    private Spinner municipio,alturaCarga, tipoPoste,ipEstrutura,ipEstrutura2,ipEstrutura3,tipoPot,
+            tipoPot2,tipoPot3, placaIdent, dimensaoVegetacao, ipAtivacao,ipAtivacao2,ipAtivacao3,
+            trafoTrifasico, trafoMono;
     private CheckBox normal, ferragemExposta, fletido, danificado, abalrroado, trincado, religador, medicao,
-            chFusivel, chFaca, comSemMedicao,descidaCabos,vinteEQuatro,ip;
+            chFusivel, chFaca, comSemMedicao,descidaCabos,vinteEQuatro,vinteEQuatro2,vinteEQuatro3,
+            ativos,chkTrafoTrifasico, chkTrafoMono, ip,ip2,ip3;
     private Formulario formularioAtual;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -53,7 +57,6 @@ public class CadastroFragment extends Fragment {
         latitude = root.findViewById(R.id.textCadastroLatitude);
         longitude = root.findViewById(R.id.textCadastroLongitude);
         alturaCarga= root.findViewById(R.id.spinCadastroAlturaCarga);
-        //ramalSubt = root.findViewById(R.id.textCadastroRamalSubt);
         //Fisicas
         tipoPoste = root.findViewById(R.id.spinCadastroTipoPoste);
         normal = root.findViewById(R.id.chkCadastroNormal);
@@ -75,8 +78,40 @@ public class CadastroFragment extends Fragment {
         ipAtivacao.setEnabled(false);
         vinteEQuatro = root.findViewById(R.id.chkCadastroVinteEQuatro);
         quantidade24H = root.findViewById(R.id.txtCadastroQuantidade24H);
+
+        ip2 = root.findViewById(R.id.chkCadastroIP2);
+        ipEstrutura2 = root.findViewById(R.id.spinCadastroIPEstrutura2);
+        quantidadeLampada2 = root.findViewById(R.id.textCadastroQuantidadeLampada2);
+        ipEstrutura2.setEnabled(false);
+        tipoPot2 = root.findViewById(R.id.spinCadastroTipoPot2);
+        tipoPot2.setEnabled(false);
+        potReator2 = root.findViewById(R.id.textCadastroPotReator2);
+        ipAtivacao2 = root.findViewById(R.id.spinCadastroIPAtivacao2);
+        ipAtivacao2.setEnabled(false);
+        vinteEQuatro2 = root.findViewById(R.id.chkCadastroVinteEQuatro2);
+        quantidade24H2 = root.findViewById(R.id.txtCadastroQuantidade24H2);
+
+        ip3 = root.findViewById(R.id.chkCadastroIP3);
+        ipEstrutura3 = root.findViewById(R.id.spinCadastroIPEstrutura3);
+        quantidadeLampada3 = root.findViewById(R.id.textCadastroQuantidadeLampada3);
+        ipEstrutura3.setEnabled(false);
+        tipoPot3 = root.findViewById(R.id.spinCadastroTipoPot3);
+        tipoPot3.setEnabled(false);
+        potReator3 = root.findViewById(R.id.textCadastroPotReator3);
+        ipAtivacao3 = root.findViewById(R.id.spinCadastroIPAtivacao3);
+        ipAtivacao3.setEnabled(false);
+        vinteEQuatro3 = root.findViewById(R.id.chkCadastroVinteEQuatro3);
+        quantidade24H3 = root.findViewById(R.id.txtCadastroQuantidade24H3);
+        observacaoIP = root.findViewById(R.id.textCadastroObservacaoIP);
+
         //Trafo
-        trafo = root.findViewById(R.id.textCadastroTrafo);
+        ativos = root.findViewById(R.id.chkAtivos);
+        chkTrafoTrifasico = root.findViewById(R.id.chkCadastroTrafoTrifasico);
+        chkTrafoMono = root.findViewById(R.id.chkCadastroTrafoMono);
+        trafoTrifasico = root.findViewById(R.id.spinCadastroTrafoTrifasico);
+        trafoTrifasico.setEnabled(false);
+        trafoMono = root.findViewById(R.id.spinCadastroTrafoMono);
+        trafoMono.setEnabled(false);
         observacaoAtivos = root.findViewById(R.id.textCadastroObservacaoAtivo);
         nome = root.findViewById(R.id.textCadastroNome);
         codigo = root.findViewById(R.id.textCadastroCodigo);
@@ -97,55 +132,39 @@ public class CadastroFragment extends Fragment {
         try {
             formularioAtual = (Formulario) this.getArguments().getSerializable("formularioSelecionado");
             if(formularioAtual != null){
+                //LOCALIZAÇÃO
                 endereco.setText(formularioAtual.getEndereco());
+                if (formularioAtual.getMunicipio().equals("-")) {
+                    municipio.setSelection(0);
+                }else {
+                    for (int i = 0; i < municipio.getAdapter().getCount(); i++) {
+                        municipio.setSelection(i);
+                        if (municipio.getSelectedItem().toString().equals(formularioAtual.getMunicipio())) {
+                            break;
+                        }
+                    }
+                }
                 latitude.setText(formularioAtual.getLatitude());
                 longitude.setText(formularioAtual.getLongitude());
-                ramalSubt.setText(formularioAtual.getRamalSubt());
-                observacaoFisicas.setText(formularioAtual.getObservacaoFisicas());
-                trafo.setText(formularioAtual.getTrafo());
-                observacaoAtivos.setText(formularioAtual.getObservacaoAtivos());
-                potReator.setText(formularioAtual.getPotReator());
-                nome.setText(formularioAtual.getNome());
-                codigo.setText(formularioAtual.getCodigo());
-                reservaTec.setText(formularioAtual.getReservaTec());
-                descricaoIrregularidade.setText(formularioAtual.getDescricaoIrregularidade());
-                distaciaBaixa.setText(formularioAtual.getDistaciaBaixa());
-                distanciaMedia.setText(formularioAtual.getDistanciaMedia());
-                observacaoVegetacao.setText(formularioAtual.getObservacaoVegetacao());
-                for (int i=0; i<municipio.getAdapter().getCount();i++){
-                    municipio.setSelection(i);
-                    if (municipio.getSelectedItem().toString().equals(formularioAtual.getMunicipio())){
-                        break;
+                if (formularioAtual.getAlturaCarga().equals("-")) {
+                    alturaCarga.setSelection(0);
+                }else {
+                    for (int i = 0; i < alturaCarga.getAdapter().getCount(); i++) {
+                        alturaCarga.setSelection(i);
+                        if (alturaCarga.getSelectedItem().toString().equals(formularioAtual.getAlturaCarga())) {
+                            break;
+                        }
                     }
                 }
-                for (int i=0; i<alturaCarga.getAdapter().getCount();i++){
-                    alturaCarga.setSelection(i);
-                    if (alturaCarga.getSelectedItem().toString().equals(formularioAtual.getAlturaCarga())){
-                        break;
-                    }
-                }
-                for (int i=0; i<tipoPoste.getAdapter().getCount();i++){
-                    tipoPoste.setSelection(i);
-                    if (tipoPoste.getSelectedItem().toString().equals(formularioAtual.getTipoPoste())){
-                        break;
-                    }
-                }
-                for (int i=0; i<tipoPot.getAdapter().getCount();i++){
-                    tipoPot.setSelection(i);
-                    if (tipoPot.getSelectedItem().toString().equals(formularioAtual.getTipoPot())){
-                        break;
-                    }
-                }
-                for (int i=0; i<placaIdent.getAdapter().getCount();i++){
-                    placaIdent.setSelection(i);
-                    if (placaIdent.getSelectedItem().toString().equals(formularioAtual.getPlacaIdent())){
-                        break;
-                    }
-                }
-                for (int i=0; i<dimensaoVegetacao.getAdapter().getCount();i++){
-                    dimensaoVegetacao.setSelection(i);
-                    if (dimensaoVegetacao.getSelectedItem().toString().equals(formularioAtual.getDimensaoVegetacao())){
-                        break;
+                //CARACTERISTICAS FÍSICAS
+                if (formularioAtual.getTipoPoste().equals("-")) {
+                    tipoPoste.setSelection(0);
+                }else {
+                    for (int i = 0; i < tipoPoste.getAdapter().getCount(); i++) {
+                        tipoPoste.setSelection(i);
+                        if (tipoPoste.getSelectedItem().toString().equals(formularioAtual.getTipoPoste())) {
+                            break;
+                        }
                     }
                 }
                 if(formularioAtual.getNormal().equals("Sim")){
@@ -173,9 +192,179 @@ public class CadastroFragment extends Fragment {
                 if(formularioAtual.getTrincado().equals("Sim")){
                     trincado.setChecked(true);
                 }
-                if(formularioAtual.getVinteEQuatro().equals("Sim")){
-                    vinteEQuatro.setChecked(true);
+                observacaoFisicas.setText(formularioAtual.getObservacaoFisicas());
+                //ILUMINAÇÃO
+                if(formularioAtual.getIp().equals("Sim")){
+                    ip.setChecked(true);
+                    if (formularioAtual.getIpEstrutura().equals("-")) {
+                        ipEstrutura.setSelection(0);
+                    }else {
+                        for (int i = 0; i < ipEstrutura.getAdapter().getCount(); i++) {
+                            ipEstrutura.setSelection(i);
+                            if (ipEstrutura.getSelectedItem().toString().equals(formularioAtual.getIpEstrutura())) {
+                                break;
+                            }
+                        }
+                    }
+                    quantidadeLampada.setText(formularioAtual.getQuantidadeLampada());
+                    if (formularioAtual.getTipoPot().equals("-")) {
+                        tipoPot.setSelection(0);
+                    }else {
+                        for (int i = 0; i < tipoPot.getAdapter().getCount(); i++) {
+                            tipoPot.setSelection(i);
+                            if (tipoPot.getSelectedItem().toString().equals(formularioAtual.getTipoPot())) {
+                                break;
+                            }
+                        }
+                    }
+                    potReator.setText(formularioAtual.getPotReator());
+                    if (formularioAtual.getIpAtivacao().equals("-")) {
+                        ipAtivacao.setSelection(0);
+                    }else {
+                        for (int i = 0; i < ipAtivacao.getAdapter().getCount(); i++) {
+                            ipAtivacao.setSelection(i);
+                            if (ipAtivacao.getSelectedItem().toString().equals(formularioAtual.getIpAtivacao())) {
+                                break;
+                            }
+                        }
+                    }
+                    if(formularioAtual.getVinteEQuatro().equals("Sim")){
+                        vinteEQuatro.setChecked(true);
+                        quantidade24H.setEnabled(true);
+                    }
+                    quantidade24H.setText(formularioAtual.getQuantidade24H());
+                    ipEstrutura.setEnabled(true);
+                    quantidadeLampada.setEnabled(true);
+                    tipoPot.setEnabled(true);
+                    potReator.setEnabled(true);
+                    ipAtivacao.setEnabled(true);
+                    vinteEQuatro.setEnabled(true);
+                    ip2.setEnabled(true);
+                    if(formularioAtual.getIp2().equals("Sim")){
+                        ip2.setChecked(true);
+                        if (formularioAtual.getIpEstrutura2().equals("-")) {
+                            ipEstrutura2.setSelection(0);
+                        }else {
+                            for (int i = 0; i < ipEstrutura2.getAdapter().getCount(); i++) {
+                                ipEstrutura2.setSelection(i);
+                                if (ipEstrutura2.getSelectedItem().toString().equals(formularioAtual.getIpEstrutura2())) {
+                                    break;
+                                }
+                            }
+                        }
+                        quantidadeLampada2.setText(formularioAtual.getQuantidadeLampada2());
+                        if (formularioAtual.getTipoPot2().equals("-")) {
+                            tipoPot2.setSelection(0);
+                        }else {
+                            for (int i = 0; i < tipoPot2.getAdapter().getCount(); i++) {
+                                tipoPot2.setSelection(i);
+                                if (tipoPot2.getSelectedItem().toString().equals(formularioAtual.getTipoPot2())) {
+                                    break;
+                                }
+                            }
+                        }
+                        potReator2.setText(formularioAtual.getPotReator2());
+                        if (formularioAtual.getIpAtivacao2().equals("-")) {
+                            ipAtivacao2.setSelection(0);
+                        }else {
+                            for (int i = 0; i < ipAtivacao2.getAdapter().getCount(); i++) {
+                                ipAtivacao2.setSelection(i);
+                                if (ipAtivacao2.getSelectedItem().toString().equals(formularioAtual.getIpAtivacao2())) {
+                                    break;
+                                }
+                            }
+                        }
+                        if(formularioAtual.getVinteEQuatro2().equals("Sim")){
+                            vinteEQuatro2.setChecked(true);
+                            quantidade24H2.setEnabled(true);
+                        }
+                        quantidade24H2.setText(formularioAtual.getQuantidade24H2());
+                        ipEstrutura2.setEnabled(true);
+                        quantidadeLampada2.setEnabled(true);
+                        tipoPot2.setEnabled(true);
+                        potReator2.setEnabled(true);
+                        ipAtivacao2.setEnabled(true);
+                        vinteEQuatro2.setEnabled(true);
+                        ip3.setEnabled(true);
+                        if(formularioAtual.getIp3().equals("Sim")){
+                            ip3.setChecked(true);
+                            if (formularioAtual.getIpEstrutura3().equals("-")) {
+                                ipEstrutura3.setSelection(0);
+                            }else {
+                                for (int i = 0; i < ipEstrutura3.getAdapter().getCount(); i++) {
+                                    ipEstrutura3.setSelection(i);
+                                    if (ipEstrutura3.getSelectedItem().toString().equals(formularioAtual.getIpEstrutura3())) {
+                                        break;
+                                    }
+                                }
+                            }
+                            quantidadeLampada3.setText(formularioAtual.getQuantidadeLampada3());
+                            if (formularioAtual.getTipoPot3().equals("-")) {
+                                tipoPot3.setSelection(0);
+                            }else {
+                                for (int i = 0; i < tipoPot3.getAdapter().getCount(); i++) {
+                                    tipoPot3.setSelection(i);
+                                    if (tipoPot3.getSelectedItem().toString().equals(formularioAtual.getTipoPot3())) {
+                                        break;
+                                    }
+                                }
+                            }
+                            potReator3.setText(formularioAtual.getPotReator3());
+                            if (formularioAtual.getIpAtivacao3().equals("-")) {
+                                ipAtivacao3.setSelection(0);
+                            }else {
+                                for (int i = 0; i < ipAtivacao3.getAdapter().getCount(); i++) {
+                                    ipAtivacao3.setSelection(i);
+                                    if (ipAtivacao3.getSelectedItem().toString().equals(formularioAtual.getIpAtivacao3())) {
+                                        break;
+                                    }
+                                }
+                            }
+                            if(formularioAtual.getVinteEQuatro3().equals("Sim")){
+                                vinteEQuatro3.setChecked(true);
+                                quantidade24H3.setEnabled(true);
+                            }
+                            quantidade24H3.setText(formularioAtual.getQuantidade24H3());
+                            ipEstrutura3.setEnabled(true);
+                            quantidadeLampada3.setEnabled(true);
+                            tipoPot3.setEnabled(true);
+                            potReator3.setEnabled(true);
+                            ipAtivacao3.setEnabled(true);
+                            vinteEQuatro3.setEnabled(true);
+
+                        }
+
+                    }
+
+
                 }
+                observacaoIP.setText(formularioAtual.getObservacaoIP());
+
+
+                //trafo.setText(formularioAtual.getTrafo());
+                observacaoAtivos.setText(formularioAtual.getObservacaoAtivos());
+
+                nome.setText(formularioAtual.getNome());
+                codigo.setText(formularioAtual.getCodigo());
+                reservaTec.setText(formularioAtual.getReservaTec());
+                descricaoIrregularidade.setText(formularioAtual.getDescricaoIrregularidade());
+                distaciaBaixa.setText(formularioAtual.getDistaciaBaixa());
+                distanciaMedia.setText(formularioAtual.getDistanciaMedia());
+                observacaoVegetacao.setText(formularioAtual.getObservacaoVegetacao());
+
+                for (int i=0; i<placaIdent.getAdapter().getCount();i++){
+                    placaIdent.setSelection(i);
+                    if (placaIdent.getSelectedItem().toString().equals(formularioAtual.getPlacaIdent())){
+                        break;
+                    }
+                }
+                for (int i=0; i<dimensaoVegetacao.getAdapter().getCount();i++){
+                    dimensaoVegetacao.setSelection(i);
+                    if (dimensaoVegetacao.getSelectedItem().toString().equals(formularioAtual.getDimensaoVegetacao())){
+                        break;
+                    }
+                }
+
                 if(formularioAtual.getReligador().equals("Sim")){
                     religador.setChecked(true);
                 }
@@ -197,7 +386,7 @@ public class CadastroFragment extends Fragment {
 
             }
         }catch (Exception e ){
-            
+
         }
 
         normal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -242,6 +431,35 @@ public class CadastroFragment extends Fragment {
         }
         );
 
+        vinteEQuatro2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+         @Override
+         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+          if(vinteEQuatro2.isChecked()){
+             quantidade24H2.setEnabled(true);
+          }else{
+             quantidade24H2.setEnabled(false);
+              quantidade24H2.setText("");
+          }
+              }
+           }
+        );
+
+        vinteEQuatro3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+          @Override
+          public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            if(vinteEQuatro3.isChecked()){
+              quantidade24H3.setEnabled(true);
+            }else{
+              quantidade24H3.setEnabled(false);
+              quantidade24H3.setText("");
+            }
+          }
+        }
+        );
+
+
+        //Listener para só habilitar os dados da própria ip e as próximas ip caso a primeira
+        // tenha sido checada
         ip.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -252,6 +470,7 @@ public class CadastroFragment extends Fragment {
                     quantidadeLampada.setEnabled(true);
                     ipAtivacao.setEnabled(true);
                     vinteEQuatro.setEnabled(true);
+                    ip2.setEnabled(true);
                 }else{
                     ipEstrutura.setEnabled(false);
                     quantidadeLampada.setEnabled(false);
@@ -263,108 +482,336 @@ public class CadastroFragment extends Fragment {
                     ipEstrutura.setSelection(0);
                     ipAtivacao.setEnabled(false);
                     vinteEQuatro.setEnabled(false);
+                    vinteEQuatro.setChecked(false);
                     ipAtivacao.setSelection(0);
+                    ip2.setChecked(false);
+                    ip2.setEnabled(false);
                 }
             }
         });
+
+        //Listener para só habilitar os dados da própria ip e as próximas ip caso a segunda
+        // tenha sido checada
+        ip2.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(ip2.isChecked()){
+                    ipEstrutura2.setEnabled(true);
+                    tipoPot2.setEnabled(true);
+                    potReator2.setEnabled(true);
+                    quantidadeLampada2.setEnabled(true);
+                    ipAtivacao2.setEnabled(true);
+                    vinteEQuatro2.setEnabled(true);
+                    ip3.setEnabled(true);
+                }else{
+                    ipEstrutura2.setEnabled(false);
+                    quantidadeLampada2.setEnabled(false);
+                    tipoPot2.setEnabled(false);
+                    tipoPot2.setSelection(0);
+                    potReator2.setEnabled(false);
+                    potReator2.setText("");
+                    quantidadeLampada2.setText("");
+                    ipEstrutura2.setSelection(0);
+                    ipAtivacao2.setEnabled(false);
+                    vinteEQuatro2.setChecked(false);
+                    vinteEQuatro2.setEnabled(false);
+                    ipAtivacao2.setSelection(0);
+                    ip3.setChecked(false);
+                    ip3.setEnabled(false);
+                }
+            }
+        });
+
+        //Listener para só habilitar os dados da própria ip caso tenha sido checada
+        ip3.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(ip3.isChecked()){
+                    ipEstrutura3.setEnabled(true);
+                    tipoPot3.setEnabled(true);
+                    potReator3.setEnabled(true);
+                    quantidadeLampada3.setEnabled(true);
+                    ipAtivacao3.setEnabled(true);
+                    vinteEQuatro3.setEnabled(true);
+                }else{
+                    ipEstrutura3.setEnabled(false);
+                    quantidadeLampada3.setEnabled(false);
+                    tipoPot3.setEnabled(false);
+                    tipoPot3.setSelection(0);
+                    potReator3.setEnabled(false);
+                    potReator3.setText("");
+                    quantidadeLampada3.setText("");
+                    ipEstrutura3.setSelection(0);
+                    ipAtivacao3.setEnabled(false);
+                    vinteEQuatro3.setChecked(false);
+                    vinteEQuatro3.setEnabled(false);
+                    ipAtivacao3.setSelection(0);
+                }
+            }
+        });
+
+        ativos.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (ativos.isChecked()){
+                    chkTrafoTrifasico.setEnabled(true);
+                    chkTrafoMono.setEnabled(true);
+                    religador.setEnabled(true);
+                    medicao.setEnabled(true);
+                    chFusivel.setEnabled(true);
+                    chFaca.setEnabled(true);
+                }else{
+                    chkTrafoTrifasico.setChecked(false);
+                    chkTrafoTrifasico.setEnabled(false);
+                    chkTrafoMono.setChecked(false);
+                    chkTrafoMono.setEnabled(false);
+                    chkTrafoTrifasico.setChecked(false);
+                    trafoTrifasico.setSelection(0);
+                    trafoTrifasico.setEnabled(false);
+                    trafoMono.setSelection(0);
+                    trafoMono.setEnabled(false);
+                    religador.setEnabled(false);
+                    religador.setChecked(false);
+                    medicao.setEnabled(false);
+                    medicao.setChecked(false);
+                    chFusivel.setEnabled(false);
+                    chFusivel.setChecked(false);
+                    chFaca.setEnabled(false);
+                    chFaca.setChecked(false);
+                }
+            }
+        });
+
+        chkTrafoTrifasico.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(chkTrafoTrifasico.isChecked()){
+                    chkTrafoMono.setChecked(false);
+                    trafoMono.setSelection(0);
+                    trafoMono.setEnabled(false);
+                    trafoTrifasico.setEnabled(true);
+                }else{
+                    trafoTrifasico.setSelection(0);
+                    trafoTrifasico.setEnabled(false);
+                }
+
+            }
+        });
+        chkTrafoMono.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(chkTrafoMono.isChecked()){
+                    chkTrafoTrifasico.setChecked(false);
+                    trafoTrifasico.setSelection(0);
+                    trafoTrifasico.setEnabled(false);
+                    trafoMono.setEnabled(true);
+                }else{
+                    trafoMono.setSelection(0);
+                    trafoMono.setEnabled(false);
+                }
+
+            }
+        });
+
+
+
 
         buttonCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 FormularioDAO formularioDAO = new FormularioDAO(getActivity().getApplicationContext());
-                if (formularioAtual != null) {
                     Formulario formulario = new Formulario();
+                //LOCALIZAÇÂO
+                formulario.setEndereco(Objects.requireNonNull(endereco.getText()).toString());
+                if(municipio.getSelectedItem().toString().equals(municipio.getItemAtPosition(0).toString())){
+                    formulario.setMunicipio("-");
+                }else{
+                    formulario.setMunicipio(municipio.getSelectedItem().toString());
+                }
+                formulario.setLatitude(Objects.requireNonNull(latitude.getText()).toString());
+                formulario.setLongitude(Objects.requireNonNull(longitude.getText()).toString());
+                if(alturaCarga.getSelectedItem().toString().equals(alturaCarga.getItemAtPosition(0).toString())){
+                    formulario.setAlturaCarga("-");
+                }else {
+                    formulario.setAlturaCarga(alturaCarga.getSelectedItem().toString());
+                }
+                //CARACTERISTICAS FÍSICAS
+                if(tipoPoste.getSelectedItem().toString().equals(tipoPoste.getItemAtPosition(0).toString())){
+                    formulario.setTipoPoste("-");
+                }else {
+                    formulario.setTipoPoste(tipoPoste.getSelectedItem().toString());
+                }
+                if (normal.isChecked()) {
+                    formulario.setNormal("Sim");
+                } else {
+                    formulario.setNormal("Não");
+                }
+                if (ferragemExposta.isChecked()) {
+                    formulario.setFerragemExposta("Sim");
+                } else {
+                    formulario.setFerragemExposta("Não");
+                }
+                if (fletido.isChecked()) {
+                    formulario.setFletido("Sim");
+                } else {
+                    formulario.setFletido("Não");
+                }
+                if (danificado.isChecked()) {
+                    formulario.setDanificado("Sim");
+                } else {
+                    formulario.setDanificado("Não");
+                }
+                if (abalrroado.isChecked()) {
+                    formulario.setAbalrroado("Sim");
+                } else {
+                    formulario.setAbalrroado("Não");
+                }
+                if (trincado.isChecked()) {
+                    formulario.setTrincado("Sim");
+                } else {
+                    formulario.setTrincado("Não");
+                }
+                formulario.setObservacaoFisicas(Objects.requireNonNull(observacaoFisicas.getText()).toString());
+                //ILUMINAÇÃO
+                if (ip.isChecked()) {
+                    formulario.setIp("Sim");
+                } else {
+                    formulario.setIp("Não");
+                }
+                if(ipEstrutura.getSelectedItem().toString().equals(ipEstrutura.getItemAtPosition(0).toString())){
+                    formulario.setIpEstrutura("-");
+                }else {
+                    formulario.setIpEstrutura(ipEstrutura.getSelectedItem().toString());
+                }
+                formulario.setQuantidadeLampada(Objects.requireNonNull(quantidadeLampada.getText().toString()));
+                if(tipoPot.getSelectedItem().toString().equals(tipoPot.getItemAtPosition(0).toString())){
+                    formulario.setTipoPot("-");
+                }else {
+                    formulario.setTipoPot(tipoPot.getSelectedItem().toString());
+                }
+                formulario.setPotReator(Objects.requireNonNull(potReator.getText()).toString());
+                if(ipAtivacao.getSelectedItem().toString().equals(ipAtivacao.getItemAtPosition(0).toString())){
+                    formulario.setIpAtivacao("-");
+                }else {
+                    formulario.setIpAtivacao(ipAtivacao.getSelectedItem().toString());
+                }
+                if (vinteEQuatro.isChecked()) {
+                    formulario.setVinteEQuatro("Sim");
+                } else {
+                    formulario.setVinteEQuatro("Não");
+                }
+                formulario.setQuantidade24H(Objects.requireNonNull(quantidade24H.getText().toString()));
+
+                if (ip2.isChecked()) {
+                    formulario.setIp2("Sim");
+                } else {
+                    formulario.setIp2("Não");
+                }
+                if(ipEstrutura2.getSelectedItem().toString().equals(ipEstrutura2.getItemAtPosition(0).toString())){
+                    formulario.setIpEstrutura2("-");
+                }else {
+                    formulario.setIpEstrutura2(ipEstrutura2.getSelectedItem().toString());
+                }
+                formulario.setQuantidadeLampada2(Objects.requireNonNull(quantidadeLampada2.getText().toString()));
+                if(tipoPot2.getSelectedItem().toString().equals(tipoPot2.getItemAtPosition(0).toString())){
+                    formulario.setTipoPot2("-");
+                }else {
+                    formulario.setTipoPot2(tipoPot2.getSelectedItem().toString());
+                }
+                formulario.setPotReator2(Objects.requireNonNull(potReator2.getText()).toString());
+                if(ipAtivacao2.getSelectedItem().toString().equals(ipAtivacao2.getItemAtPosition(0).toString())){
+                    formulario.setIpAtivacao2("-");
+                }else {
+                    formulario.setIpAtivacao2(ipAtivacao2.getSelectedItem().toString());
+                }
+                if (vinteEQuatro2.isChecked()) {
+                    formulario.setVinteEQuatro2("Sim");
+                } else {
+                    formulario.setVinteEQuatro2("Não");
+                }
+                formulario.setQuantidade24H2(Objects.requireNonNull(quantidade24H2.getText().toString()));
+
+                if (ip3.isChecked()) {
+                    formulario.setIp3("Sim");
+                } else {
+                    formulario.setIp3("Não");
+                }
+                if(ipEstrutura3.getSelectedItem().toString().equals(ipEstrutura3.getItemAtPosition(0).toString())){
+                    formulario.setIpEstrutura3("-");
+                }else {
+                    formulario.setIpEstrutura3(ipEstrutura3.getSelectedItem().toString());
+                }
+                formulario.setQuantidadeLampada3(Objects.requireNonNull(quantidadeLampada3.getText().toString()));
+                if(tipoPot3.getSelectedItem().toString().equals(tipoPot3.getItemAtPosition(0).toString())){
+                    formulario.setTipoPot3("-");
+                }else {
+                    formulario.setTipoPot3(tipoPot3.getSelectedItem().toString());
+                }
+                formulario.setPotReator3(Objects.requireNonNull(potReator3.getText()).toString());
+                if(ipAtivacao3.getSelectedItem().toString().equals(ipAtivacao3.getItemAtPosition(0).toString())){
+                    formulario.setIpAtivacao3("-");
+                }else {
+                    formulario.setIpAtivacao3(ipAtivacao3.getSelectedItem().toString());
+                }
+                if (vinteEQuatro3.isChecked()) {
+                    formulario.setVinteEQuatro3("Sim");
+                } else {
+                    formulario.setVinteEQuatro3("Não");
+                }
+                formulario.setQuantidade24H3(Objects.requireNonNull(quantidade24H3.getText().toString()));
+                formulario.setObservacaoIP(Objects.requireNonNull(observacaoIP.getText().toString()));
+                //TRAFO
+                formulario.setTrafo("teste");
+                formulario.setObservacaoAtivos(Objects.requireNonNull(observacaoAtivos.getText()).toString());
+
+                formulario.setNome(Objects.requireNonNull(nome.getText()).toString());
+                formulario.setCodigo(Objects.requireNonNull(codigo.getText()).toString());
+                formulario.setReservaTec(Objects.requireNonNull(reservaTec.getText()).toString());
+                formulario.setDescricaoIrregularidade(Objects.requireNonNull(descricaoIrregularidade.getText()).toString());
+                formulario.setDistaciaBaixa(Objects.requireNonNull(distaciaBaixa.getText()).toString());
+                formulario.setDistanciaMedia(Objects.requireNonNull(distanciaMedia.getText()).toString());
+                formulario.setObservacaoVegetacao(Objects.requireNonNull(observacaoVegetacao.getText()).toString());
+
+
+
+                formulario.setPlacaIdent(placaIdent.getSelectedItem().toString());
+                formulario.setDimensaoVegetacao(dimensaoVegetacao.getSelectedItem().toString());
+
+                if (religador.isChecked()) {
+                    formulario.setReligador("Sim");
+                } else {
+                    formulario.setReligador("Não");
+                }
+                if (medicao.isChecked()) {
+                    formulario.setMedicao("Sim");
+                } else {
+                    formulario.setMedicao("Não");
+                }
+                if (chFusivel.isChecked()) {
+                    formulario.setChFusivel("Sim");
+                } else {
+                    formulario.setChFusivel("Não");
+                }
+                if (chFaca.isChecked()) {
+                    formulario.setChFaca("Sim");
+                } else {
+                    formulario.setChFaca("Não");
+                }
+                if (comSemMedicao.isChecked()) {
+                    formulario.setComSemMedicao("Sim");
+                } else {
+                    formulario.setComSemMedicao("Não");
+                }
+                if (descidaCabos.isChecked()) {
+                    formulario.setDescidaCabos("Sim");
+                } else {
+                    formulario.setDescidaCabos("Não");
+                }
+                formulario.setNome(Objects.requireNonNull(nome.getText()).toString());
+                if (formularioAtual != null) {
                     formulario.setId(formularioAtual.getId());
                     formulario.setData(formularioAtual.getData());
-                    formulario.setEndereco(Objects.requireNonNull(endereco.getText()).toString());
-                    formulario.setLatitude(Objects.requireNonNull(latitude.getText()).toString());
-                    formulario.setLongitude(Objects.requireNonNull(longitude.getText()).toString());
-                    formulario.setRamalSubt(Objects.requireNonNull(ramalSubt.getText()).toString());
-                    formulario.setObservacaoFisicas(Objects.requireNonNull(observacaoFisicas.getText()).toString());
-                    formulario.setTrafo(Objects.requireNonNull(trafo.getText()).toString());
-                    formulario.setObservacaoAtivos(Objects.requireNonNull(observacaoAtivos.getText()).toString());
-                    formulario.setPotReator(Objects.requireNonNull(potReator.getText()).toString());
-                    formulario.setNome(Objects.requireNonNull(nome.getText()).toString());
-                    formulario.setCodigo(Objects.requireNonNull(codigo.getText()).toString());
-                    formulario.setReservaTec(Objects.requireNonNull(reservaTec.getText()).toString());
-                    formulario.setDescricaoIrregularidade(Objects.requireNonNull(descricaoIrregularidade.getText()).toString());
-                    formulario.setDistaciaBaixa(Objects.requireNonNull(distaciaBaixa.getText()).toString());
-                    formulario.setDistanciaMedia(Objects.requireNonNull(distanciaMedia.getText()).toString());
-                    formulario.setObservacaoVegetacao(Objects.requireNonNull(observacaoVegetacao.getText()).toString());
-                    formulario.setMunicipio(municipio.getSelectedItem().toString());
-                    formulario.setAlturaCarga(alturaCarga.getSelectedItem().toString());
-                    formulario.setTipoPoste(tipoPoste.getSelectedItem().toString());
-                    formulario.setTipoPot(tipoPot.getSelectedItem().toString());
-                    formulario.setPlacaIdent(placaIdent.getSelectedItem().toString());
-                    formulario.setDimensaoVegetacao(dimensaoVegetacao.getSelectedItem().toString());
-                    if (normal.isChecked()) {
-                        formulario.setNormal("Sim");
-                    } else {
-                        formulario.setNormal("Não");
-                    }
-                    if (ferragemExposta.isChecked()) {
-                        formulario.setFerragemExposta("Sim");
-                    } else {
-                        formulario.setFerragemExposta("Não");
-                    }
-                    if (fletido.isChecked()) {
-                        formulario.setFletido("Sim");
-                    } else {
-                        formulario.setFletido("Não");
-                    }
-                    if (danificado.isChecked()) {
-                        formulario.setDanificado("Sim");
-                    } else {
-                        formulario.setDanificado("Não");
-                    }
-                    if (abalrroado.isChecked()) {
-                        formulario.setAbalrroado("Sim");
-                    } else {
-                        formulario.setAbalrroado("Não");
-                    }
-                    if (trincado.isChecked()) {
-                        formulario.setTrincado("Sim");
-                    } else {
-                        formulario.setTrincado("Não");
-                    }
-                    if (vinteEQuatro.isChecked()) {
-                        formulario.setVinteEQuatro("Sim");
-                    } else {
-                        formulario.setVinteEQuatro("Não");
-                    }
-                    if (religador.isChecked()) {
-                        formulario.setReligador("Sim");
-                    } else {
-                        formulario.setReligador("Não");
-                    }
-                    if (medicao.isChecked()) {
-                        formulario.setMedicao("Sim");
-                    } else {
-                        formulario.setMedicao("Não");
-                    }
-                    if (chFusivel.isChecked()) {
-                        formulario.setChFusivel("Sim");
-                    } else {
-                        formulario.setChFusivel("Não");
-                    }
-                    if (chFaca.isChecked()) {
-                        formulario.setChFaca("Sim");
-                    } else {
-                        formulario.setChFaca("Não");
-                    }
-                    if (comSemMedicao.isChecked()) {
-                        formulario.setComSemMedicao("Sim");
-                    } else {
-                        formulario.setComSemMedicao("Não");
-                    }
-                    if (descidaCabos.isChecked()) {
-                        formulario.setDescidaCabos("Sim");
-                    } else {
-                        formulario.setDescidaCabos("Não");
-                    }
-                    formulario.setNome(Objects.requireNonNull(nome.getText()).toString());
-
-                    if(formularioDAO.atualizar(formulario)){
+                    if (formularioDAO.atualizar(formulario)) {
                         CadastradosFragment cadastradosFragment = new CadastradosFragment();
 
                         FragmentManager fm = getFragmentManager();
@@ -372,24 +819,18 @@ public class CadastroFragment extends Fragment {
                         transaction.replace(R.id.nav_host_fragment, cadastradosFragment);
                         transaction.commit();
                         Toast.makeText(getActivity().getApplicationContext(), "Sucesso ao atualizar formulário", Toast.LENGTH_SHORT).show();
-                    }else{
+                    } else {
                         Toast.makeText(getActivity().getApplicationContext(), "Erro ao atualizar formulário", Toast.LENGTH_SHORT).show();
                     }
-
-
                 } else {
                     String thisDayText, thisMonthText, thisYearText;
-
-
                     //region Inicialização da data
                     Calendar calendar = Calendar.getInstance();
 
                     int thisYear = calendar.get(Calendar.YEAR);
-                    Log.d("Data", "# thisYear : " + thisYear);
                     thisYearText = String.valueOf(thisYear);
 
                     int thisMonth = calendar.get(Calendar.MONTH) + 1;
-                    Log.d("Data", "@ thisMonth : " + thisMonth);
                     if (thisMonth < 9) {
                         thisMonthText = "0" + thisMonth;
                     } else {
@@ -397,106 +838,15 @@ public class CadastroFragment extends Fragment {
                     }
 
                     int thisDay = calendar.get(Calendar.DAY_OF_MONTH);
-                    Log.d("Data", "$ thisDay : " + thisDay);
                     if (thisDay < 9) {
                         thisDayText = "0" + thisDay;
                     } else {
                         thisDayText = String.valueOf(thisDay);
                     }
                     String data = thisDayText + "/" + thisMonthText + "/" + thisYearText;
-                    Log.d("Data", "$ data : " + data);
                     //endregion
-
-                    Formulario formulario = new Formulario();
                     formulario.setData(data);
-                    formulario.setEndereco(Objects.requireNonNull(endereco.getText()).toString());
-                    formulario.setLatitude(Objects.requireNonNull(latitude.getText()).toString());
-                    formulario.setLongitude(Objects.requireNonNull(longitude.getText()).toString());
-                    formulario.setRamalSubt(Objects.requireNonNull(ramalSubt.getText()).toString());
-                    formulario.setObservacaoFisicas(Objects.requireNonNull(observacaoFisicas.getText()).toString());
-                    formulario.setTrafo(Objects.requireNonNull(trafo.getText()).toString());
-                    formulario.setObservacaoAtivos(Objects.requireNonNull(observacaoAtivos.getText()).toString());
-                    formulario.setPotReator(Objects.requireNonNull(potReator.getText()).toString());
-                    formulario.setNome(Objects.requireNonNull(nome.getText()).toString());
-                    formulario.setCodigo(Objects.requireNonNull(codigo.getText()).toString());
-                    formulario.setReservaTec(Objects.requireNonNull(reservaTec.getText()).toString());
-                    formulario.setDescricaoIrregularidade(Objects.requireNonNull(descricaoIrregularidade.getText()).toString());
-                    formulario.setDistaciaBaixa(Objects.requireNonNull(distaciaBaixa.getText()).toString());
-                    formulario.setDistanciaMedia(Objects.requireNonNull(distanciaMedia.getText()).toString());
-                    formulario.setObservacaoVegetacao(Objects.requireNonNull(observacaoVegetacao.getText()).toString());
-                    formulario.setMunicipio(municipio.getSelectedItem().toString());
-                    formulario.setAlturaCarga(alturaCarga.getSelectedItem().toString());
-                    formulario.setTipoPoste(tipoPoste.getSelectedItem().toString());
-                    formulario.setTipoPot(tipoPot.getSelectedItem().toString());
-                    formulario.setPlacaIdent(placaIdent.getSelectedItem().toString());
-                    formulario.setDimensaoVegetacao(dimensaoVegetacao.getSelectedItem().toString());
-                    if (normal.isChecked()) {
-                        formulario.setNormal("Sim");
-                    } else {
-                        formulario.setNormal("Não");
-                    }
-                    if (ferragemExposta.isChecked()) {
-                        formulario.setFerragemExposta("Sim");
-                    } else {
-                        formulario.setFerragemExposta("Não");
-                    }
-                    if (fletido.isChecked()) {
-                        formulario.setFletido("Sim");
-                    } else {
-                        formulario.setFletido("Não");
-                    }
-                    if (danificado.isChecked()) {
-                        formulario.setDanificado("Sim");
-                    } else {
-                        formulario.setDanificado("Não");
-                    }
-                    if (abalrroado.isChecked()) {
-                        formulario.setAbalrroado("Sim");
-                    } else {
-                        formulario.setAbalrroado("Não");
-                    }
-                    if (trincado.isChecked()) {
-                        formulario.setTrincado("Sim");
-                    } else {
-                        formulario.setTrincado("Não");
-                    }
-                    if (vinteEQuatro.isChecked()) {
-                        formulario.setVinteEQuatro("Sim");
-                    } else {
-                        formulario.setVinteEQuatro("Não");
-                    }
-                    if (religador.isChecked()) {
-                        formulario.setReligador("Sim");
-                    } else {
-                        formulario.setReligador("Não");
-                    }
-                    if (medicao.isChecked()) {
-                        formulario.setMedicao("Sim");
-                    } else {
-                        formulario.setMedicao("Não");
-                    }
-                    if (chFusivel.isChecked()) {
-                        formulario.setChFusivel("Sim");
-                    } else {
-                        formulario.setChFusivel("Não");
-                    }
-                    if (chFaca.isChecked()) {
-                        formulario.setChFaca("Sim");
-                    } else {
-                        formulario.setChFaca("Não");
-                    }
-                    if (comSemMedicao.isChecked()) {
-                        formulario.setComSemMedicao("Sim");
-                    } else {
-                        formulario.setComSemMedicao("Não");
-                    }
-                    if (descidaCabos.isChecked()) {
-                        formulario.setDescidaCabos("Sim");
-                    } else {
-                        formulario.setDescidaCabos("Não");
-                    }
-                    formulario.setNome(Objects.requireNonNull(nome.getText()).toString());
-                    if(formularioDAO.salvar(formulario)){
+                    if (formularioDAO.salvar(formulario)) {
                         CadastradosFragment cadastradosFragment = new CadastradosFragment();
 
                         FragmentManager fm = getFragmentManager();
@@ -504,10 +854,9 @@ public class CadastroFragment extends Fragment {
                         transaction.replace(R.id.nav_host_fragment, cadastradosFragment);
                         transaction.commit();
                         Toast.makeText(getActivity().getApplicationContext(), "Sucesso ao salvar formulário", Toast.LENGTH_SHORT).show();
-                    }else{
+                    } else {
                         Toast.makeText(getActivity().getApplicationContext(), "Erro ao salvar formulário", Toast.LENGTH_SHORT).show();
                     }
-
                 }
             }
         });

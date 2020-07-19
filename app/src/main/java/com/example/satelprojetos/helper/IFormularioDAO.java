@@ -6,10 +6,10 @@ import java.io.FileOutputStream;
 import java.util.List;
 
 public interface IFormularioDAO{
-    public boolean salvar(Formulario formulario);
-    public boolean atualizar(Formulario formulario);
-    public boolean deletar(Formulario formulario);
-    public List<Formulario> listar();
+    boolean salvar(Formulario formulario);
+    boolean atualizar(Formulario formulario);
+    boolean deletar(Formulario formulario);
+    List<Formulario> listar();
 
 
 }

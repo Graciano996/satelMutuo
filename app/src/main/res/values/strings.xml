@@ -142,6 +142,28 @@
         <item>N/A</item>
     </string-array>
 
+    <string-array name="TrafoTrifasico">
+        <item>Trafo Trifásico(KVA)</item>
+        <item>0</item>
+        <item>15</item>
+        <item>30</item>
+        <item>45</item>
+        <item>75</item>
+        <item>112,5</item>
+        <item>150</item>
+        <item>225</item>
+        <item>300</item>
+    </string-array>
+
+    <string-array name="TrafoMono">
+        <item>Trafo Mono(KVA)</item>
+        <item>0</item>
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>25</item>
+    </string-array>
+
     <string-array name="TipoPoste">
         <item>Tipo de Poste</item>
         <item>Duplo T</item>

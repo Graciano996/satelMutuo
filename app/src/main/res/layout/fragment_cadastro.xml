@@ -4,14 +4,218 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusableInTouchMode="true"
-    android:fillViewport="true">
+    android:fillViewport="true"
+    >
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.cadastro.CadastroFragment">
+
+        <EditText
+            android:id="@+id/textCadastroPotReator3"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="Pot. Reator"
+            android:inputType="number"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroQuantidadeLampada3" />
+
+        <Spinner
+            android:id="@+id/spinCadastroTipoPot3"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:entries="@array/IluminacaoLampadaTipo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroQuantidadeLampada3" />
+
+        <CheckBox
+            android:id="@+id/chkCadastroVinteEQuatro3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:enabled="false"
+            android:text="24 Horas"
+            android:textColor="@color/textColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroIPAtivacao3" />
+
+        <EditText
+            android:id="@+id/textCadastroQuantidadeLampada3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="Quantidade"
+            android:inputType="number"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroIPEstrutura3" />
+
+        <CheckBox
+            android:id="@+id/chkCadastroIP3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:enabled="false"
+            android:text="Iluminação Pública 3"
+            android:textColor="@color/textColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtCadastroQuantidade24H2" />
+
+        <EditText
+            android:id="@+id/txtCadastroQuantidade24H3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="Quantidade"
+            android:inputType="number"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroIPAtivacao3" />
+
+        <Spinner
+            android:id="@+id/spinCadastroIPAtivacao3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/TipoAtivacao"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroPotReator3" />
+
+        <Spinner
+            android:id="@+id/spinCadastroIPEstrutura3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/IluminacaoTipo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chkCadastroIP3" />
+
+        <EditText
+            android:id="@+id/txtCadastroQuantidade24H2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="Quantidade"
+            android:inputType="number"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroIPAtivacao2" />
+
+        <CheckBox
+            android:id="@+id/chkCadastroVinteEQuatro2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:enabled="false"
+            android:text="24 Horas"
+            android:textColor="@color/textColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroIPAtivacao2" />
+
+        <CheckBox
+            android:id="@+id/chkCadastroIP2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:enabled="false"
+            android:text="Iluminação Pública 2"
+            android:textColor="@color/textColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtCadastroQuantidade24H" />
+
+        <Spinner
+            android:id="@+id/spinCadastroIPAtivacao2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/TipoAtivacao"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroPotReator2" />
+
+        <Spinner
+            android:id="@+id/spinCadastroIPEstrutura2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/IluminacaoTipo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chkCadastroIP2" />
+
+        <EditText
+            android:id="@+id/textCadastroQuantidadeLampada2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="Quantidade"
+            android:inputType="number"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroIPEstrutura2" />
+
+        <EditText
+            android:id="@+id/textCadastroPotReator2"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="Pot. Reator"
+            android:inputType="number"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroQuantidadeLampada2" />
+
+        <Spinner
+            android:id="@+id/spinCadastroTipoPot2"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:entries="@array/IluminacaoLampadaTipo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroQuantidadeLampada2" />
 
         <EditText
             android:id="@+id/textCadastroEndereco"
@@ -159,79 +363,68 @@
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1000dp"
+            android:layout_marginTop="970dp"
             android:text="CADASTRO DE ATIVOS"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textCadastroObservacaoFisicas" />
 
-        <EditText
-            android:id="@+id/textCadastroTrafo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:hint="Trafo"
-            android:inputType="textPersonName"
-            android:textColor="@color/textColor"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
         <CheckBox
             android:id="@+id/chkCadastroReligador"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
+            android:enabled="false"
             android:text="Religador"
             android:textColor="@color/textColor"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/chkCadastroMedicao"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textCadastroTrafo" />
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroTrafoMono" />
 
         <CheckBox
             android:id="@+id/chkCadastroFusivel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
+            android:enabled="false"
             android:text="ChFusivel"
             android:textColor="@color/textColor"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/chkCadastroFaca"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/chkCadastroMedicao"
-            app:layout_constraintTop_toBottomOf="@+id/textCadastroTrafo" />
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroTrafoMono" />
 
         <CheckBox
             android:id="@+id/chkCadastroMedicao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
+            android:enabled="false"
             android:text="Medição"
             android:textColor="@color/textColor"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/chkCadastroFusivel"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/chkCadastroReligador"
-            app:layout_constraintTop_toBottomOf="@+id/textCadastroTrafo" />
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroTrafoMono" />
 
         <CheckBox
             android:id="@+id/chkCadastroFaca"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
+            android:enabled="false"
             android:text="ChFaca"
             android:textColor="@color/textColor"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/chkCadastroFusivel"
-            app:layout_constraintTop_toBottomOf="@+id/textCadastroTrafo" />
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroTrafoMono" />
 
         <EditText
             android:id="@+id/textCadastroObservacaoAtivo"
@@ -277,6 +470,7 @@
             android:id="@+id/textView5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:text="USO MÚTUO"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -595,6 +789,74 @@
             android:textColor="@color/textColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinCadastroIPAtivacao" />
+
+        <EditText
+            android:id="@+id/textCadastroObservacaoIP"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:hint="Observação"
+            android:inputType="textPersonName"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtCadastroQuantidade24H3" />
+
+        <Spinner
+            android:id="@+id/spinCadastroTrafoTrifasico"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/TrafoTrifasico"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chkAtivos" />
+
+        <CheckBox
+            android:id="@+id/chkAtivos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="Ativos"
+            android:textColor="@color/textColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+        <Spinner
+            android:id="@+id/spinCadastroTrafoMono"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/TrafoMono"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroTrafoTrifasico" />
+
+        <CheckBox
+            android:id="@+id/chkCadastroTrafoTrifasico"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:enabled="false"
+            android:text="Trifásico"
+            android:textColor="@color/textColor"
+            app:layout_constraintBaseline_toBaselineOf="@+id/spinCadastroTrafoTrifasico"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <CheckBox
+            android:id="@+id/chkCadastroTrafoMono"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:enabled="false"
+            android:text="Monofásico"
+            android:textColor="@color/textColor"
+            app:layout_constraintBaseline_toBaselineOf="@+id/spinCadastroTrafoMono"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
