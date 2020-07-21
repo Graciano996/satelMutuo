@@ -1,8 +1,8 @@
 package com.example.satelprojetos.ui.cadastro;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -10,7 +10,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,27 +22,24 @@ import com.example.satelprojetos.R;
 import com.example.satelprojetos.helper.FormularioDAO;
 import com.example.satelprojetos.model.Formulario;
 import com.example.satelprojetos.ui.cadastrados.CadastradosFragment;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Objects;
 
 public class CadastroFragment extends Fragment {
 
     private CadastroViewModel cadastroViewModel;
     private Button buttonCadastrar;
-    private EditText endereco, latitude, longitude, ramalSubt, observacaoFisicas,
+    private EditText endereco, latitude, longitude, observacaoFisicas,
               observacaoAtivos,quantidadeLampada,quantidadeLampada2,quantidadeLampada3,
             potReator,potReator2,potReator3,quantidade24H,quantidade24H2,quantidade24H3 ,nome, codigo, reservaTec,
                 descricaoIrregularidade, distaciaBaixa, distanciaMedia, observacaoVegetacao, observacaoIP;
     private Spinner municipio,alturaCarga, tipoPoste,ipEstrutura,ipEstrutura2,ipEstrutura3,tipoPot,
             tipoPot2,tipoPot3, placaIdent, dimensaoVegetacao, ipAtivacao,ipAtivacao2,ipAtivacao3,
-            trafoTrifasico, trafoMono;
+            trafoTrifasico, trafoMono,ramalSubt;
     private CheckBox normal, ferragemExposta, fletido, danificado, abalrroado, trincado, religador, medicao,
             chFusivel, chFaca, comSemMedicao,descidaCabos,vinteEQuatro,vinteEQuatro2,vinteEQuatro3,
-            ativos,chkTrafoTrifasico, chkTrafoMono, ip,ip2,ip3;
+            ativos,chkTrafoTrifasico, chkTrafoMono, ip,ip2,ip3,chFusivelReligador, chBanco;
     private Formulario formularioAtual;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -52,11 +48,15 @@ public class CadastroFragment extends Fragment {
                 ViewModelProviders.of(this).get(CadastroViewModel.class);
 
         final View root = inflater.inflate(R.layout.fragment_cadastro, container, false);
+
+
+
         endereco = root.findViewById(R.id.textCadastroEndereco);
         municipio = root.findViewById(R.id.spinCadastroMunicipio);
         latitude = root.findViewById(R.id.textCadastroLatitude);
         longitude = root.findViewById(R.id.textCadastroLongitude);
         alturaCarga= root.findViewById(R.id.spinCadastroAlturaCarga);
+
         //Fisicas
         tipoPoste = root.findViewById(R.id.spinCadastroTipoPoste);
         normal = root.findViewById(R.id.chkCadastroNormal);
@@ -66,6 +66,7 @@ public class CadastroFragment extends Fragment {
         abalrroado = root.findViewById(R.id.chkCadastroAbalrroado);
         trincado = root.findViewById(R.id.chkCadastroTrincado);
         observacaoFisicas = root.findViewById(R.id.textCadastroObservacaoFisicas);
+
         //Iluminação
         ip = root.findViewById(R.id.chkCadastroIP);
         ipEstrutura = root.findViewById(R.id.spinCadastroIPEstrutura);
@@ -104,7 +105,7 @@ public class CadastroFragment extends Fragment {
         quantidade24H3 = root.findViewById(R.id.txtCadastroQuantidade24H3);
         observacaoIP = root.findViewById(R.id.textCadastroObservacaoIP);
 
-        //Trafo
+        //TRAFO
         ativos = root.findViewById(R.id.chkAtivos);
         chkTrafoTrifasico = root.findViewById(R.id.chkCadastroTrafoTrifasico);
         chkTrafoMono = root.findViewById(R.id.chkCadastroTrafoMono);
@@ -112,7 +113,17 @@ public class CadastroFragment extends Fragment {
         trafoTrifasico.setEnabled(false);
         trafoMono = root.findViewById(R.id.spinCadastroTrafoMono);
         trafoMono.setEnabled(false);
+        religador = root.findViewById(R.id.chkCadastroReligador);
+        medicao = root.findViewById(R.id.chkCadastroMedicao);
+        chFusivel = root.findViewById(R.id.chkCadastroFusivel);
+        chFaca = root.findViewById(R.id.chkCadastroFaca);
+        chBanco = root.findViewById(R.id.chkCadastroBanco);
+        chFusivelReligador = root.findViewById(R.id.chkCadastroFusivelReligador);
+        ramalSubt = root.findViewById(R.id.spinCadastroRamalSubt);
+        ramalSubt.setEnabled(false);
         observacaoAtivos = root.findViewById(R.id.textCadastroObservacaoAtivo);
+
+        //MUTUO
         nome = root.findViewById(R.id.textCadastroNome);
         codigo = root.findViewById(R.id.textCadastroCodigo);
         reservaTec = root.findViewById(R.id.textCadastroReservaTec);
@@ -122,10 +133,6 @@ public class CadastroFragment extends Fragment {
         observacaoVegetacao = root.findViewById(R.id.textCadastroObservacaoVegetacao);
         placaIdent = root.findViewById(R.id.spinCadastroPlaca);
         dimensaoVegetacao = root.findViewById(R.id.spinCadastroDimensaoVegetacao);
-        religador = root.findViewById(R.id.chkCadastroReligador);
-        medicao = root.findViewById(R.id.chkCadastroMedicao);
-        chFusivel = root.findViewById(R.id.chkCadastroFusivel);
-        chFaca = root.findViewById(R.id.chkCadastroFaca);
         comSemMedicao = root.findViewById(R.id.chkCadastroComSemMedicao);
         descidaCabos = root.findViewById(R.id.chkCadastroDescidaCabos);
         buttonCadastrar = root.findViewById(R.id.btnCadastroSalvar);
@@ -133,6 +140,7 @@ public class CadastroFragment extends Fragment {
             formularioAtual = (Formulario) this.getArguments().getSerializable("formularioSelecionado");
             if(formularioAtual != null){
                 //LOCALIZAÇÃO
+
                 endereco.setText(formularioAtual.getEndereco());
                 if (formularioAtual.getMunicipio().equals("-")) {
                     municipio.setSelection(0);
@@ -156,7 +164,10 @@ public class CadastroFragment extends Fragment {
                         }
                     }
                 }
+
+
                 //CARACTERISTICAS FÍSICAS
+
                 if (formularioAtual.getTipoPoste().equals("-")) {
                     tipoPoste.setSelection(0);
                 }else {
@@ -193,7 +204,10 @@ public class CadastroFragment extends Fragment {
                     trincado.setChecked(true);
                 }
                 observacaoFisicas.setText(formularioAtual.getObservacaoFisicas());
+
+
                 //ILUMINAÇÃO
+
                 if(formularioAtual.getIp().equals("Sim")){
                     ip.setChecked(true);
                     if (formularioAtual.getIpEstrutura().equals("-")) {
@@ -341,8 +355,79 @@ public class CadastroFragment extends Fragment {
                 observacaoIP.setText(formularioAtual.getObservacaoIP());
 
 
-                //trafo.setText(formularioAtual.getTrafo());
+                //TRAFO
+
+                if(formularioAtual.getAtivos().equals("Sim")){
+                    ativos.setChecked(true);
+                    chkTrafoMono.setEnabled(true);
+                    chkTrafoTrifasico.setEnabled(true);
+                    trafoMono.setEnabled(true);
+                    trafoTrifasico.setEnabled(true);
+                    chFusivel.setEnabled(true);
+                    chFaca.setEnabled(true);
+                    religador.setEnabled(true);
+                    medicao.setEnabled(true);
+                    chBanco.setEnabled(true);
+                    chFusivelReligador.setEnabled(true);
+                    ramalSubt.setEnabled(true);
+                }
+                if(formularioAtual.getChkTrafoTrifasico().equals("Sim")){
+                    chkTrafoTrifasico.setChecked(true);
+                }
+                if(formularioAtual.getChkTrafoMono().equals("Sim")){
+                    chkTrafoMono.setChecked(true);
+                }
+                if (formularioAtual.getTrafoTrifasico().equals("-")) {
+                    trafoTrifasico.setSelection(0);
+                }else {
+                    for (int i = 0; i < trafoTrifasico.getAdapter().getCount(); i++) {
+                        trafoTrifasico.setSelection(i);
+                        if (trafoTrifasico.getSelectedItem().toString().equals(formularioAtual.getTrafoTrifasico())) {
+                            break;
+                        }
+                    }
+                }
+                if (formularioAtual.getTrafoMono().equals("-")) {
+                    trafoMono.setSelection(0);
+                }else {
+                    for (int i = 0; i < trafoMono.getAdapter().getCount(); i++) {
+                        trafoMono.setSelection(i);
+                        if (trafoMono.getSelectedItem().toString().equals(formularioAtual.getTrafoMono())) {
+                            break;
+                        }
+                    }
+                }
+
+                if(formularioAtual.getReligador().equals("Sim")){
+                    religador.setChecked(true);
+                }
+                if(formularioAtual.getMedicao().equals("Sim")){
+                    medicao.setChecked(true);
+                }
+                if(formularioAtual.getChFusivel().equals("Sim")){
+                    chFusivel.setChecked(true);
+                }
+                if(formularioAtual.getChFaca().equals("Sim")){
+                    chFaca.setChecked(true);
+                }
+                if(formularioAtual.getBanco().equals("Sim")){
+                    chBanco.setChecked(true);
+                }
+                if(formularioAtual.getChFusivelReligador().equals("Sim")){
+                    chFusivelReligador.setChecked(true);
+                }
+                if (formularioAtual.getRamalSubt().equals("-")) {
+                    ramalSubt.setSelection(0);
+                }else {
+                    for (int i = 0; i < ramalSubt.getAdapter().getCount(); i++) {
+                        ramalSubt.setSelection(i);
+                        if (ramalSubt.getSelectedItem().toString().equals(formularioAtual.getRamalSubt())) {
+                            break;
+                        }
+                    }
+                }
                 observacaoAtivos.setText(formularioAtual.getObservacaoAtivos());
+
 
                 nome.setText(formularioAtual.getNome());
                 codigo.setText(formularioAtual.getCodigo());
@@ -363,19 +448,6 @@ public class CadastroFragment extends Fragment {
                     if (dimensaoVegetacao.getSelectedItem().toString().equals(formularioAtual.getDimensaoVegetacao())){
                         break;
                     }
-                }
-
-                if(formularioAtual.getReligador().equals("Sim")){
-                    religador.setChecked(true);
-                }
-                if(formularioAtual.getMedicao().equals("Sim")){
-                    medicao.setChecked(true);
-                }
-                if(formularioAtual.getChFusivel().equals("Sim")){
-                    chFusivel.setChecked(true);
-                }
-                if(formularioAtual.getChFaca().equals("Sim")){
-                    chFaca.setChecked(true);
                 }
                 if(formularioAtual.getComSemMedicao().equals("Sim")){
                     comSemMedicao.setChecked(true);
@@ -560,6 +632,9 @@ public class CadastroFragment extends Fragment {
                     medicao.setEnabled(true);
                     chFusivel.setEnabled(true);
                     chFaca.setEnabled(true);
+                    chFusivelReligador.setEnabled(true);
+                    chBanco.setEnabled(true);
+                    ramalSubt.setEnabled(true);
                 }else{
                     chkTrafoTrifasico.setChecked(false);
                     chkTrafoTrifasico.setEnabled(false);
@@ -578,6 +653,12 @@ public class CadastroFragment extends Fragment {
                     chFusivel.setChecked(false);
                     chFaca.setEnabled(false);
                     chFaca.setChecked(false);
+                    chFusivelReligador.setEnabled(false);
+                    chFusivelReligador.setChecked(false);
+                    chBanco.setEnabled(false);
+                    chBanco.setChecked(false);
+                    ramalSubt.setSelection(0);
+                    ramalSubt.setEnabled(false);
                 }
             }
         });
@@ -612,7 +693,13 @@ public class CadastroFragment extends Fragment {
 
             }
         });
-
+        trafoTrifasico.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                trafoTrifasico.setFocusable(true);
+                return false;
+            }
+        });
 
 
 
@@ -622,6 +709,7 @@ public class CadastroFragment extends Fragment {
                 FormularioDAO formularioDAO = new FormularioDAO(getActivity().getApplicationContext());
                     Formulario formulario = new Formulario();
                 //LOCALIZAÇÂO
+
                 formulario.setEndereco(Objects.requireNonNull(endereco.getText()).toString());
                 if(municipio.getSelectedItem().toString().equals(municipio.getItemAtPosition(0).toString())){
                     formulario.setMunicipio("-");
@@ -635,7 +723,10 @@ public class CadastroFragment extends Fragment {
                 }else {
                     formulario.setAlturaCarga(alturaCarga.getSelectedItem().toString());
                 }
+
+
                 //CARACTERISTICAS FÍSICAS
+
                 if(tipoPoste.getSelectedItem().toString().equals(tipoPoste.getItemAtPosition(0).toString())){
                     formulario.setTipoPoste("-");
                 }else {
@@ -672,7 +763,10 @@ public class CadastroFragment extends Fragment {
                     formulario.setTrincado("Não");
                 }
                 formulario.setObservacaoFisicas(Objects.requireNonNull(observacaoFisicas.getText()).toString());
+
+
                 //ILUMINAÇÃO
+
                 if (ip.isChecked()) {
                     formulario.setIp("Sim");
                 } else {
@@ -760,23 +854,35 @@ public class CadastroFragment extends Fragment {
                 }
                 formulario.setQuantidade24H3(Objects.requireNonNull(quantidade24H3.getText().toString()));
                 formulario.setObservacaoIP(Objects.requireNonNull(observacaoIP.getText().toString()));
+
+
                 //TRAFO
-                formulario.setTrafo("teste");
-                formulario.setObservacaoAtivos(Objects.requireNonNull(observacaoAtivos.getText()).toString());
 
-                formulario.setNome(Objects.requireNonNull(nome.getText()).toString());
-                formulario.setCodigo(Objects.requireNonNull(codigo.getText()).toString());
-                formulario.setReservaTec(Objects.requireNonNull(reservaTec.getText()).toString());
-                formulario.setDescricaoIrregularidade(Objects.requireNonNull(descricaoIrregularidade.getText()).toString());
-                formulario.setDistaciaBaixa(Objects.requireNonNull(distaciaBaixa.getText()).toString());
-                formulario.setDistanciaMedia(Objects.requireNonNull(distanciaMedia.getText()).toString());
-                formulario.setObservacaoVegetacao(Objects.requireNonNull(observacaoVegetacao.getText()).toString());
-
-
-
-                formulario.setPlacaIdent(placaIdent.getSelectedItem().toString());
-                formulario.setDimensaoVegetacao(dimensaoVegetacao.getSelectedItem().toString());
-
+                if (ativos.isChecked()) {
+                    formulario.setAtivos("Sim");
+                } else {
+                    formulario.setAtivos("Não");
+                }
+                if (chkTrafoTrifasico.isChecked()) {
+                    formulario.setChkTrafoTrifasico("Sim");
+                } else {
+                    formulario.setChkTrafoTrifasico("Não");
+                }
+                if (chkTrafoMono.isChecked()) {
+                    formulario.setChkTrafoMono("Sim");
+                } else {
+                    formulario.setChkTrafoMono("Não");
+                }
+                if(trafoTrifasico.getSelectedItem().toString().equals(trafoTrifasico.getItemAtPosition(0).toString())){
+                    formulario.setTrafoTrifasico("-");
+                }else {
+                    formulario.setTrafoTrifasico(trafoTrifasico.getSelectedItem().toString());
+                }
+                if(trafoMono.getSelectedItem().toString().equals(trafoMono.getItemAtPosition(0).toString())){
+                    formulario.setTrafoMono("-");
+                }else {
+                    formulario.setTrafoMono(trafoMono.getSelectedItem().toString());
+                }
                 if (religador.isChecked()) {
                     formulario.setReligador("Sim");
                 } else {
@@ -797,6 +903,45 @@ public class CadastroFragment extends Fragment {
                 } else {
                     formulario.setChFaca("Não");
                 }
+                if (chBanco.isChecked()) {
+                    formulario.setBanco("Sim");
+                } else {
+                    formulario.setBanco("Não");
+                }
+                if (chFusivelReligador.isChecked()) {
+                    formulario.setChFusivelReligador("Sim");
+                } else {
+                    formulario.setChFusivelReligador("Não");
+                }
+                if(ramalSubt.getSelectedItem().toString().equals(ramalSubt.getItemAtPosition(0).toString())){
+                    formulario.setRamalSubt("-");
+                }else {
+                    formulario.setRamalSubt(ramalSubt.getSelectedItem().toString());
+                }
+
+
+                //MUTUO
+
+
+
+
+
+                formulario.setObservacaoAtivos(Objects.requireNonNull(observacaoAtivos.getText()).toString());
+
+                formulario.setNome(Objects.requireNonNull(nome.getText()).toString());
+                formulario.setCodigo(Objects.requireNonNull(codigo.getText()).toString());
+                formulario.setReservaTec(Objects.requireNonNull(reservaTec.getText()).toString());
+                formulario.setDescricaoIrregularidade(Objects.requireNonNull(descricaoIrregularidade.getText()).toString());
+                formulario.setDistaciaBaixa(Objects.requireNonNull(distaciaBaixa.getText()).toString());
+                formulario.setDistanciaMedia(Objects.requireNonNull(distanciaMedia.getText()).toString());
+                formulario.setObservacaoVegetacao(Objects.requireNonNull(observacaoVegetacao.getText()).toString());
+
+
+
+                formulario.setPlacaIdent(placaIdent.getSelectedItem().toString());
+                formulario.setDimensaoVegetacao(dimensaoVegetacao.getSelectedItem().toString());
+
+
                 if (comSemMedicao.isChecked()) {
                     formulario.setComSemMedicao("Sim");
                 } else {

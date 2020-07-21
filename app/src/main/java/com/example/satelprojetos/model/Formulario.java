@@ -19,11 +19,17 @@ public class Formulario implements Serializable {
     private String trincado;
     private String ramalSubt;
     private String observacaoFisicas;
-    private String trafo;
+    private String ativos;
+    private String chkTrafoTrifasico;
+    private String chkTrafoMono;
+    private String trafoTrifasico;
+    private String trafoMono;
     private String religador;
     private String medicao;
     private String chFusivel;
     private String chFaca;
+    private String banco;
+    private String chFusivelReligador;;
     private String observacaoAtivos;
     private String ip;
     private String ipEstrutura;
@@ -61,6 +67,22 @@ public class Formulario implements Serializable {
     private String distaciaBaixa;
     private String distanciaMedia;
     private String observacaoVegetacao;
+
+    public String getChkTrafoTrifasico() {
+        return chkTrafoTrifasico;
+    }
+
+    public void setChkTrafoTrifasico(String chkTrafoTrifasico) {
+        this.chkTrafoTrifasico = chkTrafoTrifasico;
+    }
+
+    public String getChkTrafoMono() {
+        return chkTrafoMono;
+    }
+
+    public void setChkTrafoMono(String chkTrafoMono) {
+        this.chkTrafoMono = chkTrafoMono;
+    }
 
     public Long getId() {
         return id;
@@ -190,12 +212,28 @@ public class Formulario implements Serializable {
         this.observacaoFisicas = observacaoFisicas;
     }
 
-    public String getTrafo() {
-        return trafo;
+    public String getAtivos() {
+        return ativos;
     }
 
-    public void setTrafo(String trafo) {
-        this.trafo = trafo;
+    public void setAtivos(String ativos) {
+        this.ativos = ativos;
+    }
+
+    public String getTrafoTrifasico() {
+        return trafoTrifasico;
+    }
+
+    public void setTrafoTrifasico(String trafoTrifasico) {
+        this.trafoTrifasico = trafoTrifasico;
+    }
+
+    public String getTrafoMono() {
+        return trafoMono;
+    }
+
+    public void setTrafoMono(String trafoMono) {
+        this.trafoMono = trafoMono;
     }
 
     public String getReligador() {
@@ -228,6 +266,22 @@ public class Formulario implements Serializable {
 
     public void setChFaca(String chFaca) {
         this.chFaca = chFaca;
+    }
+
+    public String getBanco() {
+        return banco;
+    }
+
+    public void setBanco(String banco) {
+        this.banco = banco;
+    }
+
+    public String getChFusivelReligador() {
+        return chFusivelReligador;
+    }
+
+    public void setChFusivelReligador(String chFusivelReligador) {
+        this.chFusivelReligador = chFusivelReligador;
     }
 
     public String getObservacaoAtivos() {
@@ -545,11 +599,15 @@ public class Formulario implements Serializable {
                 ", trincado='" + trincado + '\'' +
                 ", ramalSubt='" + ramalSubt + '\'' +
                 ", observacaoFisicas='" + observacaoFisicas + '\'' +
-                ", trafo='" + trafo + '\'' +
+                ", ativos='" + ativos + '\'' +
+                ", trafoTrifasico='" + trafoTrifasico + '\'' +
+                ", trafoMono='" + trafoMono + '\'' +
                 ", religador='" + religador + '\'' +
                 ", medicao='" + medicao + '\'' +
                 ", chFusivel='" + chFusivel + '\'' +
                 ", chFaca='" + chFaca + '\'' +
+                ", banco='" + banco + '\'' +
+                ", chFusivelReligador='" + chFusivelReligador + '\'' +
                 ", observacaoAtivos='" + observacaoAtivos + '\'' +
                 ", ip='" + ip + '\'' +
                 ", ipEstrutura='" + ipEstrutura + '\'' +
@@ -575,6 +633,7 @@ public class Formulario implements Serializable {
                 ", ipAtivacao3='" + ipAtivacao3 + '\'' +
                 ", vinteEQuatro3='" + vinteEQuatro3 + '\'' +
                 ", quantidade24H3='" + quantidade24H3 + '\'' +
+                ", observacaoIP='" + observacaoIP + '\'' +
                 ", nome='" + nome + '\'' +
                 ", codigo='" + codigo + '\'' +
                 ", reservaTec='" + reservaTec + '\'' +

@@ -2,15 +2,19 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/scrollCadastro"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
-    >
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    android:onClick="onClick">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:onClick="onClick"
         tools:context=".ui.cadastro.CadastroFragment">
 
         <EditText
@@ -58,7 +62,7 @@
             android:layout_marginEnd="16dp"
             android:ems="10"
             android:enabled="false"
-            android:hint="Quantidade"
+            android:hint="Quantidade Lâmpada"
             android:inputType="number"
             android:textColor="@color/textColor"
             app:layout_constraintEnd_toEndOf="parent"
@@ -85,7 +89,7 @@
             android:layout_marginEnd="16dp"
             android:ems="10"
             android:enabled="false"
-            android:hint="Quantidade"
+            android:hint="Quantidade 24H"
             android:inputType="number"
             android:textColor="@color/textColor"
             app:layout_constraintEnd_toEndOf="parent"
@@ -123,7 +127,7 @@
             android:layout_marginEnd="16dp"
             android:ems="10"
             android:enabled="false"
-            android:hint="Quantidade"
+            android:hint="Quantidade 24H"
             android:inputType="number"
             android:textColor="@color/textColor"
             app:layout_constraintEnd_toEndOf="parent"
@@ -186,7 +190,7 @@
             android:layout_marginEnd="16dp"
             android:ems="10"
             android:enabled="false"
-            android:hint="Quantidade"
+            android:hint="Quantidade Lâmpada"
             android:inputType="number"
             android:textColor="@color/textColor"
             app:layout_constraintEnd_toEndOf="parent"
@@ -225,6 +229,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
+            android:focusable="auto"
             android:hint="Endereço"
             android:inputType="textPersonName"
             android:textColor="@color/textColor"
@@ -252,6 +257,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:ems="10"
+            android:focusable="auto"
             android:hint="Latitude"
             android:inputType="textPersonName"
             android:textColor="@color/textColor"
@@ -265,6 +271,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:ems="10"
+            android:focusable="auto"
             android:hint="Longitude"
             android:inputType="textPersonName"
             android:textColor="@color/textColor"
@@ -341,6 +348,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
+            android:focusable="auto"
             android:hint="Observação"
             android:inputType="textPersonName"
             android:textColor="@color/textColor"
@@ -374,64 +382,60 @@
             android:id="@+id/chkCadastroReligador"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:enabled="false"
             android:text="Religador"
             android:textColor="@color/textColor"
             android:textSize="12sp"
-            app:layout_constraintEnd_toStartOf="@+id/chkCadastroMedicao"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinCadastroTrafoMono" />
+            app:layout_constraintTop_toBottomOf="@+id/chkCadastroTrafoMono" />
 
         <CheckBox
             android:id="@+id/chkCadastroFusivel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
             android:enabled="false"
             android:text="ChFusivel"
             android:textColor="@color/textColor"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/chkCadastroFaca"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/chkCadastroMedicao"
-            app:layout_constraintTop_toBottomOf="@+id/spinCadastroTrafoMono" />
+            app:layout_constraintTop_toBottomOf="@+id/chkCadastroTrafoMono" />
 
         <CheckBox
             android:id="@+id/chkCadastroMedicao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:enabled="false"
             android:text="Medição"
             android:textColor="@color/textColor"
             android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/chkCadastroFusivel"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/chkCadastroReligador"
-            app:layout_constraintTop_toBottomOf="@+id/spinCadastroTrafoMono" />
+            app:layout_constraintTop_toBottomOf="@+id/chkCadastroTrafoMono" />
 
         <CheckBox
             android:id="@+id/chkCadastroFaca"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
             android:enabled="false"
             android:text="ChFaca"
             android:textColor="@color/textColor"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/chkCadastroFusivel"
-            app:layout_constraintTop_toBottomOf="@+id/spinCadastroTrafoMono" />
+            app:layout_constraintTop_toBottomOf="@+id/chkCadastroTrafoMono" />
 
         <EditText
             android:id="@+id/textCadastroObservacaoAtivo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="48dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
             android:hint="Observação"
@@ -439,7 +443,7 @@
             android:textColor="@color/textColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/chkCadastroReligador" />
+            app:layout_constraintTop_toBottomOf="@+id/chkCadastroBanco" />
 
         <TextView
             android:id="@+id/textView4"
@@ -735,7 +739,7 @@
             android:layout_marginEnd="16dp"
             android:ems="10"
             android:enabled="false"
-            android:hint="Quantidade"
+            android:hint="Quantidade Lâmpada"
             android:inputType="number"
             android:textColor="@color/textColor"
             app:layout_constraintEnd_toEndOf="parent"
@@ -784,7 +788,7 @@
             android:layout_marginEnd="16dp"
             android:ems="10"
             android:enabled="false"
-            android:hint="Quantidade"
+            android:hint="Quantidade 24H"
             android:inputType="number"
             android:textColor="@color/textColor"
             app:layout_constraintEnd_toEndOf="parent"
@@ -857,6 +861,42 @@
             android:textColor="@color/textColor"
             app:layout_constraintBaseline_toBaselineOf="@+id/spinCadastroTrafoMono"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <CheckBox
+            android:id="@+id/chkCadastroBanco"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:enabled="false"
+            android:text="Banco de Capacitores"
+            android:textColor="@color/textColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chkCadastroMedicao" />
+
+        <CheckBox
+            android:id="@+id/chkCadastroFusivelReligador"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:enabled="false"
+            android:text="ChFusivel Religadora"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chkCadastroFusivel" />
+
+        <Spinner
+            android:id="@+id/spinCadastroRamalSubt"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/RamalSubt"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chkCadastroBanco" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

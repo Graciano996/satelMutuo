@@ -142,6 +142,14 @@
         <item>N/A</item>
     </string-array>
 
+    <string-array name="RamalSubt">
+        <item>Ramal Substação</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
     <string-array name="TrafoTrifasico">
         <item>Trafo Trifásico(KVA)</item>
         <item>0</item>
