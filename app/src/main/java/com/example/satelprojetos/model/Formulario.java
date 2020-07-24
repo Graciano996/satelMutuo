@@ -647,4 +647,52 @@ public class Formulario implements Serializable {
                 ", observacaoVegetacao='" + observacaoVegetacao + '\'' +
                 '}';
     }
+
+    public void GenericSetter(String atributo, String dado){
+        if (atributo.equals("municipio")){
+            setMunicipio(dado);
+        }
+        else if (atributo.equals("alturaCarga")){
+            setAlturaCarga(dado);
+        }
+        else if (atributo.equals("tipoPoste")){
+            setTipoPoste(dado);
+        }
+        else if (atributo.equals("ipEstrutura")){
+            setIpEstrutura(dado);
+        }
+        else if (atributo.equals("tipoPot")){
+            setTipoPot(dado);
+        }
+        else if (atributo.equals("ipAtivacao")){
+            setIpAtivacao(dado);
+        }
+        else if (atributo.equals("ipEstrutura2")){
+            setIpEstrutura2(dado);
+        }
+        else if (atributo.equals("tipoPot2")){
+            setTipoPot2(dado);
+        }
+        else if (atributo.equals("ipAtivacao2")){
+            setIpAtivacao2(dado);
+        }
+        else if (atributo.equals("ipEstrutura3")){
+            setIpEstrutura3(dado);
+        }
+        else if (atributo.equals("tipoPot3")){
+            setTipoPot3(dado);
+        }
+        else if (atributo.equals("ipAtivacao3")){
+            setIpAtivacao3(dado);
+        }
+        else if (atributo.equals("trafoTrifasico")){
+            setTrafoTrifasico(dado);
+        }
+        else if (atributo.equals("trafoMono")){
+            setTrafoMono(dado);
+        }
+        else if (atributo.equals("ramalSubt")){
+            setRamalSubt(dado);
+        }
+    }
 }

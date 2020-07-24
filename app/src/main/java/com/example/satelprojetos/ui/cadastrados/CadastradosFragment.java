@@ -28,6 +28,7 @@ import com.example.satelprojetos.helper.FormularioDAO;
 import com.example.satelprojetos.helper.RecyclerItemClickListener;
 import com.example.satelprojetos.model.Formulario;
 import com.example.satelprojetos.ui.cadastro.CadastroFragment;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -63,8 +64,9 @@ public class CadastradosFragment extends Fragment {
                                 bundle.putSerializable("formularioSelecionado", formularioSelecionado);
                                 cadastroFragment.setArguments(bundle);
                                 Log.i("TAGB",formularioSelecionado.toString());
-
-                                FragmentManager fm = getFragmentManager();
+                                NavigationView navigationView = requireActivity().findViewById(R.id.nav_view);
+                                navigationView.setCheckedItem(R.id.nav_cadastro);
+                                FragmentManager fm = getParentFragmentManager();
                                 FragmentTransaction transaction = fm.beginTransaction();
                                 transaction.replace(R.id.nav_host_fragment, cadastroFragment).addToBackStack(null);
                                 transaction.commit();

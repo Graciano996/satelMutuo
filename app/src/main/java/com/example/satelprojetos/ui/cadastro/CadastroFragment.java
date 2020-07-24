@@ -1,8 +1,8 @@
 package com.example.satelprojetos.ui.cadastro;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -16,7 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProviders;
+
 
 import com.example.satelprojetos.R;
 import com.example.satelprojetos.helper.FormularioDAO;
@@ -28,8 +28,6 @@ import java.util.Objects;
 
 public class CadastroFragment extends Fragment {
 
-    private CadastroViewModel cadastroViewModel;
-    private Button buttonCadastrar;
     private EditText endereco, latitude, longitude, observacaoFisicas,
               observacaoAtivos,quantidadeLampada,quantidadeLampada2,quantidadeLampada3,
             potReator,potReator2,potReator3,quantidade24H,quantidade24H2,quantidade24H3 ,nome, codigo, reservaTec,
@@ -44,8 +42,7 @@ public class CadastroFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        cadastroViewModel =
-                ViewModelProviders.of(this).get(CadastroViewModel.class);
+
 
         final View root = inflater.inflate(R.layout.fragment_cadastro, container, false);
 
@@ -135,8 +132,9 @@ public class CadastroFragment extends Fragment {
         dimensaoVegetacao = root.findViewById(R.id.spinCadastroDimensaoVegetacao);
         comSemMedicao = root.findViewById(R.id.chkCadastroComSemMedicao);
         descidaCabos = root.findViewById(R.id.chkCadastroDescidaCabos);
-        buttonCadastrar = root.findViewById(R.id.btnCadastroSalvar);
+        Button buttonCadastrar = root.findViewById(R.id.btnCadastroSalvar);
         try {
+            assert this.getArguments() != null;
             formularioAtual = (Formulario) this.getArguments().getSerializable("formularioSelecionado");
             if(formularioAtual != null){
                 //LOCALIZAÇÃO
@@ -458,7 +456,7 @@ public class CadastroFragment extends Fragment {
 
             }
         }catch (Exception e ){
-
+         Log.e("ERRO", "erro: " + e);
         }
 
         normal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -693,45 +691,33 @@ public class CadastroFragment extends Fragment {
 
             }
         });
-        trafoTrifasico.setOnTouchListener(new View.OnTouchListener() {
+        /*trafoTrifasico.setOnTouchListener(new View.OnTouchListener() {
+            @SuppressLint("ClickableViewAccessibility")
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 trafoTrifasico.setFocusable(true);
                 return false;
             }
-        });
-
+        });*/
 
 
         buttonCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FormularioDAO formularioDAO = new FormularioDAO(getActivity().getApplicationContext());
+                FormularioDAO formularioDAO = new FormularioDAO(requireActivity().getApplicationContext());
                     Formulario formulario = new Formulario();
                 //LOCALIZAÇÂO
 
                 formulario.setEndereco(Objects.requireNonNull(endereco.getText()).toString());
-                if(municipio.getSelectedItem().toString().equals(municipio.getItemAtPosition(0).toString())){
-                    formulario.setMunicipio("-");
-                }else{
-                    formulario.setMunicipio(municipio.getSelectedItem().toString());
-                }
+                setLista(formulario,municipio, "municipio");
                 formulario.setLatitude(Objects.requireNonNull(latitude.getText()).toString());
                 formulario.setLongitude(Objects.requireNonNull(longitude.getText()).toString());
-                if(alturaCarga.getSelectedItem().toString().equals(alturaCarga.getItemAtPosition(0).toString())){
-                    formulario.setAlturaCarga("-");
-                }else {
-                    formulario.setAlturaCarga(alturaCarga.getSelectedItem().toString());
-                }
+                setLista(formulario, alturaCarga, "alturaCarga");
 
 
                 //CARACTERISTICAS FÍSICAS
 
-                if(tipoPoste.getSelectedItem().toString().equals(tipoPoste.getItemAtPosition(0).toString())){
-                    formulario.setTipoPoste("-");
-                }else {
-                    formulario.setTipoPoste(tipoPoste.getSelectedItem().toString());
-                }
+                setLista(formulario,tipoPoste, "tipoPoste");
                 if (normal.isChecked()) {
                     formulario.setNormal("Sim");
                 } else {
@@ -772,23 +758,11 @@ public class CadastroFragment extends Fragment {
                 } else {
                     formulario.setIp("Não");
                 }
-                if(ipEstrutura.getSelectedItem().toString().equals(ipEstrutura.getItemAtPosition(0).toString())){
-                    formulario.setIpEstrutura("-");
-                }else {
-                    formulario.setIpEstrutura(ipEstrutura.getSelectedItem().toString());
-                }
+                setLista(formulario,ipEstrutura,"ipEstrutura");
                 formulario.setQuantidadeLampada(Objects.requireNonNull(quantidadeLampada.getText().toString()));
-                if(tipoPot.getSelectedItem().toString().equals(tipoPot.getItemAtPosition(0).toString())){
-                    formulario.setTipoPot("-");
-                }else {
-                    formulario.setTipoPot(tipoPot.getSelectedItem().toString());
-                }
+                setLista(formulario, tipoPot, "tipoPot");
                 formulario.setPotReator(Objects.requireNonNull(potReator.getText()).toString());
-                if(ipAtivacao.getSelectedItem().toString().equals(ipAtivacao.getItemAtPosition(0).toString())){
-                    formulario.setIpAtivacao("-");
-                }else {
-                    formulario.setIpAtivacao(ipAtivacao.getSelectedItem().toString());
-                }
+                setLista(formulario, ipAtivacao, "ipAtivacao");
                 if (vinteEQuatro.isChecked()) {
                     formulario.setVinteEQuatro("Sim");
                 } else {
@@ -801,23 +775,11 @@ public class CadastroFragment extends Fragment {
                 } else {
                     formulario.setIp2("Não");
                 }
-                if(ipEstrutura2.getSelectedItem().toString().equals(ipEstrutura2.getItemAtPosition(0).toString())){
-                    formulario.setIpEstrutura2("-");
-                }else {
-                    formulario.setIpEstrutura2(ipEstrutura2.getSelectedItem().toString());
-                }
+                setLista(formulario,ipEstrutura2,"ipEstrutura2");
                 formulario.setQuantidadeLampada2(Objects.requireNonNull(quantidadeLampada2.getText().toString()));
-                if(tipoPot2.getSelectedItem().toString().equals(tipoPot2.getItemAtPosition(0).toString())){
-                    formulario.setTipoPot2("-");
-                }else {
-                    formulario.setTipoPot2(tipoPot2.getSelectedItem().toString());
-                }
+                setLista(formulario, tipoPot2, "tipoPot2");
                 formulario.setPotReator2(Objects.requireNonNull(potReator2.getText()).toString());
-                if(ipAtivacao2.getSelectedItem().toString().equals(ipAtivacao2.getItemAtPosition(0).toString())){
-                    formulario.setIpAtivacao2("-");
-                }else {
-                    formulario.setIpAtivacao2(ipAtivacao2.getSelectedItem().toString());
-                }
+                setLista(formulario, ipAtivacao2, "ipAtivacao2");
                 if (vinteEQuatro2.isChecked()) {
                     formulario.setVinteEQuatro2("Sim");
                 } else {
@@ -830,23 +792,11 @@ public class CadastroFragment extends Fragment {
                 } else {
                     formulario.setIp3("Não");
                 }
-                if(ipEstrutura3.getSelectedItem().toString().equals(ipEstrutura3.getItemAtPosition(0).toString())){
-                    formulario.setIpEstrutura3("-");
-                }else {
-                    formulario.setIpEstrutura3(ipEstrutura3.getSelectedItem().toString());
-                }
+                setLista(formulario,ipEstrutura3,"ipEstrutura3");
                 formulario.setQuantidadeLampada3(Objects.requireNonNull(quantidadeLampada3.getText().toString()));
-                if(tipoPot3.getSelectedItem().toString().equals(tipoPot3.getItemAtPosition(0).toString())){
-                    formulario.setTipoPot3("-");
-                }else {
-                    formulario.setTipoPot3(tipoPot3.getSelectedItem().toString());
-                }
+                setLista(formulario, tipoPot3, "tipoPot3");
                 formulario.setPotReator3(Objects.requireNonNull(potReator3.getText()).toString());
-                if(ipAtivacao3.getSelectedItem().toString().equals(ipAtivacao3.getItemAtPosition(0).toString())){
-                    formulario.setIpAtivacao3("-");
-                }else {
-                    formulario.setIpAtivacao3(ipAtivacao3.getSelectedItem().toString());
-                }
+                setLista(formulario, ipAtivacao3, "ipAtivacao3");
                 if (vinteEQuatro3.isChecked()) {
                     formulario.setVinteEQuatro3("Sim");
                 } else {
@@ -873,16 +823,8 @@ public class CadastroFragment extends Fragment {
                 } else {
                     formulario.setChkTrafoMono("Não");
                 }
-                if(trafoTrifasico.getSelectedItem().toString().equals(trafoTrifasico.getItemAtPosition(0).toString())){
-                    formulario.setTrafoTrifasico("-");
-                }else {
-                    formulario.setTrafoTrifasico(trafoTrifasico.getSelectedItem().toString());
-                }
-                if(trafoMono.getSelectedItem().toString().equals(trafoMono.getItemAtPosition(0).toString())){
-                    formulario.setTrafoMono("-");
-                }else {
-                    formulario.setTrafoMono(trafoMono.getSelectedItem().toString());
-                }
+                setLista(formulario,trafoTrifasico,"trafoTrifasico");
+                setLista(formulario,trafoMono,"trafoMono");
                 if (religador.isChecked()) {
                     formulario.setReligador("Sim");
                 } else {
@@ -913,11 +855,7 @@ public class CadastroFragment extends Fragment {
                 } else {
                     formulario.setChFusivelReligador("Não");
                 }
-                if(ramalSubt.getSelectedItem().toString().equals(ramalSubt.getItemAtPosition(0).toString())){
-                    formulario.setRamalSubt("-");
-                }else {
-                    formulario.setRamalSubt(ramalSubt.getSelectedItem().toString());
-                }
+                setLista(formulario,ramalSubt,"ramalSubt");
 
 
                 //MUTUO
@@ -959,13 +897,13 @@ public class CadastroFragment extends Fragment {
                     if (formularioDAO.atualizar(formulario)) {
                         CadastradosFragment cadastradosFragment = new CadastradosFragment();
 
-                        FragmentManager fm = getFragmentManager();
+                        FragmentManager fm = getParentFragmentManager();
                         FragmentTransaction transaction = fm.beginTransaction();
                         transaction.replace(R.id.nav_host_fragment, cadastradosFragment);
                         transaction.commit();
-                        Toast.makeText(getActivity().getApplicationContext(), "Sucesso ao atualizar formulário", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireActivity().getApplicationContext(), "Sucesso ao atualizar formulário", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getActivity().getApplicationContext(), "Erro ao atualizar formulário", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireActivity().getApplicationContext(), "Erro ao atualizar formulário", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     String thisDayText, thisMonthText, thisYearText;
@@ -994,13 +932,13 @@ public class CadastroFragment extends Fragment {
                     if (formularioDAO.salvar(formulario)) {
                         CadastradosFragment cadastradosFragment = new CadastradosFragment();
 
-                        FragmentManager fm = getFragmentManager();
+                        FragmentManager fm = getParentFragmentManager();
                         FragmentTransaction transaction = fm.beginTransaction();
                         transaction.replace(R.id.nav_host_fragment, cadastradosFragment);
                         transaction.commit();
-                        Toast.makeText(getActivity().getApplicationContext(), "Sucesso ao salvar formulário", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireActivity().getApplicationContext(), "Sucesso ao salvar formulário", Toast.LENGTH_SHORT).show();
                     } else {
-                        Toast.makeText(getActivity().getApplicationContext(), "Erro ao salvar formulário", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireActivity().getApplicationContext(), "Erro ao salvar formulário", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
@@ -1008,8 +946,12 @@ public class CadastroFragment extends Fragment {
 
         return root;
     }
-
-    public boolean onBackPressed() {
-        return false;
+//Pega o valor do spinner e coloca um "-" caso, o usuário não tenha escolhido nenhuma opção.
+    public void setLista(Formulario formulario, Spinner spinner, String atributo){
+        if(spinner.getSelectedItem().toString().equals(spinner.getItemAtPosition(0).toString())){
+            formulario.GenericSetter(atributo,"-");
+        }else{
+            formulario.GenericSetter(atributo,spinner.getSelectedItem().toString());
+        }
     }
 }
