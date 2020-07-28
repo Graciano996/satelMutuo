@@ -30,14 +30,24 @@ public class CadastroFragment extends Fragment {
 
     private EditText endereco, latitude, longitude, observacaoFisicas,
               observacaoAtivos,quantidadeLampada,quantidadeLampada2,quantidadeLampada3,
-            potReator,potReator2,potReator3,quantidade24H,quantidade24H2,quantidade24H3 ,nome, codigo, reservaTec,
-                descricaoIrregularidade, distaciaBaixa, distanciaMedia, observacaoVegetacao, observacaoIP;
+            potReator,potReator2,potReator3,quantidade24H,quantidade24H2,quantidade24H3 ,
+                 distaciaBaixa, distanciaMedia, observacaoVegetacao, observacaoIP,
+                quantidadeCabos, quantidadeCabos2, quantidadeCabos3, quantidadeCabos4, quantidadeCabos5,
+                nome, nome2, nome3, nome4, nome5, descricaoIrregularidade, descricaoIrregularidade2,
+                descricaoIrregularidade3, descricaoIrregularidade4,descricaoIrregularidade5,
+                observacaoMutuo, observacaoMutuo2, observacaoMutuo3, observacaoMutuo4, observacaoMutuo5;
     private Spinner municipio,alturaCarga, tipoPoste,ipEstrutura,ipEstrutura2,ipEstrutura3,tipoPot,
             tipoPot2,tipoPot3, placaIdent, dimensaoVegetacao, ipAtivacao,ipAtivacao2,ipAtivacao3,
-            trafoTrifasico, trafoMono,ramalSubt;
+            trafoTrifasico, trafoMono,ramalSubt, quantidadeOcupantes,
+            tipoCabo, tipoCabo2, tipoCabo3, tipoCabo4, tipoCabo5, finalidade, finalidade2, finalidade3,
+            finalidade4, finalidade5, ceans, ceans2, ceans3, ceans4, ceans5, tar, tar2, tar3, tar4,
+            tar5, reservaTec, reservaTec2, reservaTec3, reservaTec4, reservaTec5, backbone,
+            backbone2, backbone3, backbone4,backbone5;
     private CheckBox normal, ferragemExposta, fletido, danificado, abalrroado, trincado, religador, medicao,
-            chFusivel, chFaca, comSemMedicao,descidaCabos,vinteEQuatro,vinteEQuatro2,vinteEQuatro3,
-            ativos,chkTrafoTrifasico, chkTrafoMono, ip,ip2,ip3,chFusivelReligador, chBanco;
+            chFusivel, chFaca,vinteEQuatro,vinteEQuatro2,vinteEQuatro3,
+            ativos,chkTrafoTrifasico, chkTrafoMono, ip,ip2,ip3,chFusivelReligador, chBanco, mutuo,
+            placaIdentificadora, placaIdentificadora2, placaIdentificadora3, placaIdentificadora4,
+            placaIdentificadora5,descidaCabos, descidaCabos2, descidaCabos3, descidaCabos4, descidaCabos5;
     private Formulario formularioAtual;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -121,16 +131,82 @@ public class CadastroFragment extends Fragment {
         observacaoAtivos = root.findViewById(R.id.textCadastroObservacaoAtivo);
 
         //MUTUO
+        mutuo = root.findViewById(R.id.chkCadastroMutuo);
+        quantidadeOcupantes = root.findViewById(R.id.spinCadastroMutuoOcupantes);
+
+        quantidadeCabos = root.findViewById(R.id.textCadastroMutuoQuantidadeCabos);
+        tipoCabo = root.findViewById(R.id.spinCadastroMutuoTipoCabo);
         nome = root.findViewById(R.id.textCadastroNome);
-        codigo = root.findViewById(R.id.textCadastroCodigo);
-        reservaTec = root.findViewById(R.id.textCadastroReservaTec);
+        finalidade = root.findViewById(R.id.spinCadastroFinalidade);
+        ceans = root.findViewById(R.id.spinCadastroCeans);
+        tar = root.findViewById(R.id.spinCadastroTar);
+        reservaTec = root.findViewById(R.id.spinCadastroReservaTec);
+        backbone = root.findViewById(R.id.spinCadastroBackbone);
+        placaIdentificadora = root.findViewById(R.id.chkCadastroPlaca);
+        descidaCabos = root.findViewById(R.id.chkCadastroDescidaCabos);
         descricaoIrregularidade = root.findViewById(R.id.textCadastroDescricao);
+        observacaoMutuo = root.findViewById(R.id.textCadastroObservacaoMutuo);
+
+        quantidadeCabos2 = root.findViewById(R.id.textCadastroMutuoQuantidadeCabos2);
+        tipoCabo2 = root.findViewById(R.id.spinCadastroMutuoTipoCabo2);
+        nome2 = root.findViewById(R.id.textCadastroNome2);
+        finalidade2 = root.findViewById(R.id.spinCadastroFinalidade2);
+        ceans2 = root.findViewById(R.id.spinCadastroCeans2);
+        tar2 = root.findViewById(R.id.spinCadastroTar2);
+        reservaTec2 = root.findViewById(R.id.spinCadastroReservaTec2);
+        backbone2 = root.findViewById(R.id.spinCadastroBackbone2);
+        placaIdentificadora2 = root.findViewById(R.id.chkCadastroPlaca2);
+        descidaCabos2 = root.findViewById(R.id.chkCadastroDescidaCabos2);
+        descricaoIrregularidade2 = root.findViewById(R.id.textCadastroDescricao2);
+        observacaoMutuo2 = root.findViewById(R.id.textCadastroObservacaoMutuo2);
+
+        quantidadeCabos3 = root.findViewById(R.id.textCadastroMutuoQuantidadeCabos3);
+        tipoCabo3 = root.findViewById(R.id.spinCadastroMutuoTipoCabo3);
+        nome3 = root.findViewById(R.id.textCadastroNome3);
+        finalidade3 = root.findViewById(R.id.spinCadastroFinalidade3);
+        ceans3 = root.findViewById(R.id.spinCadastroCeans3);
+        tar3 = root.findViewById(R.id.spinCadastroTar3);
+        reservaTec3 = root.findViewById(R.id.spinCadastroReservaTec3);
+        backbone3 = root.findViewById(R.id.spinCadastroBackbone3);
+        placaIdentificadora3 = root.findViewById(R.id.chkCadastroPlaca3);
+        descidaCabos3 = root.findViewById(R.id.chkCadastroDescidaCabos3);
+        descricaoIrregularidade3 = root.findViewById(R.id.textCadastroDescricao3);
+        observacaoMutuo3 = root.findViewById(R.id.textCadastroObservacaoMutuo3);
+
+        quantidadeCabos4 = root.findViewById(R.id.textCadastroMutuoQuantidadeCabos4);
+        tipoCabo4 = root.findViewById(R.id.spinCadastroMutuoTipoCabo4);
+        nome4 = root.findViewById(R.id.textCadastroNome4);
+        finalidade4 = root.findViewById(R.id.spinCadastroFinalidade4);
+        ceans4 = root.findViewById(R.id.spinCadastroCeans4);
+        tar4 = root.findViewById(R.id.spinCadastroTar4);
+        reservaTec4 = root.findViewById(R.id.spinCadastroReservaTec4);
+        backbone4 = root.findViewById(R.id.spinCadastroBackbone4);
+        placaIdentificadora4 = root.findViewById(R.id.chkCadastroPlaca4);
+        descidaCabos4 = root.findViewById(R.id.chkCadastroDescidaCabos4);
+        descricaoIrregularidade4 = root.findViewById(R.id.textCadastroDescricao4);
+        observacaoMutuo4 = root.findViewById(R.id.textCadastroObservacaoMutuo4);
+
+        quantidadeCabos5 = root.findViewById(R.id.textCadastroMutuoQuantidadeCabos5);
+        tipoCabo5 = root.findViewById(R.id.spinCadastroMutuoTipoCabo5);
+        nome5 = root.findViewById(R.id.textCadastroNome5);
+        finalidade5 = root.findViewById(R.id.spinCadastroFinalidade5);
+        ceans5 = root.findViewById(R.id.spinCadastroCeans5);
+        tar5 = root.findViewById(R.id.spinCadastroTar5);
+        reservaTec5 = root.findViewById(R.id.spinCadastroReservaTec5);
+        backbone5 = root.findViewById(R.id.spinCadastroBackbone5);
+        placaIdentificadora5 = root.findViewById(R.id.chkCadastroPlaca5);
+        descidaCabos5 = root.findViewById(R.id.chkCadastroDescidaCabos5);
+        descricaoIrregularidade5 = root.findViewById(R.id.textCadastroDescricao5);
+        observacaoMutuo5 = root.findViewById(R.id.textCadastroObservacaoMutuo5);
+
+
+        //VEGETAÇÃO
         distaciaBaixa = root.findViewById(R.id.textCadastroDistanciaBaixaTensao);
         distanciaMedia = root.findViewById(R.id.textCadastroDistanciaMediaTensao);
         observacaoVegetacao = root.findViewById(R.id.textCadastroObservacaoVegetacao);
-        placaIdent = root.findViewById(R.id.spinCadastroPlaca);
+        placaIdent = root.findViewById(R.id.chkCadastroPlaca);
         dimensaoVegetacao = root.findViewById(R.id.spinCadastroDimensaoVegetacao);
-        comSemMedicao = root.findViewById(R.id.chkCadastroComSemMedicao);
+
         descidaCabos = root.findViewById(R.id.chkCadastroDescidaCabos);
         Button buttonCadastrar = root.findViewById(R.id.btnCadastroSalvar);
         try {
@@ -426,10 +502,10 @@ public class CadastroFragment extends Fragment {
                 }
                 observacaoAtivos.setText(formularioAtual.getObservacaoAtivos());
 
-
+                //MUTUO
                 nome.setText(formularioAtual.getNome());
-                codigo.setText(formularioAtual.getCodigo());
-                reservaTec.setText(formularioAtual.getReservaTec());
+
+
                 descricaoIrregularidade.setText(formularioAtual.getDescricaoIrregularidade());
                 distaciaBaixa.setText(formularioAtual.getDistaciaBaixa());
                 distanciaMedia.setText(formularioAtual.getDistanciaMedia());
@@ -446,9 +522,6 @@ public class CadastroFragment extends Fragment {
                     if (dimensaoVegetacao.getSelectedItem().toString().equals(formularioAtual.getDimensaoVegetacao())){
                         break;
                     }
-                }
-                if(formularioAtual.getComSemMedicao().equals("Sim")){
-                    comSemMedicao.setChecked(true);
                 }
                 if(formularioAtual.getDescidaCabos().equals("Sim")){
                     descidaCabos.setChecked(true);
@@ -856,20 +929,72 @@ public class CadastroFragment extends Fragment {
                     formulario.setChFusivelReligador("Não");
                 }
                 setLista(formulario,ramalSubt,"ramalSubt");
-
-
-                //MUTUO
-
-
-
-
-
                 formulario.setObservacaoAtivos(Objects.requireNonNull(observacaoAtivos.getText()).toString());
 
+                //MUTUO
+                if (mutuo.isChecked()) {
+                    formulario.setAtivos("Sim");
+                } else {
+                    formulario.setAtivos("Não");
+                }
+                setLista(formulario,quantidadeOcupantes,"quantidadeOcupantes");
+
+                formulario.setQuantidadeCabos(Objects.requireNonNull(quantidadeCabos.getText()).toString());
+                setLista(formulario,tipoCabo,"tipoCabo");
                 formulario.setNome(Objects.requireNonNull(nome.getText()).toString());
-                formulario.setCodigo(Objects.requireNonNull(codigo.getText()).toString());
-                formulario.setReservaTec(Objects.requireNonNull(reservaTec.getText()).toString());
+                setLista(formulario,finalidade,"finalidade");
+                setLista(formulario,ceans,"ceans");
+                setLista(formulario,tar,"tar");
+                setLista(formulario,reservaTec,"reservaTec");
+                setLista(formulario,backbone,"backbone");
                 formulario.setDescricaoIrregularidade(Objects.requireNonNull(descricaoIrregularidade.getText()).toString());
+                formulario.setObservacaoMutuo(Objects.requireNonNull(observacaoMutuo.getText()).toString());
+
+                formulario.setQuantidadeCabos2(Objects.requireNonNull(quantidadeCabos2.getText()).toString());
+                setLista(formulario,tipoCabo2,"tipoCabo2");
+                formulario.setNome2(Objects.requireNonNull(nome2.getText()).toString());
+                setLista(formulario,finalidade2,"finalidade2");
+                setLista(formulario,ceans2,"ceans2");
+                setLista(formulario,tar2,"tar2");
+                setLista(formulario,reservaTec2,"reservaTec2");
+                setLista(formulario,backbone2,"backbone2");
+                formulario.setDescricaoIrregularidade2(Objects.requireNonNull(descricaoIrregularidade2.getText()).toString());
+                formulario.setObservacaoMutuo2(Objects.requireNonNull(observacaoMutuo2.getText()).toString());
+
+                formulario.setQuantidadeCabos3(Objects.requireNonNull(quantidadeCabos3.getText()).toString());
+                setLista(formulario,tipoCabo3,"tipoCabo3");
+                formulario.setNome3(Objects.requireNonNull(nome3.getText()).toString());
+                setLista(formulario,finalidade3,"finalidade3");
+                setLista(formulario,ceans3,"ceans3");
+                setLista(formulario,tar3,"tar3");
+                setLista(formulario,reservaTec3,"reservaTec3");
+                setLista(formulario,backbone3,"backbone3");
+                formulario.setDescricaoIrregularidade3(Objects.requireNonNull(descricaoIrregularidade3.getText()).toString());
+                formulario.setObservacaoMutuo3(Objects.requireNonNull(observacaoMutuo3.getText()).toString());
+
+                formulario.setQuantidadeCabos4(Objects.requireNonNull(quantidadeCabos4.getText()).toString());
+                setLista(formulario,tipoCabo4,"tipoCabo4");
+                formulario.setNome4(Objects.requireNonNull(nome4.getText()).toString());
+                setLista(formulario,finalidade4,"finalidade4");
+                setLista(formulario,ceans4,"ceans4");
+                setLista(formulario,tar4,"tar4");
+                setLista(formulario,reservaTec4,"reservaTec4");
+                setLista(formulario,backbone4,"backbone4");
+                formulario.setDescricaoIrregularidade4(Objects.requireNonNull(descricaoIrregularidade4.getText()).toString());
+                formulario.setObservacaoMutuo4(Objects.requireNonNull(observacaoMutuo4.getText()).toString());
+
+                formulario.setQuantidadeCabos5(Objects.requireNonNull(quantidadeCabos5.getText()).toString());
+                setLista(formulario,tipoCabo5,"tipoCabo5");
+                formulario.setNome5(Objects.requireNonNull(nome5.getText()).toString());
+                setLista(formulario,finalidade5,"finalidade5");
+                setLista(formulario,ceans5,"ceans5");
+                setLista(formulario,tar5,"tar5");
+                setLista(formulario,reservaTec5,"reservaTec5");
+                setLista(formulario,backbone5,"backbone5");
+                formulario.setDescricaoIrregularidade5(Objects.requireNonNull(descricaoIrregularidade5.getText()).toString());
+                formulario.setObservacaoMutuo5(Objects.requireNonNull(observacaoMutuo5.getText()).toString());
+
+                //VEGETAÇÃO
                 formulario.setDistaciaBaixa(Objects.requireNonNull(distaciaBaixa.getText()).toString());
                 formulario.setDistanciaMedia(Objects.requireNonNull(distanciaMedia.getText()).toString());
                 formulario.setObservacaoVegetacao(Objects.requireNonNull(observacaoVegetacao.getText()).toString());
@@ -880,11 +1005,7 @@ public class CadastroFragment extends Fragment {
                 formulario.setDimensaoVegetacao(dimensaoVegetacao.getSelectedItem().toString());
 
 
-                if (comSemMedicao.isChecked()) {
-                    formulario.setComSemMedicao("Sim");
-                } else {
-                    formulario.setComSemMedicao("Não");
-                }
+
                 if (descidaCabos.isChecked()) {
                     formulario.setDescidaCabos("Sim");
                 } else {

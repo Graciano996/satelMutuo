@@ -89,12 +89,14 @@ public class FormularioDAO implements IFormularioDAO {
         cv.put("observacaoAtivos", formulario.getObservacaoAtivos());
 
 
-        cv.put("codigo", formulario.getCodigo());
+
+
         cv.put("reservaTec", formulario.getReservaTec());
-        cv.put("comSemMedicao", formulario.getComSemMedicao());
         cv.put("descidaCabos", formulario.getDescidaCabos());
         cv.put("placaIdent", formulario.getPlacaIdent());
         cv.put("descricaoIrregularidade", formulario.getDescricaoIrregularidade());
+
+
         cv.put("dimensaoVegetacao", formulario.getDimensaoVegetacao());
         cv.put("distanciaBaixa", formulario.getDistaciaBaixa());
         cv.put("distanciaMedia", formulario.getDistanciaMedia());
@@ -177,9 +179,7 @@ public class FormularioDAO implements IFormularioDAO {
         cv.put("observacaoAtivos", formulario.getObservacaoAtivos());
 
 
-        cv.put("codigo", formulario.getCodigo());
         cv.put("reservaTec", formulario.getReservaTec());
-        cv.put("comSemMedicao", formulario.getComSemMedicao());
         cv.put("descidaCabos", formulario.getDescidaCabos());
         cv.put("placaIdent", formulario.getPlacaIdent());
         cv.put("descricaoIrregularidade", formulario.getDescricaoIrregularidade());
@@ -366,9 +366,8 @@ public class FormularioDAO implements IFormularioDAO {
             formulario.setObservacaoAtivos(observacaoAtivos);
 
 
-            formulario.setCodigo(codigo);
+
             formulario.setReservaTec(reservaTec);
-            formulario.setComSemMedicao(comSemMedicao);
             formulario.setDescidaCabos(descidaCabos);
             formulario.setPlacaIdent(placaIdent);
             formulario.setDescricaoIrregularidade(descricaoIrregularidade);

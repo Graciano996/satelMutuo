@@ -2,10 +2,9 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/scrollCadastro"
+    android:id="@+id/ScrollView"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:fillViewport="true"
+    android:layout_height="10000dp"
     android:focusable="false"
     android:focusableInTouchMode="false"
     android:onClick="onClick">
@@ -16,6 +15,639 @@
         android:layout_height="match_parent"
         android:onClick="onClick"
         tools:context=".ui.cadastro.CadastroFragment">
+
+        <Spinner
+            android:id="@+id/spinCadastroMutuoTipoCabo5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/TipoCaboMutuo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroMutuoQuantidadeCabos5" />
+
+        <EditText
+            android:id="@+id/textCadastroMutuoQuantidadeCabos5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="Quantidade de Cabos"
+            android:inputType="textPersonName"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroObservacaoMutuo4" />
+
+        <EditText
+            android:id="@+id/textCadastroNome5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="Nome da Empresa"
+            android:inputType="textPersonName"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroMutuoTipoCabo5" />
+
+        <Spinner
+            android:id="@+id/spinCadastroFinalidade5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/finalidade"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroNome5" />
+
+        <Spinner
+            android:id="@+id/spinCadastroCeans5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/ceans"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroFinalidade5" />
+
+        <Spinner
+            android:id="@+id/spinCadastroTar5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/tar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroCeans5" />
+
+        <Spinner
+            android:id="@+id/spinCadastroReservaTec5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/reservaTec"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroTar5" />
+
+        <Spinner
+            android:id="@+id/spinCadastroBackbone5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/backbone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroReservaTec5" />
+
+        <CheckBox
+            android:id="@+id/chkCadastroPlaca5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:enabled="false"
+            android:text="Placa Identificadora"
+            android:textColor="@color/textColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroBackbone5" />
+
+        <CheckBox
+            android:id="@+id/chkCadastroDescidaCabos5"
+            android:layout_width="153dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:enabled="false"
+            android:text="Descida de Cabos"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroBackbone5" />
+
+        <EditText
+            android:id="@+id/textCadastroDescricao5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:hint="Descrição de Irregularidade"
+            android:inputType="textPersonName"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chkCadastroPlaca5" />
+
+        <EditText
+            android:id="@+id/textCadastroObservacaoMutuo5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:hint="Observação"
+            android:inputType="textPersonName"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroDescricao5" />
+
+        <Spinner
+            android:id="@+id/spinCadastroMutuoTipoCabo4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/TipoCaboMutuo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroMutuoQuantidadeCabos4" />
+
+        <EditText
+            android:id="@+id/textCadastroMutuoQuantidadeCabos4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="Quantidade de Cabos"
+            android:inputType="textPersonName"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroObservacaoMutuo3" />
+
+        <EditText
+            android:id="@+id/textCadastroNome4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="Nome da Empresa"
+            android:inputType="textPersonName"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroMutuoTipoCabo4" />
+
+        <Spinner
+            android:id="@+id/spinCadastroFinalidade4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/finalidade"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroNome4" />
+
+        <Spinner
+            android:id="@+id/spinCadastroCeans4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/ceans"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroFinalidade4" />
+
+        <Spinner
+            android:id="@+id/spinCadastroTar4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/tar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroCeans4" />
+
+        <Spinner
+            android:id="@+id/spinCadastroReservaTec4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/reservaTec"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroTar4" />
+
+        <Spinner
+            android:id="@+id/spinCadastroBackbone4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/backbone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroReservaTec4" />
+
+        <CheckBox
+            android:id="@+id/chkCadastroPlaca4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:enabled="false"
+            android:text="Placa Identificadora"
+            android:textColor="@color/textColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroBackbone4" />
+
+        <CheckBox
+            android:id="@+id/chkCadastroDescidaCabos4"
+            android:layout_width="153dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:enabled="false"
+            android:text="Descida de Cabos"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroBackbone4" />
+
+        <EditText
+            android:id="@+id/textCadastroDescricao4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:hint="Descrição de Irregularidade"
+            android:inputType="textPersonName"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chkCadastroPlaca4" />
+
+        <EditText
+            android:id="@+id/textCadastroObservacaoMutuo4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:hint="Observação"
+            android:inputType="textPersonName"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroDescricao4"
+            tools:layout_editor_absoluteY="3724dp" />
+
+        <Spinner
+            android:id="@+id/spinCadastroMutuoTipoCabo3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/TipoCaboMutuo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroMutuoQuantidadeCabos3" />
+
+        <EditText
+            android:id="@+id/textCadastroMutuoQuantidadeCabos3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="Quantidade de Cabos"
+            android:inputType="textPersonName"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroObservacaoMutuo2" />
+
+        <EditText
+            android:id="@+id/textCadastroNome3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="Nome da Empresa"
+            android:inputType="textPersonName"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroMutuoTipoCabo3" />
+
+        <Spinner
+            android:id="@+id/spinCadastroFinalidade3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/finalidade"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroNome3" />
+
+        <Spinner
+            android:id="@+id/spinCadastroCeans3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/ceans"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroFinalidade3" />
+
+        <Spinner
+            android:id="@+id/spinCadastroTar3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/tar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroCeans3" />
+
+        <Spinner
+            android:id="@+id/spinCadastroReservaTec3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/reservaTec"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroTar3" />
+
+        <Spinner
+            android:id="@+id/spinCadastroBackbone3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/backbone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroReservaTec3" />
+
+        <CheckBox
+            android:id="@+id/chkCadastroPlaca3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:enabled="false"
+            android:text="Placa Identificadora"
+            android:textColor="@color/textColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroBackbone3" />
+
+        <CheckBox
+            android:id="@+id/chkCadastroDescidaCabos3"
+            android:layout_width="153dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:enabled="false"
+            android:text="Descida de Cabos"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroBackbone3" />
+
+        <EditText
+            android:id="@+id/textCadastroDescricao3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:hint="Descrição de Irregularidade"
+            android:inputType="textPersonName"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chkCadastroPlaca3" />
+
+        <EditText
+            android:id="@+id/textCadastroObservacaoMutuo3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:hint="Observação"
+            android:inputType="textPersonName"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroDescricao3" />
+
+        <Spinner
+            android:id="@+id/spinCadastroMutuoTipoCabo2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/TipoCaboMutuo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroMutuoQuantidadeCabos2" />
+
+        <EditText
+            android:id="@+id/textCadastroMutuoQuantidadeCabos2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="Quantidade de Cabos"
+            android:inputType="textPersonName"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroObservacaoMutuo" />
+
+        <EditText
+            android:id="@+id/textCadastroNome2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="Nome da Empresa"
+            android:inputType="textPersonName"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroMutuoTipoCabo2" />
+
+        <Spinner
+            android:id="@+id/spinCadastroFinalidade2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/finalidade"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroNome2" />
+
+        <Spinner
+            android:id="@+id/spinCadastroCeans2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/ceans"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroFinalidade2" />
+
+        <Spinner
+            android:id="@+id/spinCadastroTar2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/tar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroCeans2" />
+
+        <Spinner
+            android:id="@+id/spinCadastroReservaTec2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/reservaTec"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroTar2" />
+
+        <Spinner
+            android:id="@+id/spinCadastroBackbone2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/backbone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroReservaTec2" />
+
+        <CheckBox
+            android:id="@+id/chkCadastroPlaca2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:enabled="false"
+            android:text="Placa Identificadora"
+            android:textColor="@color/textColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroBackbone2" />
+
+        <CheckBox
+            android:id="@+id/chkCadastroDescidaCabos2"
+            android:layout_width="153dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:enabled="false"
+            android:text="Descida de Cabos"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroBackbone2" />
+
+        <EditText
+            android:id="@+id/textCadastroDescricao2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:hint="Descrição de Irregularidade"
+            android:inputType="textPersonName"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chkCadastroPlaca2" />
+
+        <EditText
+            android:id="@+id/textCadastroObservacaoMutuo2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:hint="Observação"
+            android:inputType="textPersonName"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroDescricao2" />
 
         <EditText
             android:id="@+id/textCadastroPotReator3"
@@ -489,6 +1121,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
+            android:enabled="false"
             android:hint="Nome da Empresa"
             android:inputType="textPersonName"
             android:textColor="@color/textColor"
@@ -496,67 +1129,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinCadastroMutuoTipoCabo" />
 
-        <EditText
-            android:id="@+id/textCadastroCodigo"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:ems="10"
-            android:hint="Código"
-            android:inputType="textPersonName"
-            android:textColor="@color/textColor"
-            app:layout_constraintEnd_toStartOf="@+id/chkCadastroComSemMedicao"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textCadastroNome" />
-
-        <Spinner
-            android:id="@+id/spinCadastroPlaca"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:entries="@array/Placa"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textCadastroReservaTec" />
-
-        <CheckBox
-            android:id="@+id/chkCadastroComSemMedicao"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:text="Com/Sem Medição"
-            android:textColor="@color/textColor"
-            app:layout_constraintBaseline_toBaselineOf="@+id/textCadastroCodigo"
-            app:layout_constraintEnd_toEndOf="parent" />
-
-        <EditText
-            android:id="@+id/textCadastroReservaTec"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:ems="10"
-            android:hint="Reserva Tec."
-            android:inputType="textPersonName"
-            android:textColor="@color/textColor"
-            app:layout_constraintEnd_toStartOf="@+id/chkCadastroDescidaCabos"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textCadastroCodigo" />
-
         <CheckBox
             android:id="@+id/chkCadastroDescidaCabos"
             android:layout_width="153dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            android:enabled="false"
             android:text="Descida de Cabos"
             android:textColor="@color/textColor"
-            app:layout_constraintBaseline_toBaselineOf="@+id/textCadastroReservaTec"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroBackbone" />
 
         <EditText
             android:id="@+id/textCadastroDescricao"
@@ -571,7 +1154,7 @@
             android:textColor="@color/textColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinCadastroPlaca" />
+            app:layout_constraintTop_toBottomOf="@+id/chkCadastroPlaca" />
 
         <TextView
             android:id="@+id/textView6"
@@ -582,7 +1165,7 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textCadastroDescricao" />
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroObservacaoMutuo5" />
 
         <Spinner
             android:id="@+id/spinCadastroDimensaoVegetacao"
@@ -917,6 +1500,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
+            android:enabled="false"
             android:hint="Quantidade de Cabos"
             android:inputType="textPersonName"
             android:textColor="@color/textColor"
@@ -947,6 +1531,93 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/chkCadastroMutuo" />
+
+        <Spinner
+            android:id="@+id/spinCadastroFinalidade"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/finalidade"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroNome" />
+
+        <Spinner
+            android:id="@+id/spinCadastroCeans"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/ceans"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroFinalidade" />
+
+        <Spinner
+            android:id="@+id/spinCadastroTar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/tar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroCeans" />
+
+        <Spinner
+            android:id="@+id/spinCadastroReservaTec"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/reservaTec"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroTar" />
+
+        <Spinner
+            android:id="@+id/spinCadastroBackbone"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/backbone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroReservaTec" />
+
+        <CheckBox
+            android:id="@+id/chkCadastroPlaca"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:enabled="false"
+            android:text="Placa Identificadora"
+            android:textColor="@color/textColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroBackbone" />
+
+        <EditText
+            android:id="@+id/textCadastroObservacaoMutuo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:hint="Observação"
+            android:inputType="textPersonName"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroDescricao" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
