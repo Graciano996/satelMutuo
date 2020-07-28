@@ -34,7 +34,10 @@ public class DbHelper extends SQLiteOpenHelper {
                 " ip3 TEXT NOT NULL,ipEstrutura3 TEXT NOT NULL,quantidadeLampada3 TEXT NOT NULL," +
                 " ipAtivacao3 TEXT NOT NULL,vinteEQuatro3 TEXT NOT NULL,quantidade24H3 TEXT NOT NULL," +
                 " tipoPot3 TEXT NOT NULL, potReator3 TEXT NOT NULL, observacaoIP," +
-                " chFaca TEXT NOT NULL, observacaoAtivos TEXT NOT NULL, trafo TEXT NOT NULL, religador TEXT NOT NULL, medicao TEXT NOT NULL, chFusivel TEXT NOT NULL," +
+                " ativos TEXT NOT NULL, chkTrafoTrifasico TEXT NOT NULL, chkTrafoMono TEXT NOT  NULL,"+
+                " trafoTrifasico TEXT NOT NULL, trafoMono TEXT NOT NULL,chFusivel TEXT NOT NULL,"+
+                " chFaca TEXT NOT NULL,religador TEXT NOT NULL, medicao TEXT NOT NULL, banco TEXT NOT NULL," +
+                " chFusivelReligador TEXT NOT NULL, ramalSubt TEXT NOT NULL ,observacaoAtivos TEXT NOT NULL,"+
                 " codigo TEXT NOT NULL, reservaTec TEXT NOT NULL, " +
                 " comSemMedicao TEXT NOT NULL, descidaCabos TEXT NOT NULL, placaIdent TEXT NOT NULL, descricaoIrregularidade TEXT NOT NULL," +
                 " dimensaoVegetacao TEXT NOT NULL, distanciaBaixa TEXT NOT NULL, distanciaMedia TEXT NOT NULL, observacaoVegetacao TEXT NOT NULL);";

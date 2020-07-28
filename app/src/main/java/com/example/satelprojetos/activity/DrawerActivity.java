@@ -1,15 +1,24 @@
 package com.example.satelprojetos.activity;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
 
 import com.example.satelprojetos.R;
+import com.example.satelprojetos.helper.FormularioDAO;
 import com.example.satelprojetos.ui.cadastro.CadastroFragment;
 import com.google.android.material.navigation.NavigationView;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -17,6 +26,8 @@ import androidx.navigation.ui.NavigationUI;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+
+import java.util.List;
 
 import static java.lang.Integer.valueOf;
 
@@ -64,5 +75,41 @@ public class DrawerActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    public void onClick(View v) {
+        v.clearFocus();
+        Log.i("FOCUS", v.toString());
+    }
+    @Override
+    public void onBackPressed() {
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        Log.i("ENTREI","apertei back");
+
+        String conteudoDrawer = navigationView.getCheckedItem().toString();
+        Log.i("nome",conteudoDrawer);
+        if (conteudoDrawer.equals("Cadastrados")) {
+            final AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.LightDialogTheme);
+            dialog.setTitle("Sair da conta?");
+
+            dialog.setMessage("Ao pressionar sim voltará a tela de login");
+            dialog.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                }
+            });
+            dialog.setNegativeButton("Não", null);
+            dialog.create();
+            dialog.show();
+
+
+        } else {
+            navigationView.setCheckedItem(R.id.nav_cadastrados);
+            getSupportFragmentManager().popBackStack();
+        }
+
     }
 }

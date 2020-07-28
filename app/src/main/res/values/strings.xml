@@ -51,10 +51,10 @@
 
     <string-array name="IluminacaoTipo">
         <item>Tipo de Estrutura</item>
-        <item>Braço</item>
-        <item>Pétala</item>
-        <item>Suporte</item>
-        <item>Refletor</item>
+        <item>BRAÇO</item>
+        <item>PÉTALA</item>
+        <item>SUPORTE</item>
+        <item>REFLETOR</item>
     </string-array>
 
     <string-array name="IluminacaoLampadaTipo">
@@ -142,6 +142,21 @@
         <item>N/A</item>
     </string-array>
 
+    <string-array name="RamalSubt">
+        <item>Ramal Substação</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="TipoCaboMutuo">
+        <item>Tipo de Cabo</item>
+        <item>FIBRA</item>
+        <item>CTP-APL</item>
+        <item>SEM INDENTIFICAÇÃO</item>
+    </string-array>
+
     <string-array name="TrafoTrifasico">
         <item>Trafo Trifásico(KVA)</item>
         <item>0</item>
@@ -155,6 +170,15 @@
         <item>300</item>
     </string-array>
 
+    <string-array name="MutuoOcupantes">
+        <item>Quantidade de Ocupantes</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
     <string-array name="TrafoMono">
         <item>Trafo Mono(KVA)</item>
         <item>0</item>
@@ -166,12 +190,12 @@
 
     <string-array name="TipoPoste">
         <item>Tipo de Poste</item>
-        <item>Duplo T</item>
-        <item>CC-Concreto Circular</item>
-        <item>Madeira</item>
-        <item>Fibra</item>
-        <item>Metálico</item>
-        <item>Ornamental</item>
+        <item>DUPLO T</item>
+        <item>CC-CONCRETO CIRCULAR</item>
+        <item>MADEIRA</item>
+        <item>FIBRA</item>
+        <item>METÁLICO</item>
+        <item>ORNAMENTAL</item>
     </string-array>
 
     <string name="cadastro_municipio">Município</string>

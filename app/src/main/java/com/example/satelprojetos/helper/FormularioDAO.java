@@ -34,6 +34,8 @@ public class FormularioDAO implements IFormularioDAO {
         cv.put("alturaCarga", formulario.getAlturaCarga());
         cv.put("latitude", formulario.getLatitude());
         cv.put("longitude", formulario.getLongitude());
+
+
         cv.put("tipoPoste",formulario.getTipoPoste());
         cv.put("normal", formulario.getNormal());
         cv.put("ferragemExposta", formulario.getFerragemExposta());
@@ -42,6 +44,8 @@ public class FormularioDAO implements IFormularioDAO {
         cv.put("abalrroado", formulario.getAbalrroado());
         cv.put("trincado", formulario.getTrincado());
         cv.put("observacaoFisicas", formulario.getObservacaoFisicas());
+
+
         cv.put("ip", formulario.getIp());
         cv.put("ipEstrutura", formulario.getIpEstrutura());
         cv.put("quantidadeLampada", formulario.getQuantidadeLampada());
@@ -70,12 +74,21 @@ public class FormularioDAO implements IFormularioDAO {
         cv.put("quantidade24H3", formulario.getQuantidade24H3());
         cv.put("observacaoIP", formulario.getObservacaoIP());
 
-        cv.put("trafo", formulario.getTrafo());
+        cv.put("ativos", formulario.getAtivos());
+        cv.put("chkTrafoTrifasico", formulario.getChkTrafoTrifasico());
+        cv.put("chkTrafoMono", formulario.getChkTrafoMono());
+        cv.put("trafoTrifasico", formulario.getTrafoTrifasico());
+        cv.put("trafoMono", formulario.getTrafoMono());
         cv.put("religador", formulario.getReligador());
         cv.put("medicao", formulario.getMedicao());
         cv.put("chFusivel", formulario.getChFusivel());
         cv.put("chFaca", formulario.getChFaca());
+        cv.put("banco", formulario.getBanco());
+        cv.put("chFusivelReligador", formulario.getChFusivelReligador());
+        cv.put("ramalSubt", formulario.getRamalSubt());
         cv.put("observacaoAtivos", formulario.getObservacaoAtivos());
+
+
         cv.put("codigo", formulario.getCodigo());
         cv.put("reservaTec", formulario.getReservaTec());
         cv.put("comSemMedicao", formulario.getComSemMedicao());
@@ -108,6 +121,8 @@ public class FormularioDAO implements IFormularioDAO {
         cv.put("alturaCarga", formulario.getAlturaCarga());
         cv.put("latitude", formulario.getLatitude());
         cv.put("longitude", formulario.getLongitude());
+
+
         cv.put("tipoPoste",formulario.getTipoPoste());
         cv.put("normal", formulario.getNormal());
         cv.put("ferragemExposta", formulario.getFerragemExposta());
@@ -116,6 +131,8 @@ public class FormularioDAO implements IFormularioDAO {
         cv.put("abalrroado", formulario.getAbalrroado());
         cv.put("trincado", formulario.getTrincado());
         cv.put("observacaoFisicas", formulario.getObservacaoFisicas());
+
+
         cv.put("ip", formulario.getIp());
         cv.put("ipEstrutura", formulario.getIpEstrutura());
         cv.put("quantidadeLampada", formulario.getQuantidadeLampada());
@@ -144,12 +161,22 @@ public class FormularioDAO implements IFormularioDAO {
         cv.put("quantidade24H3", formulario.getQuantidade24H3());
         cv.put("observacaoIP", formulario.getObservacaoIP());
 
-        cv.put("trafo", formulario.getTrafo());
+
+        cv.put("ativos", formulario.getAtivos());
+        cv.put("chkTrafoTrifasico", formulario.getChkTrafoTrifasico());
+        cv.put("chkTrafoMono", formulario.getChkTrafoMono());
+        cv.put("trafoTrifasico", formulario.getTrafoTrifasico());
+        cv.put("trafoMono", formulario.getTrafoMono());
         cv.put("religador", formulario.getReligador());
         cv.put("medicao", formulario.getMedicao());
         cv.put("chFusivel", formulario.getChFusivel());
         cv.put("chFaca", formulario.getChFaca());
+        cv.put("banco", formulario.getBanco());
+        cv.put("chFusivelReligador", formulario.getChFusivelReligador());
+        cv.put("ramalSubt", formulario.getRamalSubt());
         cv.put("observacaoAtivos", formulario.getObservacaoAtivos());
+
+
         cv.put("codigo", formulario.getCodigo());
         cv.put("reservaTec", formulario.getReservaTec());
         cv.put("comSemMedicao", formulario.getComSemMedicao());
@@ -208,6 +235,8 @@ public class FormularioDAO implements IFormularioDAO {
             String alturaCarga = c.getString(c.getColumnIndex("alturaCarga"));
             String latitude = c.getString(c.getColumnIndex("latitude"));
             String longitude = c.getString(c.getColumnIndex("longitude"));
+
+
             String tipoPoste = c.getString(c.getColumnIndex("tipoPoste"));
             String normal = c.getString(c.getColumnIndex("normal"));
             String ferragemExposta = c.getString(c.getColumnIndex("ferragemExposta"));
@@ -216,6 +245,8 @@ public class FormularioDAO implements IFormularioDAO {
             String abalrroado = c.getString(c.getColumnIndex("abalrroado"));
             String trincado = c.getString(c.getColumnIndex("trincado"));
             String observacaoFisicas = c.getString(c.getColumnIndex("observacaoFisicas"));
+
+
             String ip = c.getString(c.getColumnIndex("ip"));
             String ipEstrutura = c.getString(c.getColumnIndex("ipEstrutura"));
             String quantidadeLampada = c.getString(c.getColumnIndex("quantidadeLampada"));
@@ -244,12 +275,21 @@ public class FormularioDAO implements IFormularioDAO {
             String quantidade24H3 = c.getString(c.getColumnIndex("quantidade24H3"));
             String observacaoIP = c.getString(c.getColumnIndex("observacaoIP"));
 
-            String trafo = c.getString(c.getColumnIndex("trafo"));
+            String ativos = c.getString(c.getColumnIndex("ativos"));
+            String chkTrafoTrifasico = c.getString(c.getColumnIndex("chkTrafoTrifasico"));
+            String chkTrafoMono = c.getString(c.getColumnIndex("chkTrafoMono"));
+            String trafoTrifasico = c.getString(c.getColumnIndex("trafoTrifasico"));
+            String trafoMono = c.getString(c.getColumnIndex("trafoMono"));
             String religador = c.getString(c.getColumnIndex("religador"));
             String medicao = c.getString(c.getColumnIndex("medicao"));
             String chFusivel = c.getString(c.getColumnIndex("chFusivel"));
             String chFaca = c.getString(c.getColumnIndex("chFaca"));
+            String banco = c.getString(c.getColumnIndex("banco"));
+            String chFusivelReligador = c.getString(c.getColumnIndex("chFusivelReligador"));
+            String ramalSubt = c.getString(c.getColumnIndex("ramalSubt"));
             String observacaoAtivos = c.getString(c.getColumnIndex("observacaoAtivos"));
+
+
             String codigo = c.getString(c.getColumnIndex("codigo"));
             String reservaTec = c.getString(c.getColumnIndex("reservaTec"));
             String comSemMedicao = c.getString(c.getColumnIndex("comSemMedicao"));
@@ -270,6 +310,8 @@ public class FormularioDAO implements IFormularioDAO {
             formulario.setAlturaCarga(alturaCarga);
             formulario.setLatitude(latitude);
             formulario.setLongitude(longitude);
+
+
             formulario.setTipoPoste(tipoPoste);
             formulario.setNormal(normal);
             formulario.setFerragemExposta(ferragemExposta);
@@ -278,6 +320,8 @@ public class FormularioDAO implements IFormularioDAO {
             formulario.setAbalrroado(abalrroado);
             formulario.setTrincado(trincado);
             formulario.setObservacaoFisicas(observacaoFisicas);
+
+
             formulario.setIp(ip);
             formulario.setIpEstrutura(ipEstrutura);
             formulario.setQuantidadeLampada(quantidadeLampada);
@@ -307,12 +351,21 @@ public class FormularioDAO implements IFormularioDAO {
             formulario.setObservacaoIP(observacaoIP);
 
 
-            formulario.setTrafo(trafo);
+            formulario.setAtivos(ativos);
+            formulario.setChkTrafoTrifasico(chkTrafoTrifasico);
+            formulario.setChkTrafoMono(chkTrafoMono);
+            formulario.setTrafoTrifasico(trafoTrifasico);
+            formulario.setTrafoMono(trafoMono);
             formulario.setReligador(religador);
             formulario.setMedicao(medicao);
             formulario.setChFusivel(chFusivel);
             formulario.setChFaca(chFaca);
+            formulario.setBanco(banco);
+            formulario.setChFusivelReligador(chFusivelReligador);
+            formulario.setRamalSubt(ramalSubt);
             formulario.setObservacaoAtivos(observacaoAtivos);
+
+
             formulario.setCodigo(codigo);
             formulario.setReservaTec(reservaTec);
             formulario.setComSemMedicao(comSemMedicao);

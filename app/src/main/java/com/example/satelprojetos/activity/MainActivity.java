@@ -3,6 +3,8 @@ package com.example.satelprojetos.activity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.satelprojetos.R;
 import com.example.satelprojetos.model.Usuario;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -85,6 +88,25 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        Log.i("ENTREI","apertei back");
+
+            final AlertDialog.Builder dialog = new AlertDialog.Builder(this, R.style.LightDialogTheme);
+            dialog.setTitle("Sair do aplicativo?");
+            dialog.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finishAndRemoveTask();
+                    System.exit(0);
+                }
+            });
+            dialog.setNegativeButton("Não", null);
+            dialog.create();
+            dialog.show();
 
     }
 }
