@@ -856,6 +856,7 @@ public class CadastroFragment extends Fragment {
                     formulario.setChFusivelReligador("Não");
                 }
                 setLista(formulario,ramalSubt,"ramalSubt");
+                formulario.setObservacaoAtivos(Objects.requireNonNull(observacaoAtivos.getText()).toString());
 
 
                 //MUTUO
@@ -864,7 +865,7 @@ public class CadastroFragment extends Fragment {
 
 
 
-                formulario.setObservacaoAtivos(Objects.requireNonNull(observacaoAtivos.getText()).toString());
+
 
                 formulario.setNome(Objects.requireNonNull(nome.getText()).toString());
                 formulario.setCodigo(Objects.requireNonNull(codigo.getText()).toString());
