@@ -198,6 +198,61 @@
         <item>ORNAMENTAL</item>
     </string-array>
 
+    <string-array name="finalidade">
+        <item>Finalidade</item>
+        <item>NÃO IDENTIFICADO</item>
+        <item>INTERNET</item>
+        <item>TV A CABO</item>
+        <item>TELEFONIA</item>
+    </string-array>
+
+    <string-array name="ceans">
+        <item>CEANS</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string-array name="tar">
+        <item>TAR</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string-array name="reservaTec">
+        <item>RESERVA TEC</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+    </string-array>
+
+    <string-array name="backbone">
+        <item>BACKBONE</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
     <string name="cadastro_municipio">Município</string>
     <string name="sessionId" />
     <string-array name="list_municipios">
