@@ -2,18 +2,18 @@ package com.example.satelprojetos.model;
 
 public class Usuario {
 
-    private String nome;
+    private String email;
     private String senha;
 
     public Usuario() {
     }
 
-    public String getNome() {
-        return nome;
+    public String getEmail() {
+        return email;
     }
 
-    public void setNome(String nome) {
-        this.nome = nome;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getSenha() {

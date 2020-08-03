@@ -36,9 +36,10 @@
 
     <string-array name="vegetacao">
         <item>Dimensão</item>
-        <item>Pequeno porte</item>
-        <item>Médio Porte</item>
-        <item>Grande Porte</item>
+        <item>GRANDE PORTE</item>
+        <item>MÉDIO PORTE</item>
+        <item>PEQUENO PORTE</item>
+        <item>SEM VEGETAÇÃO</item>
     </string-array>
 
     <string-array name="Placa">
@@ -186,6 +187,40 @@
         <item>10</item>
         <item>15</item>
         <item>25</item>
+    </string-array>
+
+    <string-array name="EstadoArvore">
+        <item>Estado da Árvore</item>
+        <item>NÃO APLICA</item>
+        <item>SAUDÁVEL</item>
+        <item>MORTA</item>
+    </string-array>
+
+    <string-array name="LocalArvore">
+        <item>Local</item>
+        <item>NÃO APLICA</item>
+        <item>RUA</item>
+        <item>RESIDÊNCIA</item>
+    </string-array>
+
+    <string-array name="DistanciaBaixa">
+        <item>Distância Vegetação da Baixa Tensão</item>
+        <item>NÃO APLICA</item>
+        <item>ATÉ 100CM</item>
+        <item>DE 100CM A 200CM</item>
+        <item>MAIS DE 200CM</item>
+        <item>VEGETAÇÃO SOBRE O POSTE</item>
+        <item>EM CONTATO</item>
+    </string-array>
+
+    <string-array name="DistanciaMedia">
+        <item>Distância Vegetação da Média Tensão</item>
+        <item>NÃO APLICA</item>
+        <item>ATÉ 100CM</item>
+        <item>DE 100CM A 200CM</item>
+        <item>MAIS DE 200CM</item>
+        <item>VEGETAÇÃO SOBRE O POSTE</item>
+        <item>EM CONTATO</item>
     </string-array>
 
     <string-array name="TipoPoste">

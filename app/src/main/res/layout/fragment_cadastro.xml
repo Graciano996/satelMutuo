@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/ScrollView"
     android:layout_width="match_parent"
-    android:layout_height="10000dp"
+    android:layout_height="match_parent"
     android:focusable="false"
     android:focusableInTouchMode="false"
     android:onClick="onClick">
@@ -33,7 +33,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
             android:enabled="false"
@@ -42,7 +42,7 @@
             android:textColor="@color/textColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textCadastroObservacaoMutuo4" />
+            app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
         <EditText
             android:id="@+id/textCadastroNome5"
@@ -151,6 +151,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            android:enabled="false"
             android:ems="10"
             android:hint="Descrição de Irregularidade"
             android:inputType="textPersonName"
@@ -166,6 +167,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            android:enabled="false"
             android:ems="10"
             android:hint="Observação"
             android:inputType="textPersonName"
@@ -191,7 +193,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
             android:enabled="false"
@@ -200,7 +202,7 @@
             android:textColor="@color/textColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textCadastroObservacaoMutuo3" />
+            app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
         <EditText
             android:id="@+id/textCadastroNome4"
@@ -309,6 +311,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            android:enabled="false"
             android:ems="10"
             android:hint="Descrição de Irregularidade"
             android:inputType="textPersonName"
@@ -324,6 +327,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            android:enabled="false"
             android:ems="10"
             android:hint="Observação"
             android:inputType="textPersonName"
@@ -350,7 +354,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
             android:enabled="false"
@@ -359,7 +363,7 @@
             android:textColor="@color/textColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textCadastroObservacaoMutuo2" />
+            app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
         <EditText
             android:id="@+id/textCadastroNome3"
@@ -468,6 +472,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            android:enabled="false"
             android:ems="10"
             android:hint="Descrição de Irregularidade"
             android:inputType="textPersonName"
@@ -483,6 +488,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            android:enabled="false"
             android:ems="10"
             android:hint="Observação"
             android:inputType="textPersonName"
@@ -508,7 +514,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
             android:enabled="false"
@@ -517,7 +523,7 @@
             android:textColor="@color/textColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textCadastroObservacaoMutuo" />
+            app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
         <EditText
             android:id="@+id/textCadastroNome2"
@@ -626,6 +632,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            android:enabled="false"
             android:ems="10"
             android:hint="Descrição de Irregularidade"
             android:inputType="textPersonName"
@@ -641,6 +648,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            android:enabled="false"
             android:ems="10"
             android:hint="Observação"
             android:inputType="textPersonName"
@@ -994,6 +1002,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="CARACTERÍSTICAS FÍSICAS"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -1003,12 +1012,13 @@
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="970dp"
+            android:layout_marginTop="16dp"
             android:text="CADASTRO DE ATIVOS"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textCadastroObservacaoFisicas" />
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroObservacaoIP" />
 
         <CheckBox
             android:id="@+id/chkCadastroReligador"
@@ -1083,6 +1093,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="ILUMINAÇÃO"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -1108,6 +1119,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="USO MÚTUO"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -1148,6 +1160,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            android:enabled="false"
             android:ems="10"
             android:hint="Descrição de Irregularidade"
             android:inputType="textPersonName"
@@ -1180,37 +1193,6 @@
             app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
         <EditText
-            android:id="@+id/textCadastroDistanciaBaixaTensao"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:hint="Distancia Baixa Tensão (m)"
-            android:inputType="textPersonName"
-            android:textColor="@color/textColor"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinCadastroDimensaoVegetacao" />
-
-        <EditText
-            android:id="@+id/textCadastroDistanciaMediaTensao"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:hint="Distancia Média Tensão (m)"
-            android:inputType="textPersonName"
-            android:textColor="@color/textColor"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textCadastroDistanciaBaixaTensao" />
-
-        <EditText
             android:id="@+id/textCadastroObservacaoVegetacao"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -1223,7 +1205,7 @@
             android:textColor="@color/textColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textCadastroDistanciaMediaTensao" />
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroLocalArvore" />
 
         <Button
             android:id="@+id/btnCadastroSalvar"
@@ -1611,6 +1593,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
+            android:enabled="false"
             android:ems="10"
             android:hint="Observação"
             android:inputType="textPersonName"
@@ -1618,6 +1601,110 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textCadastroDescricao" />
+
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="USO MÚTUO 2"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroObservacaoMutuo" />
+
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="USO MÚTUO 3"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroObservacaoMutuo2" />
+
+        <Spinner
+            android:id="@+id/spinCadastroBaixa"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/DistanciaBaixa"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroDimensaoVegetacao" />
+
+        <Spinner
+            android:id="@+id/spinCadastroMedia"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/DistanciaMedia"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroBaixa" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="USO MÚTUO 4 "
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroObservacaoMutuo3" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="USO MÚTUO 5"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroObservacaoMutuo4" />
+
+        <Spinner
+            android:id="@+id/spinCadastroEstadoArvore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:entries="@array/EstadoArvore"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroMedia" />
+
+        <CheckBox
+            android:id="@+id/chkCadastroQuedaArvore"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:text="Risco de Queda"
+            android:textColor="@color/textColor"
+            app:layout_constraintBaseline_toBaselineOf="@+id/spinCadastroEstadoArvore"
+            app:layout_constraintStart_toEndOf="@+id/spinCadastroEstadoArvore" />
+
+        <Spinner
+            android:id="@+id/spinCadastroLocalArvore"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/LocalArvore"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/chkCadastroQuedaArvore" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

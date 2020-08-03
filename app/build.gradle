@@ -37,6 +37,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     compileOnly 'com.google.android.wearable:wearable:2.5.0'
     implementation 'com.google.firebase:firebase-database:18.0.0'
+    implementation 'com.google.firebase:firebase-auth:19.3.1'
 
 }
 

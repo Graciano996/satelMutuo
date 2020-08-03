@@ -24,11 +24,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.satelprojetos.R;
 import com.example.satelprojetos.activity.DrawerActivity;
 import com.example.satelprojetos.adapter.FormularioAdapter;
+import com.example.satelprojetos.config.ConfiguracaoFirebase;
+import com.example.satelprojetos.helper.Base64Custom;
 import com.example.satelprojetos.helper.FormularioDAO;
 import com.example.satelprojetos.helper.RecyclerItemClickListener;
 import com.example.satelprojetos.model.Formulario;
 import com.example.satelprojetos.ui.cadastro.CadastroFragment;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -44,6 +47,7 @@ public class CadastradosFragment extends Fragment {
     private Button btnEnviarCadastrados;
     private List<Formulario> listaFormulario = new ArrayList<>();
     private DatabaseReference referencia = FirebaseDatabase.getInstance().getReference();
+    private FirebaseAuth autentificacao;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -111,12 +115,10 @@ public class CadastradosFragment extends Fragment {
         btnEnviarCadastrados.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sessionId",0);
-                String sessionId = sharedPreferences.getString("Id","");
-                Log.i("sessionId2", sessionId);
                 FormularioDAO formularioDAO = new FormularioDAO(getActivity().getApplicationContext());
                 listaFormulario = formularioDAO.listar();
-                DatabaseReference formularios = referencia.child("usuarios").child(sessionId).child("formulario");
+                autentificacao = ConfiguracaoFirebase.getFirebaseAuth();
+                DatabaseReference formularios = referencia.child("usuarios").child(Base64Custom.codificarBase64(autentificacao.getCurrentUser().getEmail())).child("formulario");
                 for(int i=0; i<listaFormulario.size();i++){
                     formularios.child(listaFormulario.get(i).getId().toString()).setValue(listaFormulario.get(i));
                 }

@@ -126,6 +126,9 @@ public class Formulario implements Serializable {
     private String dimensaoVegetacao;
     private String distaciaBaixa;
     private String distanciaMedia;
+    private String estadoArvore;
+    private String quedaArvore;
+    private String localArvore;
     private String observacaoVegetacao;
 
     public Long getId() {
@@ -1072,78 +1075,36 @@ public class Formulario implements Serializable {
         this.distanciaMedia = distanciaMedia;
     }
 
+    public String getEstadoArvore() {
+        return estadoArvore;
+    }
+
+    public void setEstadoArvore(String estadoArvore) {
+        this.estadoArvore = estadoArvore;
+    }
+
+    public String getQuedaArvore() {
+        return quedaArvore;
+    }
+
+    public void setQuedaArvore(String quedaArvore) {
+        this.quedaArvore = quedaArvore;
+    }
+
+    public String getLocalArvore() {
+        return localArvore;
+    }
+
+    public void setLocalArvore(String localArvore) {
+        this.localArvore = localArvore;
+    }
+
     public String getObservacaoVegetacao() {
         return observacaoVegetacao;
     }
 
     public void setObservacaoVegetacao(String observacaoVegetacao) {
         this.observacaoVegetacao = observacaoVegetacao;
-    }
-
-    @Override
-    public String toString() {
-        return "Formulario{" +
-                "id=" + id +
-                ", data='" + data + '\'' +
-                ", endereco='" + endereco + '\'' +
-                ", municipio='" + municipio + '\'' +
-                ", alturaCarga='" + alturaCarga + '\'' +
-                ", latitude='" + latitude + '\'' +
-                ", longitude='" + longitude + '\'' +
-                ", tipoPoste='" + tipoPoste + '\'' +
-                ", normal='" + normal + '\'' +
-                ", ferragemExposta='" + ferragemExposta + '\'' +
-                ", fletido='" + fletido + '\'' +
-                ", danificado='" + danificado + '\'' +
-                ", abalrroado='" + abalrroado + '\'' +
-                ", trincado='" + trincado + '\'' +
-                ", ramalSubt='" + ramalSubt + '\'' +
-                ", observacaoFisicas='" + observacaoFisicas + '\'' +
-                ", ativos='" + ativos + '\'' +
-                ", trafoTrifasico='" + trafoTrifasico + '\'' +
-                ", trafoMono='" + trafoMono + '\'' +
-                ", religador='" + religador + '\'' +
-                ", medicao='" + medicao + '\'' +
-                ", chFusivel='" + chFusivel + '\'' +
-                ", chFaca='" + chFaca + '\'' +
-                ", banco='" + banco + '\'' +
-                ", chFusivelReligador='" + chFusivelReligador + '\'' +
-                ", observacaoAtivos='" + observacaoAtivos + '\'' +
-                ", ip='" + ip + '\'' +
-                ", ipEstrutura='" + ipEstrutura + '\'' +
-                ", quantidadeLampada='" + quantidadeLampada + '\'' +
-                ", tipoPot='" + tipoPot + '\'' +
-                ", potReator='" + potReator + '\'' +
-                ", ipAtivacao='" + ipAtivacao + '\'' +
-                ", vinteEQuatro='" + vinteEQuatro + '\'' +
-                ", quantidade24H='" + quantidade24H + '\'' +
-                ", ip2='" + ip2 + '\'' +
-                ", ipEstrutura2='" + ipEstrutura2 + '\'' +
-                ", quantidadeLampada2='" + quantidadeLampada2 + '\'' +
-                ", tipoPot2='" + tipoPot2 + '\'' +
-                ", potReator2='" + potReator2 + '\'' +
-                ", ipAtivacao2='" + ipAtivacao2 + '\'' +
-                ", vinteEQuatro2='" + vinteEQuatro2 + '\'' +
-                ", quantidade24H2='" + quantidade24H2 + '\'' +
-                ", ip3='" + ip3 + '\'' +
-                ", ipEstrutura3='" + ipEstrutura3 + '\'' +
-                ", quantidadeLampada3='" + quantidadeLampada3 + '\'' +
-                ", tipoPot3='" + tipoPot3 + '\'' +
-                ", potReator3='" + potReator3 + '\'' +
-                ", ipAtivacao3='" + ipAtivacao3 + '\'' +
-                ", vinteEQuatro3='" + vinteEQuatro3 + '\'' +
-                ", quantidade24H3='" + quantidade24H3 + '\'' +
-                ", observacaoIP='" + observacaoIP + '\'' +
-                ", nome='" + nome + '\'' +
-                ", reservaTec='" + reservaTec + '\'' +
-                ", descidaCabos='" + descidaCabos + '\'' +
-                ", placaIdent='" + placaIdent + '\'' +
-                ", descricaoIrregularidade='" + descricaoIrregularidade + '\'' +
-                ", dimensaoVegetacao='" + dimensaoVegetacao + '\'' +
-                ", distaciaBaixa='" + distaciaBaixa + '\'' +
-                ", distanciaMedia='" + distanciaMedia + '\'' +
-                ", observacaoVegetacao='" + observacaoVegetacao + '\'' +
-                '}';
     }
 
     public void GenericSetter(String atributo, String dado){
@@ -1289,5 +1250,21 @@ public class Formulario implements Serializable {
         else if (atributo.equals("backbone5")){
             setBackbone5(dado);
         }
+        else if (atributo.equals("dimensaoVegetacao")){
+            setDimensaoVegetacao(dado);
+        }
+        else if (atributo.equals("distanciaBaixa")){
+            setDistaciaBaixa(dado);
+        }
+        else if (atributo.equals("distanciaMedia")){
+            setDistanciaMedia(dado);
+        }
+        else if (atributo.equals("estadoArvore")){
+            setEstadoArvore(dado);
+        }
+        else if (atributo.equals("localArvore")){
+            setLocalArvore(dado);
+        }
+
     }
 }

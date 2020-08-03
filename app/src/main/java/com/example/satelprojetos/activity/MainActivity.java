@@ -14,8 +14,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.satelprojetos.R;
+import com.example.satelprojetos.config.ConfiguracaoFirebase;
 import com.example.satelprojetos.model.Usuario;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -24,71 +31,67 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class MainActivity extends AppCompatActivity {
-
     private DatabaseReference referencia = FirebaseDatabase.getInstance().getReference();
-    private EditText nomeUsuario, senhaUsuario;
-    private String  cadastrado;
+    private EditText emailUsuario, senhaUsuario;
+    private FirebaseAuth autentificacao;
+    private Usuario usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        nomeUsuario = findViewById(R.id.editTextTextPersonName);
-        senhaUsuario = findViewById(R.id.editTextTextPassword);
+
     }
     public void abrirDrawer(View view){
-
-        nomeUsuario = findViewById(R.id.editTextTextPersonName);
-        final DatabaseReference usuarioDatabase = referencia.child("usuarios");
-        final Usuario usuario = new Usuario();
-        usuario.setNome(nomeUsuario.getText().toString());
-        usuario.setSenha(senhaUsuario.getText().toString());
-        Query queryUid=usuarioDatabase.orderByKey();
-        queryUid.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                cadastrado="";
-                for (DataSnapshot datas : dataSnapshot.getChildren()) {
-                    final String key=datas.getKey();
-                    usuarioDatabase.child(key).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            Usuario usuarioBanco = dataSnapshot.getValue(Usuario.class);
-                            if ((usuario.getNome().equals(usuarioBanco.getNome())) && (usuario.getSenha().equals(usuarioBanco.getSenha())) ) {
-                                cadastrado = "X";
-                                Intent intent = new Intent(getApplicationContext(), DrawerActivity.class);
-                                intent.putExtra("ID", key);
-                                startActivity(intent);
-                            }
-                            Log.i("TESTE2", usuarioBanco.getNome());
-                            Log.i("TESTE2", usuarioBanco.getSenha());
-                            Handler handler = new Handler();
-                            handler.postDelayed(new Runnable() {
-                                public void run() {
-                                    if(cadastrado!="X"){
-                                        Toast.makeText(MainActivity.this, "Verique os dados digitados", Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            }, 100);
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    });
-                    Log.i("TESTE", key);
-                }
-
-
+        Log.i("TESTE", "oi");
+        emailUsuario = findViewById(R.id.editTextTextPersonName);
+        String email = emailUsuario.getText().toString();
+        senhaUsuario = findViewById(R.id.editTextTextPassword);
+        String senha = senhaUsuario.getText().toString();
+        if(!email.isEmpty()){
+            if(!senha.isEmpty()){
+                usuario = new Usuario();
+                usuario.setEmail(email);
+                usuario.setSenha(senha);
+                validarLogin();
+            }else {
+                Toast.makeText(MainActivity.this, "Digite uma senha", Toast.LENGTH_SHORT).show();
             }
+        }else {
+            Toast.makeText(MainActivity.this, "Digite um email", Toast.LENGTH_SHORT).show();
+        }
+    }
 
+    public void validarLogin(){
+        autentificacao = ConfiguracaoFirebase.getFirebaseAuth();
+        autentificacao.signInWithEmailAndPassword(
+                usuario.getEmail(),
+                usuario.getSenha()
+        ).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()){
+                    Intent intent = new Intent(getApplicationContext(), DrawerActivity.class);
+                    intent.putExtra("ID", autentificacao.getCurrentUser().getEmail());
+                    Log.i("TESTE", autentificacao.getCurrentUser().getEmail());
+                    startActivity(intent);
+                    Toast.makeText(MainActivity.this, "Sucesso ao fazer login", Toast.LENGTH_SHORT).show();
+                }else {
+                    String excecao = "";
+                    try{
+                        throw task.getException();
+                    }catch (FirebaseAuthInvalidUserException e){
+                        excecao = "Usuário não está cadastrado.";
+                    }catch (FirebaseAuthInvalidCredentialsException e){
+                        excecao = "Email e senha não correspondem a um usuário cadastrado.";
+                    }
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    Toast.makeText(MainActivity.this, excecao, Toast.LENGTH_SHORT).show();
+                }
             }
         });
-
     }
 
     @Override

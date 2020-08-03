@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -31,24 +32,27 @@ public class CadastroFragment extends Fragment {
     private EditText endereco, latitude, longitude, observacaoFisicas,
               observacaoAtivos,quantidadeLampada,quantidadeLampada2,quantidadeLampada3,
             potReator,potReator2,potReator3,quantidade24H,quantidade24H2,quantidade24H3 ,
-                 distaciaBaixa, distanciaMedia, observacaoVegetacao, observacaoIP,
+                observacaoVegetacao, observacaoIP,
                 quantidadeCabos, quantidadeCabos2, quantidadeCabos3, quantidadeCabos4, quantidadeCabos5,
                 nome, nome2, nome3, nome4, nome5, descricaoIrregularidade, descricaoIrregularidade2,
                 descricaoIrregularidade3, descricaoIrregularidade4,descricaoIrregularidade5,
                 observacaoMutuo, observacaoMutuo2, observacaoMutuo3, observacaoMutuo4, observacaoMutuo5;
     private Spinner municipio,alturaCarga, tipoPoste,ipEstrutura,ipEstrutura2,ipEstrutura3,tipoPot,
-            tipoPot2,tipoPot3, placaIdent, dimensaoVegetacao, ipAtivacao,ipAtivacao2,ipAtivacao3,
+            tipoPot2,tipoPot3, dimensaoVegetacao, ipAtivacao,ipAtivacao2,ipAtivacao3,
             trafoTrifasico, trafoMono,ramalSubt, quantidadeOcupantes,
             tipoCabo, tipoCabo2, tipoCabo3, tipoCabo4, tipoCabo5, finalidade, finalidade2, finalidade3,
             finalidade4, finalidade5, ceans, ceans2, ceans3, ceans4, ceans5, tar, tar2, tar3, tar4,
             tar5, reservaTec, reservaTec2, reservaTec3, reservaTec4, reservaTec5, backbone,
-            backbone2, backbone3, backbone4,backbone5;
+            backbone2, backbone3, backbone4,backbone5,distaciaBaixa, distanciaMedia,estadoArvore,
+            localArvore;
     private CheckBox normal, ferragemExposta, fletido, danificado, abalrroado, trincado, religador, medicao,
             chFusivel, chFaca,vinteEQuatro,vinteEQuatro2,vinteEQuatro3,
             ativos,chkTrafoTrifasico, chkTrafoMono, ip,ip2,ip3,chFusivelReligador, chBanco, mutuo,
             placaIdentificadora, placaIdentificadora2, placaIdentificadora3, placaIdentificadora4,
-            placaIdentificadora5,descidaCabos, descidaCabos2, descidaCabos3, descidaCabos4, descidaCabos5;
+            placaIdentificadora5,descidaCabos, descidaCabos2, descidaCabos3, descidaCabos4, descidaCabos5,
+            quedaArvore;
     private Formulario formularioAtual;
+    private Boolean controle = false;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -133,15 +137,22 @@ public class CadastroFragment extends Fragment {
         //MUTUO
         mutuo = root.findViewById(R.id.chkCadastroMutuo);
         quantidadeOcupantes = root.findViewById(R.id.spinCadastroMutuoOcupantes);
+        quantidadeOcupantes.setEnabled(false);
 
         quantidadeCabos = root.findViewById(R.id.textCadastroMutuoQuantidadeCabos);
         tipoCabo = root.findViewById(R.id.spinCadastroMutuoTipoCabo);
+        tipoCabo.setEnabled(false);
         nome = root.findViewById(R.id.textCadastroNome);
         finalidade = root.findViewById(R.id.spinCadastroFinalidade);
+        finalidade.setEnabled(false);
         ceans = root.findViewById(R.id.spinCadastroCeans);
+        ceans.setEnabled(false);
         tar = root.findViewById(R.id.spinCadastroTar);
+        tar.setEnabled(false);
         reservaTec = root.findViewById(R.id.spinCadastroReservaTec);
+        reservaTec.setEnabled(false);
         backbone = root.findViewById(R.id.spinCadastroBackbone);
+        backbone.setEnabled(false);
         placaIdentificadora = root.findViewById(R.id.chkCadastroPlaca);
         descidaCabos = root.findViewById(R.id.chkCadastroDescidaCabos);
         descricaoIrregularidade = root.findViewById(R.id.textCadastroDescricao);
@@ -149,12 +160,18 @@ public class CadastroFragment extends Fragment {
 
         quantidadeCabos2 = root.findViewById(R.id.textCadastroMutuoQuantidadeCabos2);
         tipoCabo2 = root.findViewById(R.id.spinCadastroMutuoTipoCabo2);
+        tipoCabo2.setEnabled(false);
         nome2 = root.findViewById(R.id.textCadastroNome2);
         finalidade2 = root.findViewById(R.id.spinCadastroFinalidade2);
+        finalidade2.setEnabled(false);
         ceans2 = root.findViewById(R.id.spinCadastroCeans2);
+        ceans2.setEnabled(false);
         tar2 = root.findViewById(R.id.spinCadastroTar2);
+        tar2.setEnabled(false);
         reservaTec2 = root.findViewById(R.id.spinCadastroReservaTec2);
+        reservaTec2.setEnabled(false);
         backbone2 = root.findViewById(R.id.spinCadastroBackbone2);
+        backbone2.setEnabled(false);
         placaIdentificadora2 = root.findViewById(R.id.chkCadastroPlaca2);
         descidaCabos2 = root.findViewById(R.id.chkCadastroDescidaCabos2);
         descricaoIrregularidade2 = root.findViewById(R.id.textCadastroDescricao2);
@@ -162,12 +179,18 @@ public class CadastroFragment extends Fragment {
 
         quantidadeCabos3 = root.findViewById(R.id.textCadastroMutuoQuantidadeCabos3);
         tipoCabo3 = root.findViewById(R.id.spinCadastroMutuoTipoCabo3);
+        tipoCabo3.setEnabled(false);
         nome3 = root.findViewById(R.id.textCadastroNome3);
         finalidade3 = root.findViewById(R.id.spinCadastroFinalidade3);
+        finalidade3.setEnabled(false);
         ceans3 = root.findViewById(R.id.spinCadastroCeans3);
+        ceans3.setEnabled(false);
         tar3 = root.findViewById(R.id.spinCadastroTar3);
+        tar3.setEnabled(false);
         reservaTec3 = root.findViewById(R.id.spinCadastroReservaTec3);
+        reservaTec3.setEnabled(false);
         backbone3 = root.findViewById(R.id.spinCadastroBackbone3);
+        backbone3.setEnabled(false);
         placaIdentificadora3 = root.findViewById(R.id.chkCadastroPlaca3);
         descidaCabos3 = root.findViewById(R.id.chkCadastroDescidaCabos3);
         descricaoIrregularidade3 = root.findViewById(R.id.textCadastroDescricao3);
@@ -175,12 +198,18 @@ public class CadastroFragment extends Fragment {
 
         quantidadeCabos4 = root.findViewById(R.id.textCadastroMutuoQuantidadeCabos4);
         tipoCabo4 = root.findViewById(R.id.spinCadastroMutuoTipoCabo4);
+        tipoCabo4.setEnabled(false);
         nome4 = root.findViewById(R.id.textCadastroNome4);
         finalidade4 = root.findViewById(R.id.spinCadastroFinalidade4);
+        finalidade4.setEnabled(false);
         ceans4 = root.findViewById(R.id.spinCadastroCeans4);
+        ceans4.setEnabled(false);
         tar4 = root.findViewById(R.id.spinCadastroTar4);
+        tar4.setEnabled(false);
         reservaTec4 = root.findViewById(R.id.spinCadastroReservaTec4);
+        reservaTec4.setEnabled(false);
         backbone4 = root.findViewById(R.id.spinCadastroBackbone4);
+        backbone4.setEnabled(false);
         placaIdentificadora4 = root.findViewById(R.id.chkCadastroPlaca4);
         descidaCabos4 = root.findViewById(R.id.chkCadastroDescidaCabos4);
         descricaoIrregularidade4 = root.findViewById(R.id.textCadastroDescricao4);
@@ -188,12 +217,18 @@ public class CadastroFragment extends Fragment {
 
         quantidadeCabos5 = root.findViewById(R.id.textCadastroMutuoQuantidadeCabos5);
         tipoCabo5 = root.findViewById(R.id.spinCadastroMutuoTipoCabo5);
+        tipoCabo5.setEnabled(false);
         nome5 = root.findViewById(R.id.textCadastroNome5);
         finalidade5 = root.findViewById(R.id.spinCadastroFinalidade5);
+        finalidade5.setEnabled(false);
         ceans5 = root.findViewById(R.id.spinCadastroCeans5);
+        ceans5.setEnabled(false);
         tar5 = root.findViewById(R.id.spinCadastroTar5);
+        tar5.setEnabled(false);
         reservaTec5 = root.findViewById(R.id.spinCadastroReservaTec5);
+        reservaTec5.setEnabled(false);
         backbone5 = root.findViewById(R.id.spinCadastroBackbone5);
+        backbone5.setEnabled(false);
         placaIdentificadora5 = root.findViewById(R.id.chkCadastroPlaca5);
         descidaCabos5 = root.findViewById(R.id.chkCadastroDescidaCabos5);
         descricaoIrregularidade5 = root.findViewById(R.id.textCadastroDescricao5);
@@ -201,20 +236,21 @@ public class CadastroFragment extends Fragment {
 
 
         //VEGETAÇÃO
-        distaciaBaixa = root.findViewById(R.id.textCadastroDistanciaBaixaTensao);
-        distanciaMedia = root.findViewById(R.id.textCadastroDistanciaMediaTensao);
-        observacaoVegetacao = root.findViewById(R.id.textCadastroObservacaoVegetacao);
-        placaIdent = root.findViewById(R.id.chkCadastroPlaca);
         dimensaoVegetacao = root.findViewById(R.id.spinCadastroDimensaoVegetacao);
+        distaciaBaixa = root.findViewById(R.id.spinCadastroBaixa);
+        distanciaMedia = root.findViewById(R.id.spinCadastroMedia);
+        estadoArvore = root.findViewById(R.id.spinCadastroEstadoArvore);
+        quedaArvore = root.findViewById(R.id.chkCadastroQuedaArvore);
+        localArvore = root.findViewById(R.id.spinCadastroLocalArvore);
+        observacaoVegetacao = root.findViewById(R.id.textCadastroObservacaoVegetacao);
 
-        descidaCabos = root.findViewById(R.id.chkCadastroDescidaCabos);
         Button buttonCadastrar = root.findViewById(R.id.btnCadastroSalvar);
         try {
             assert this.getArguments() != null;
             formularioAtual = (Formulario) this.getArguments().getSerializable("formularioSelecionado");
             if(formularioAtual != null){
                 //LOCALIZAÇÃO
-
+                controle = true;
                 endereco.setText(formularioAtual.getEndereco());
                 if (formularioAtual.getMunicipio().equals("-")) {
                     municipio.setSelection(0);
@@ -503,34 +539,966 @@ public class CadastroFragment extends Fragment {
                 observacaoAtivos.setText(formularioAtual.getObservacaoAtivos());
 
                 //MUTUO
-                nome.setText(formularioAtual.getNome());
-
-
-                descricaoIrregularidade.setText(formularioAtual.getDescricaoIrregularidade());
-                distaciaBaixa.setText(formularioAtual.getDistaciaBaixa());
-                distanciaMedia.setText(formularioAtual.getDistanciaMedia());
-                observacaoVegetacao.setText(formularioAtual.getObservacaoVegetacao());
-
-                for (int i=0; i<placaIdent.getAdapter().getCount();i++){
-                    placaIdent.setSelection(i);
-                    if (placaIdent.getSelectedItem().toString().equals(formularioAtual.getPlacaIdent())){
-                        break;
+               if (formularioAtual.getQuantidadeOcupantes().equals("-")) {
+                    quantidadeOcupantes.setSelection(0);
+                }else {
+                    for (int i = 0; i < quantidadeOcupantes.getAdapter().getCount(); i++) {
+                        quantidadeOcupantes.setSelection(i);
+                        if (quantidadeOcupantes.getSelectedItem().toString().equals(formularioAtual.getQuantidadeOcupantes())) {
+                            break;
+                        }
                     }
                 }
-                for (int i=0; i<dimensaoVegetacao.getAdapter().getCount();i++){
-                    dimensaoVegetacao.setSelection(i);
-                    if (dimensaoVegetacao.getSelectedItem().toString().equals(formularioAtual.getDimensaoVegetacao())){
-                        break;
+                if(formularioAtual.getMutuo().equals("Sim")){
+                    mutuo.setChecked(true);
+                    quantidadeOcupantes.setEnabled(true);
+                    if(formularioAtual.getQuantidadeOcupantes().equals("0")){
+                        // region MutuoDados0
+                        mutuoDados(quantidadeCabos,null,false);
+                        mutuoDados(quantidadeCabos2,null,false);
+                        mutuoDados(quantidadeCabos3,null,false);
+                        mutuoDados(quantidadeCabos4,null,false);
+                        mutuoDados(quantidadeCabos5,null,false);
+
+                        mutuoDados(null,tipoCabo,false);
+                        mutuoDados(null,tipoCabo2,false);
+                        mutuoDados(null,tipoCabo3,false);
+                        mutuoDados(null,tipoCabo4,false);
+                        mutuoDados(null,tipoCabo5,false);
+
+                        mutuoDados(nome,null,false);
+                        mutuoDados(nome2,null,false);
+                        mutuoDados(nome3,null,false);
+                        mutuoDados(nome4,null,false);
+                        mutuoDados(nome5,null,false);
+
+                        mutuoDados(null,finalidade,false);
+                        mutuoDados(null,finalidade2,false);
+                        mutuoDados(null,finalidade3,false);
+                        mutuoDados(null,finalidade4,false);
+                        mutuoDados(null,finalidade5,false);
+
+                        mutuoDados(null,ceans,false);
+                        mutuoDados(null,ceans2,false);
+                        mutuoDados(null,ceans3,false);
+                        mutuoDados(null,ceans4,false);
+                        mutuoDados(null,ceans5,false);
+
+                        mutuoDados(null,tar,false);
+                        mutuoDados(null,tar2,false);
+                        mutuoDados(null,tar3,false);
+                        mutuoDados(null,tar4,false);
+                        mutuoDados(null,tar5,false);
+
+                        mutuoDados(null,reservaTec,false);
+                        mutuoDados(null,reservaTec2,false);
+                        mutuoDados(null,reservaTec3,false);
+                        mutuoDados(null,reservaTec4,false);
+                        mutuoDados(null,reservaTec5,false);
+
+                        mutuoDados(null,backbone,false);
+                        mutuoDados(null,backbone2,false);
+                        mutuoDados(null,backbone3,false);
+                        mutuoDados(null,backbone4,false);
+                        mutuoDados(null,backbone5,false);
+
+                        mutuoDados(descricaoIrregularidade,null,false);
+                        mutuoDados(descricaoIrregularidade2,null,false);
+                        mutuoDados(descricaoIrregularidade3,null,false);
+                        mutuoDados(descricaoIrregularidade4,null,false);
+                        mutuoDados(descricaoIrregularidade5,null,false);
+
+                        mutuoDados(observacaoMutuo,null,false);
+                        mutuoDados(observacaoMutuo2,null,false);
+                        mutuoDados(observacaoMutuo3,null,false);
+                        mutuoDados(observacaoMutuo4,null,false);
+                        mutuoDados(observacaoMutuo5,null,false);
+
+                        placaIdentificadora.setChecked(false);
+                        placaIdentificadora.setEnabled(false);
+                        placaIdentificadora2.setChecked(false);
+                        placaIdentificadora2.setEnabled(false);
+                        placaIdentificadora3.setChecked(false);
+                        placaIdentificadora3.setEnabled(false);
+                        placaIdentificadora4.setChecked(false);
+                        placaIdentificadora4.setEnabled(false);
+                        placaIdentificadora5.setChecked(false);
+                        placaIdentificadora5.setEnabled(false);
+
+                        descidaCabos.setChecked(false);
+                        descidaCabos.setEnabled(false);
+                        descidaCabos2.setChecked(false);
+                        descidaCabos2.setEnabled(false);
+                        descidaCabos3.setChecked(false);
+                        descidaCabos3.setEnabled(false);
+                        descidaCabos4.setChecked(false);
+                        descidaCabos4.setEnabled(false);
+                        descidaCabos5.setChecked(false);
+                        descidaCabos5.setEnabled(false);
+
+                        // endregion
                     }
+                    else if(formularioAtual.getQuantidadeOcupantes().equals("1")){
+                        Log.i("Spinenr","Apertei 1");
+                        // region MutuoDados1
+                        mutuoDados(quantidadeCabos,null,true);
+                        mutuoDados(quantidadeCabos2,null,false);
+                        mutuoDados(quantidadeCabos3,null,false);
+                        mutuoDados(quantidadeCabos4,null,false);
+                        mutuoDados(quantidadeCabos5,null,false);
+
+                        mutuoDados(null,tipoCabo,true);
+                        mutuoDados(null,tipoCabo2,false);
+                        mutuoDados(null,tipoCabo3,false);
+                        mutuoDados(null,tipoCabo4,false);
+                        mutuoDados(null,tipoCabo5,false);
+
+                        mutuoDados(nome,null,true);
+                        mutuoDados(nome2,null,false);
+                        mutuoDados(nome3,null,false);
+                        mutuoDados(nome4,null,false);
+                        mutuoDados(nome5,null,false);
+
+                        mutuoDados(null,finalidade,true);
+                        mutuoDados(null,finalidade2,false);
+                        mutuoDados(null,finalidade3,false);
+                        mutuoDados(null,finalidade4,false);
+                        mutuoDados(null,finalidade5,false);
+
+                        mutuoDados(null,ceans,true);
+                        mutuoDados(null,ceans2,false);
+                        mutuoDados(null,ceans3,false);
+                        mutuoDados(null,ceans4,false);
+                        mutuoDados(null,ceans5,false);
+
+                        mutuoDados(null,tar,true);
+                        mutuoDados(null,tar2,false);
+                        mutuoDados(null,tar3,false);
+                        mutuoDados(null,tar4,false);
+                        mutuoDados(null,tar5,false);
+
+                        mutuoDados(null,reservaTec,true);
+                        mutuoDados(null,reservaTec2,false);
+                        mutuoDados(null,reservaTec3,false);
+                        mutuoDados(null,reservaTec4,false);
+                        mutuoDados(null,reservaTec5,false);
+
+                        mutuoDados(null,backbone,true);
+                        mutuoDados(null,backbone2,false);
+                        mutuoDados(null,backbone3,false);
+                        mutuoDados(null,backbone4,false);
+                        mutuoDados(null,backbone5,false);
+
+                        mutuoDados(descricaoIrregularidade,null,true);
+                        mutuoDados(descricaoIrregularidade2,null,false);
+                        mutuoDados(descricaoIrregularidade3,null,false);
+                        mutuoDados(descricaoIrregularidade4,null,false);
+                        mutuoDados(descricaoIrregularidade5,null,false);
+
+                        mutuoDados(observacaoMutuo,null,true);
+                        mutuoDados(observacaoMutuo2,null,false);
+                        mutuoDados(observacaoMutuo3,null,false);
+                        mutuoDados(observacaoMutuo4,null,false);
+                        mutuoDados(observacaoMutuo5,null,false);
+
+
+                        placaIdentificadora.setEnabled(true);
+                        placaIdentificadora2.setChecked(false);
+                        placaIdentificadora2.setEnabled(false);
+                        placaIdentificadora3.setChecked(false);
+                        placaIdentificadora3.setEnabled(false);
+                        placaIdentificadora4.setChecked(false);
+                        placaIdentificadora4.setEnabled(false);
+                        placaIdentificadora5.setChecked(false);
+                        placaIdentificadora5.setEnabled(false);
+
+
+                        descidaCabos.setEnabled(true);
+                        descidaCabos2.setChecked(false);
+                        descidaCabos2.setEnabled(false);
+                        descidaCabos3.setChecked(false);
+                        descidaCabos3.setEnabled(false);
+                        descidaCabos4.setChecked(false);
+                        descidaCabos4.setEnabled(false);
+                        descidaCabos5.setChecked(false);
+                        descidaCabos5.setEnabled(false);
+
+                        //endregion
+                    }
+                    else if(formularioAtual.getQuantidadeOcupantes().equals("2")){
+                        Log.i("Spinenr","Apertei 2");
+                        //region MutuoDados2
+
+                        mutuoDados(quantidadeCabos,null,true);
+                        mutuoDados(quantidadeCabos2,null,true);
+                        mutuoDados(quantidadeCabos3,null,false);
+                        mutuoDados(quantidadeCabos4,null,false);
+                        mutuoDados(quantidadeCabos5,null,false);
+
+                        mutuoDados(null,tipoCabo,true);
+                        mutuoDados(null,tipoCabo2,true);
+                        mutuoDados(null,tipoCabo3,false);
+                        mutuoDados(null,tipoCabo4,false);
+                        mutuoDados(null,tipoCabo5,false);
+
+                        mutuoDados(nome,null,true);
+                        mutuoDados(nome2,null,true);
+                        mutuoDados(nome3,null,false);
+                        mutuoDados(nome4,null,false);
+                        mutuoDados(nome5,null,false);
+
+                        mutuoDados(null,finalidade,true);
+                        mutuoDados(null,finalidade2,true);
+                        mutuoDados(null,finalidade3,false);
+                        mutuoDados(null,finalidade4,false);
+                        mutuoDados(null,finalidade5,false);
+
+                        mutuoDados(null,ceans,true);
+                        mutuoDados(null,ceans2,true);
+                        mutuoDados(null,ceans3,false);
+                        mutuoDados(null,ceans4,false);
+                        mutuoDados(null,ceans5,false);
+
+                        mutuoDados(null,tar,true);
+                        mutuoDados(null,tar2,true);
+                        mutuoDados(null,tar3,false);
+                        mutuoDados(null,tar4,false);
+                        mutuoDados(null,tar5,false);
+
+                        mutuoDados(null,reservaTec,true);
+                        mutuoDados(null,reservaTec2,true);
+                        mutuoDados(null,reservaTec3,false);
+                        mutuoDados(null,reservaTec4,false);
+                        mutuoDados(null,reservaTec5,false);
+
+                        mutuoDados(null,backbone,true);
+                        mutuoDados(null,backbone2,true);
+                        mutuoDados(null,backbone3,false);
+                        mutuoDados(null,backbone4,false);
+                        mutuoDados(null,backbone5,false);
+
+                        mutuoDados(descricaoIrregularidade,null,true);
+                        mutuoDados(descricaoIrregularidade2,null,true);
+                        mutuoDados(descricaoIrregularidade3,null,false);
+                        mutuoDados(descricaoIrregularidade4,null,false);
+                        mutuoDados(descricaoIrregularidade5,null,false);
+
+                        mutuoDados(observacaoMutuo,null,true);
+                        mutuoDados(observacaoMutuo2,null,true);
+                        mutuoDados(observacaoMutuo3,null,false);
+                        mutuoDados(observacaoMutuo4,null,false);
+                        mutuoDados(observacaoMutuo5,null,false);
+
+
+                        placaIdentificadora.setEnabled(true);
+
+                        placaIdentificadora2.setEnabled(true);
+                        placaIdentificadora3.setChecked(false);
+                        placaIdentificadora3.setEnabled(false);
+                        placaIdentificadora4.setChecked(false);
+                        placaIdentificadora4.setEnabled(false);
+                        placaIdentificadora5.setChecked(false);
+                        placaIdentificadora5.setEnabled(false);
+
+
+                        descidaCabos.setEnabled(true);
+
+                        descidaCabos2.setEnabled(true);
+                        descidaCabos3.setChecked(false);
+                        descidaCabos3.setEnabled(false);
+                        descidaCabos4.setChecked(false);
+                        descidaCabos4.setEnabled(false);
+                        descidaCabos5.setChecked(false);
+                        descidaCabos5.setEnabled(false);
+
+                        //endregion
+                    }
+                    else if(formularioAtual.getQuantidadeOcupantes().equals("3")){
+                        Log.i("Spinenr","Apertei 3");
+                        //region MutuoDados3
+
+                        mutuoDados(quantidadeCabos,null,true);
+                        mutuoDados(quantidadeCabos2,null,true);
+                        mutuoDados(quantidadeCabos3,null,true);
+                        mutuoDados(quantidadeCabos4,null,false);
+                        mutuoDados(quantidadeCabos5,null,false);
+
+                        mutuoDados(null,tipoCabo,true);
+                        mutuoDados(null,tipoCabo2,true);
+                        mutuoDados(null,tipoCabo3,true);
+                        mutuoDados(null,tipoCabo4,false);
+                        mutuoDados(null,tipoCabo5,false);
+
+                        mutuoDados(nome,null,true);
+                        mutuoDados(nome2,null,true);
+                        mutuoDados(nome3,null,true);
+                        mutuoDados(nome4,null,false);
+                        mutuoDados(nome5,null,false);
+
+                        mutuoDados(null,finalidade,true);
+                        mutuoDados(null,finalidade2,true);
+                        mutuoDados(null,finalidade3,true);
+                        mutuoDados(null,finalidade4,false);
+                        mutuoDados(null,finalidade5,false);
+
+                        mutuoDados(null,ceans,true);
+                        mutuoDados(null,ceans2,true);
+                        mutuoDados(null,ceans3,true);
+                        mutuoDados(null,ceans4,false);
+                        mutuoDados(null,ceans5,false);
+
+                        mutuoDados(null,tar,true);
+                        mutuoDados(null,tar2,true);
+                        mutuoDados(null,tar3,true);
+                        mutuoDados(null,tar4,false);
+                        mutuoDados(null,tar5,false);
+
+                        mutuoDados(null,reservaTec,true);
+                        mutuoDados(null,reservaTec2,true);
+                        mutuoDados(null,reservaTec3,true);
+                        mutuoDados(null,reservaTec4,false);
+                        mutuoDados(null,reservaTec5,false);
+
+                        mutuoDados(null,backbone,true);
+                        mutuoDados(null,backbone2,true);
+                        mutuoDados(null,backbone3,true);
+                        mutuoDados(null,backbone4,false);
+                        mutuoDados(null,backbone5,false);
+
+                        mutuoDados(descricaoIrregularidade,null,true);
+                        mutuoDados(descricaoIrregularidade2,null,true);
+                        mutuoDados(descricaoIrregularidade3,null,true);
+                        mutuoDados(descricaoIrregularidade4,null,false);
+                        mutuoDados(descricaoIrregularidade5,null,false);
+
+                        mutuoDados(observacaoMutuo,null,true);
+                        mutuoDados(observacaoMutuo2,null,true);
+                        mutuoDados(observacaoMutuo3,null,true);
+                        mutuoDados(observacaoMutuo4,null,false);
+                        mutuoDados(observacaoMutuo5,null,false);
+
+
+                        placaIdentificadora.setEnabled(true);
+
+                        placaIdentificadora2.setEnabled(true);
+
+                        placaIdentificadora3.setEnabled(true);
+                        placaIdentificadora4.setChecked(false);
+                        placaIdentificadora4.setEnabled(false);
+                        placaIdentificadora5.setChecked(false);
+                        placaIdentificadora5.setEnabled(false);
+
+
+                        descidaCabos.setEnabled(true);
+
+                        descidaCabos2.setEnabled(true);
+
+                        descidaCabos3.setEnabled(true);
+                        descidaCabos4.setChecked(false);
+                        descidaCabos4.setEnabled(false);
+                        descidaCabos5.setChecked(false);
+                        descidaCabos5.setEnabled(false);
+
+                        //endregion
+                    }
+                    else if(formularioAtual.getQuantidadeOcupantes().equals("4")){
+                        Log.i("Spinenr","Apertei 4");
+                        //region MutuoDados4
+
+                        mutuoDados(quantidadeCabos,null,true);
+                        mutuoDados(quantidadeCabos2,null,true);
+                        mutuoDados(quantidadeCabos3,null,true);
+                        mutuoDados(quantidadeCabos4,null,true);
+                        mutuoDados(quantidadeCabos5,null,false);
+
+                        mutuoDados(null,tipoCabo,true);
+                        mutuoDados(null,tipoCabo2,true);
+                        mutuoDados(null,tipoCabo3,true);
+                        mutuoDados(null,tipoCabo4,true);
+                        mutuoDados(null,tipoCabo5,false);
+
+                        mutuoDados(nome,null,true);
+                        mutuoDados(nome2,null,true);
+                        mutuoDados(nome3,null,true);
+                        mutuoDados(nome4,null,true);
+                        mutuoDados(nome5,null,false);
+
+                        mutuoDados(null,finalidade,true);
+                        mutuoDados(null,finalidade2,true);
+                        mutuoDados(null,finalidade3,true);
+                        mutuoDados(null,finalidade4,true);
+                        mutuoDados(null,finalidade5,false);
+
+                        mutuoDados(null,ceans,true);
+                        mutuoDados(null,ceans2,true);
+                        mutuoDados(null,ceans3,true);
+                        mutuoDados(null,ceans4,true);
+                        mutuoDados(null,ceans5,false);
+
+                        mutuoDados(null,tar,true);
+                        mutuoDados(null,tar2,true);
+                        mutuoDados(null,tar3,true);
+                        mutuoDados(null,tar4,true);
+                        mutuoDados(null,tar5,false);
+
+                        mutuoDados(null,reservaTec,true);
+                        mutuoDados(null,reservaTec2,true);
+                        mutuoDados(null,reservaTec3,true);
+                        mutuoDados(null,reservaTec4,true);
+                        mutuoDados(null,reservaTec5,false);
+
+                        mutuoDados(null,backbone,true);
+                        mutuoDados(null,backbone2,true);
+                        mutuoDados(null,backbone3,true);
+                        mutuoDados(null,backbone4,true);
+                        mutuoDados(null,backbone5,false);
+
+                        mutuoDados(descricaoIrregularidade,null,true);
+                        mutuoDados(descricaoIrregularidade2,null,true);
+                        mutuoDados(descricaoIrregularidade3,null,true);
+                        mutuoDados(descricaoIrregularidade4,null,true);
+                        mutuoDados(descricaoIrregularidade5,null,false);
+
+                        mutuoDados(observacaoMutuo,null,true);
+                        mutuoDados(observacaoMutuo2,null,true);
+                        mutuoDados(observacaoMutuo3,null,true);
+                        mutuoDados(observacaoMutuo4,null,true);
+                        mutuoDados(observacaoMutuo5,null,false);
+
+
+                        placaIdentificadora.setEnabled(true);
+
+                        placaIdentificadora2.setEnabled(true);
+
+                        placaIdentificadora3.setEnabled(true);
+
+                        placaIdentificadora4.setEnabled(true);
+                        placaIdentificadora5.setChecked(false);
+                        placaIdentificadora5.setEnabled(false);
+
+
+                        descidaCabos.setEnabled(true);
+
+                        descidaCabos2.setEnabled(true);
+
+                        descidaCabos3.setEnabled(true);
+
+                        descidaCabos4.setEnabled(true);
+                        descidaCabos5.setChecked(false);
+                        descidaCabos5.setEnabled(false);
+
+                        //endregion
+                    }
+                    else if(formularioAtual.getQuantidadeOcupantes().equals("5")){
+                        Log.i("Spinenr","Apertei 5");
+                        //region MutuoDados5
+
+                        mutuoDados(quantidadeCabos,null,true);
+                        mutuoDados(quantidadeCabos2,null,true);
+                        mutuoDados(quantidadeCabos3,null,true);
+                        mutuoDados(quantidadeCabos4,null,true);
+                        mutuoDados(quantidadeCabos5,null,true);
+
+                        mutuoDados(null,tipoCabo,true);
+                        mutuoDados(null,tipoCabo2,true);
+                        mutuoDados(null,tipoCabo3,true);
+                        mutuoDados(null,tipoCabo4,true);
+                        mutuoDados(null,tipoCabo5,true);
+
+                        mutuoDados(nome,null,true);
+                        mutuoDados(nome2,null,true);
+                        mutuoDados(nome3,null,true);
+                        mutuoDados(nome4,null,true);
+                        mutuoDados(nome5,null,true);
+
+                        mutuoDados(null,finalidade,true);
+                        mutuoDados(null,finalidade2,true);
+                        mutuoDados(null,finalidade3,true);
+                        mutuoDados(null,finalidade4,true);
+                        mutuoDados(null,finalidade5,true);
+
+                        mutuoDados(null,ceans,true);
+                        mutuoDados(null,ceans2,true);
+                        mutuoDados(null,ceans3,true);
+                        mutuoDados(null,ceans4,true);
+                        mutuoDados(null,ceans5,true);
+
+                        mutuoDados(null,tar,true);
+                        mutuoDados(null,tar2,true);
+                        mutuoDados(null,tar3,true);
+                        mutuoDados(null,tar4,true);
+                        mutuoDados(null,tar5,true);
+
+                        mutuoDados(null,reservaTec,true);
+                        mutuoDados(null,reservaTec2,true);
+                        mutuoDados(null,reservaTec3,true);
+                        mutuoDados(null,reservaTec4,true);
+                        mutuoDados(null,reservaTec5,true);
+
+                        mutuoDados(null,backbone,true);
+                        mutuoDados(null,backbone2,true);
+                        mutuoDados(null,backbone3,true);
+                        mutuoDados(null,backbone4,true);
+                        mutuoDados(null,backbone5,true);
+
+                        mutuoDados(descricaoIrregularidade,null,true);
+                        mutuoDados(descricaoIrregularidade2,null,true);
+                        mutuoDados(descricaoIrregularidade3,null,true);
+                        mutuoDados(descricaoIrregularidade4,null,true);
+                        mutuoDados(descricaoIrregularidade5,null,true);
+
+                        mutuoDados(observacaoMutuo,null,true);
+                        mutuoDados(observacaoMutuo2,null,true);
+                        mutuoDados(observacaoMutuo3,null,true);
+                        mutuoDados(observacaoMutuo4,null,true);
+                        mutuoDados(observacaoMutuo5,null,true);
+
+
+                        placaIdentificadora.setEnabled(true);
+
+                        placaIdentificadora2.setEnabled(true);
+
+                        placaIdentificadora3.setEnabled(true);
+
+                        placaIdentificadora4.setEnabled(true);
+
+                        placaIdentificadora5.setEnabled(true);
+
+
+                        descidaCabos.setEnabled(true);
+
+                        descidaCabos2.setEnabled(true);
+
+                        descidaCabos3.setEnabled(true);
+
+                        descidaCabos4.setEnabled(true);
+
+                        descidaCabos5.setEnabled(true);
+
+                        //endregion
+                    }
+
+
+
+
+                }
+                //1
+                quantidadeCabos.setText(formularioAtual.getQuantidadeCabos());
+                if (formularioAtual.getTipoCabo().equals("-")) {
+                    tipoCabo.setSelection(0);
+                }else {
+                    for (int i = 0; i < tipoCabo.getAdapter().getCount(); i++) {
+                        tipoCabo.setSelection(i);
+                        if (tipoCabo.getSelectedItem().toString().equals(formularioAtual.getTipoCabo())) {
+                            break;
+                        }
+                    }
+                }
+                nome.setText(formularioAtual.getNome());
+                if (formularioAtual.getFinalidade().equals("-")) {
+                    finalidade.setSelection(0);
+                }else {
+                    for (int i = 0; i < finalidade.getAdapter().getCount(); i++) {
+                        finalidade.setSelection(i);
+                        if (finalidade.getSelectedItem().toString().equals(formularioAtual.getFinalidade())) {
+                            break;
+                        }
+                    }
+                }
+                if (formularioAtual.getCeans().equals("-")) {
+                    ceans.setSelection(0);
+                }else {
+                    for (int i = 0; i < ceans.getAdapter().getCount(); i++) {
+                        ceans.setSelection(i);
+                        if (ceans.getSelectedItem().toString().equals(formularioAtual.getCeans())) {
+                            break;
+                        }
+                    }
+                }
+                if (formularioAtual.getTar().equals("-")) {
+                    tar.setSelection(0);
+                }else {
+                    for (int i = 0; i < tar.getAdapter().getCount(); i++) {
+                        tar.setSelection(i);
+                        if (tar.getSelectedItem().toString().equals(formularioAtual.getTar())) {
+                            break;
+                        }
+                    }
+                }
+                if (formularioAtual.getReservaTec().equals("-")) {
+                    reservaTec.setSelection(0);
+                }else {
+                    for (int i = 0; i < reservaTec.getAdapter().getCount(); i++) {
+                        reservaTec.setSelection(i);
+                        if (reservaTec.getSelectedItem().toString().equals(formularioAtual.getReservaTec())) {
+                            break;
+                        }
+                    }
+                }
+                if (formularioAtual.getBackbone().equals("-")) {
+                    backbone.setSelection(0);
+                }else {
+                    for (int i = 0; i < backbone.getAdapter().getCount(); i++) {
+                        backbone.setSelection(i);
+                        if (backbone.getSelectedItem().toString().equals(formularioAtual.getBackbone())) {
+                            break;
+                        }
+                    }
+                }
+                if(formularioAtual.getPlacaIdent().equals("Sim")){
+                    placaIdentificadora.setChecked(true);
                 }
                 if(formularioAtual.getDescidaCabos().equals("Sim")){
                     descidaCabos.setChecked(true);
                 }
+                descricaoIrregularidade.setText(formularioAtual.getDescricaoIrregularidade());
+                observacaoMutuo.setText((formularioAtual.getObservacaoMutuo()));
+                //2
+                quantidadeCabos2.setText(formularioAtual.getQuantidadeCabos2());
+                if (formularioAtual.getTipoCabo2().equals("-")) {
+                    tipoCabo2.setSelection(0);
+                }else {
+                    for (int i = 0; i < tipoCabo2.getAdapter().getCount(); i++) {
+                        tipoCabo2.setSelection(i);
+                        if (tipoCabo2.getSelectedItem().toString().equals(formularioAtual.getTipoCabo2())) {
+                            break;
+                        }
+                    }
+                }
+                nome2.setText(formularioAtual.getNome2());
+                if (formularioAtual.getFinalidade2().equals("-")) {
+                    finalidade2.setSelection(0);
+                }else {
+                    for (int i = 0; i < finalidade2.getAdapter().getCount(); i++) {
+                        finalidade2.setSelection(i);
+                        if (finalidade2.getSelectedItem().toString().equals(formularioAtual.getFinalidade2())) {
+                            break;
+                        }
+                    }
+                }
+                if (formularioAtual.getCeans2().equals("-")) {
+                    ceans2.setSelection(0);
+                }else {
+                    for (int i = 0; i < ceans2.getAdapter().getCount(); i++) {
+                        ceans2.setSelection(i);
+                        if (ceans2.getSelectedItem().toString().equals(formularioAtual.getCeans2())) {
+                            break;
+                        }
+                    }
+                }
+                    if (formularioAtual.getTar2().equals("-")) {
+                        tar2.setSelection(0);
+                    }else {
+                        for (int i = 0; i < tar2.getAdapter().getCount(); i++) {
+                            tar2.setSelection(i);
+                            if (tar2.getSelectedItem().toString().equals(formularioAtual.getTar2())) {
+                                break;
+                            }
+                        }
+                    }
+                if (formularioAtual.getReservaTec2().equals("-")) {
+                    reservaTec2.setSelection(0);
+                }else {
+                    for (int i = 0; i < reservaTec2.getAdapter().getCount(); i++) {
+                        reservaTec2.setSelection(i);
+                        if (reservaTec2.getSelectedItem().toString().equals(formularioAtual.getReservaTec2())) {
+                            break;
+                        }
+                    }
+                }
+                if (formularioAtual.getBackbone2().equals("-")) {
+                    backbone2.setSelection(0);
+                }else {
+                    for (int i = 0; i < backbone2.getAdapter().getCount(); i++) {
+                        backbone2.setSelection(i);
+                        if (backbone2.getSelectedItem().toString().equals(formularioAtual.getBackbone2())) {
+                            break;
+                        }
+                    }
+                }
+                if(formularioAtual.getPlacaIdent2().equals("Sim")){
+                    placaIdentificadora2.setChecked(true);
+                }
+                if(formularioAtual.getDescidaCabos2().equals("Sim")){
+                    descidaCabos2.setChecked(true);
+                }
+                descricaoIrregularidade2.setText(formularioAtual.getDescricaoIrregularidade2());
+                observacaoMutuo2.setText((formularioAtual.getObservacaoMutuo2()));
+                //3
+                quantidadeCabos3.setText(formularioAtual.getQuantidadeCabos3());
+                if (formularioAtual.getTipoCabo3().equals("-")) {
+                    tipoCabo3.setSelection(0);
+                }else {
+                    for (int i = 0; i < tipoCabo3.getAdapter().getCount(); i++) {
+                        tipoCabo3.setSelection(i);
+                        if (tipoCabo3.getSelectedItem().toString().equals(formularioAtual.getTipoCabo3())) {
+                            break;
+                        }
+                    }
+                }
+                nome3.setText(formularioAtual.getNome3());
+                if (formularioAtual.getFinalidade3().equals("-")) {
+                    finalidade3.setSelection(0);
+                }else {
+                    for (int i = 0; i < finalidade3.getAdapter().getCount(); i++) {
+                        finalidade3.setSelection(i);
+                        if (finalidade3.getSelectedItem().toString().equals(formularioAtual.getFinalidade3())) {
+                            break;
+                        }
+                    }
+                }
+                    if (formularioAtual.getCeans3().equals("-")) {
+                        ceans3.setSelection(0);
+                    }else {
+                        for (int i = 0; i < ceans3.getAdapter().getCount(); i++) {
+                            ceans3.setSelection(i);
+                            if (ceans3.getSelectedItem().toString().equals(formularioAtual.getCeans3())) {
+                                break;
+                            }
+                        }
+                    }
+                if (formularioAtual.getTar3().equals("-")) {
+                    tar3.setSelection(0);
+                }else {
+                    for (int i = 0; i < tar3.getAdapter().getCount(); i++) {
+                        tar3.setSelection(i);
+                        if (tar3.getSelectedItem().toString().equals(formularioAtual.getTar3())) {
+                            break;
+                        }
+                    }
+                }
+                    if (formularioAtual.getReservaTec3().equals("-")) {
+                        reservaTec3.setSelection(0);
+                    }else {
+                        for (int i = 0; i < reservaTec3.getAdapter().getCount(); i++) {
+                            reservaTec3.setSelection(i);
+                            if (reservaTec3.getSelectedItem().toString().equals(formularioAtual.getReservaTec3())) {
+                                break;
+                            }
+                        }
+                    }
+                if (formularioAtual.getBackbone3().equals("-")) {
+                    backbone3.setSelection(0);
+                }else {
+                    for (int i = 0; i < backbone3.getAdapter().getCount(); i++) {
+                        backbone3.setSelection(i);
+                        if (backbone3.getSelectedItem().toString().equals(formularioAtual.getBackbone3())) {
+                            break;
+                        }
+                    }
+                }
+                if(formularioAtual.getPlacaIdent3().equals("Sim")){
+                    placaIdentificadora3.setChecked(true);
+                }
+                if(formularioAtual.getDescidaCabos3().equals("Sim")){
+                    descidaCabos3.setChecked(true);
+                }
+                descricaoIrregularidade3.setText(formularioAtual.getDescricaoIrregularidade3());
+                observacaoMutuo3.setText((formularioAtual.getObservacaoMutuo3()));
+                //4
+                quantidadeCabos4.setText(formularioAtual.getQuantidadeCabos4());
+                if (formularioAtual.getTipoCabo4().equals("-")) {
+                    tipoCabo4.setSelection(0);
+                }else {
+                    for (int i = 0; i < tipoCabo4.getAdapter().getCount(); i++) {
+                        tipoCabo4.setSelection(i);
+                        if (tipoCabo4.getSelectedItem().toString().equals(formularioAtual.getTipoCabo4())) {
+                            break;
+                        }
+                    }
+                }
+                nome4.setText(formularioAtual.getNome4());
+                if (formularioAtual.getFinalidade4().equals("-")) {
+                    finalidade4.setSelection(0);
+                }else {
+                    for (int i = 0; i < finalidade4.getAdapter().getCount(); i++) {
+                        finalidade4.setSelection(i);
+                        if (finalidade4.getSelectedItem().toString().equals(formularioAtual.getFinalidade4())) {
+                            break;
+                        }
+                    }
+                }
+                    if (formularioAtual.getCeans4().equals("-")) {
+                        ceans4.setSelection(0);
+                    }else {
+                        for (int i = 0; i < ceans4.getAdapter().getCount(); i++) {
+                            ceans4.setSelection(i);
+                            if (ceans4.getSelectedItem().toString().equals(formularioAtual.getCeans4())) {
+                                break;
+                            }
+                        }
+                    }
+                if (formularioAtual.getTar4().equals("-")) {
+                    tar4.setSelection(0);
+                }else {
+                    for (int i = 0; i < tar4.getAdapter().getCount(); i++) {
+                        tar4.setSelection(i);
+                        if (tar4.getSelectedItem().toString().equals(formularioAtual.getTar4())) {
+                            break;
+                        }
+                    }
+                }
+                if (formularioAtual.getReservaTec4().equals("-")) {
+                    reservaTec4.setSelection(0);
+                }else {
+                    for (int i = 0; i < reservaTec4.getAdapter().getCount(); i++) {
+                        reservaTec4.setSelection(i);
+                        if (reservaTec4.getSelectedItem().toString().equals(formularioAtual.getReservaTec4())) {
+                            break;
+                        }
+                    }
+                }
+                if (formularioAtual.getBackbone4().equals("-")) {
+                    backbone4.setSelection(0);
+                }else {
+                    for (int i = 0; i < backbone4.getAdapter().getCount(); i++) {
+                        backbone4.setSelection(i);
+                        if (backbone4.getSelectedItem().toString().equals(formularioAtual.getBackbone4())) {
+                            break;
+                        }
+                    }
+                }
+                if(formularioAtual.getPlacaIdent4().equals("Sim")){
+                    placaIdentificadora4.setChecked(true);
+                }
+                if(formularioAtual.getDescidaCabos4().equals("Sim")){
+                    descidaCabos4.setChecked(true);
+                }
+                descricaoIrregularidade4.setText(formularioAtual.getDescricaoIrregularidade4());
+                observacaoMutuo4.setText((formularioAtual.getObservacaoMutuo4()));
+                //5
+                quantidadeCabos5.setText(formularioAtual.getQuantidadeCabos5());
+                if (formularioAtual.getTipoCabo5().equals("-")) {
+                    tipoCabo5.setSelection(0);
+                }else {
+                    for (int i = 0; i < tipoCabo5.getAdapter().getCount(); i++) {
+                        tipoCabo5.setSelection(i);
+                        if (tipoCabo5.getSelectedItem().toString().equals(formularioAtual.getTipoCabo5())) {
+                            break;
+                        }
+                    }
+                }
+                nome5.setText(formularioAtual.getNome5());
+                if (formularioAtual.getFinalidade5().equals("-")) {
+                    finalidade5.setSelection(0);
+                }else {
+                    for (int i = 0; i < finalidade5.getAdapter().getCount(); i++) {
+                        finalidade5.setSelection(i);
+                        if (finalidade5.getSelectedItem().toString().equals(formularioAtual.getFinalidade5())) {
+                            break;
+                        }
+                    }
+                }
+                if (formularioAtual.getCeans5().equals("-")) {
+                    ceans5.setSelection(0);
+                }else {
+                    for (int i = 0; i < ceans5.getAdapter().getCount(); i++) {
+                        ceans5.setSelection(i);
+                        if (ceans5.getSelectedItem().toString().equals(formularioAtual.getCeans5())) {
+                            break;
+                        }
+                    }
+                }
+                if (formularioAtual.getTar5().equals("-")) {
+                    tar5.setSelection(0);
+                }else {
+                    for (int i = 0; i < tar5.getAdapter().getCount(); i++) {
+                        tar5.setSelection(i);
+                        if (tar5.getSelectedItem().toString().equals(formularioAtual.getTar5())) {
+                            break;
+                        }
+                    }
+                }
+                if (formularioAtual.getReservaTec5().equals("-")) {
+                    reservaTec5.setSelection(0);
+                }else {
+                    for (int i = 0; i < reservaTec5.getAdapter().getCount(); i++) {
+                        reservaTec5.setSelection(i);
+                        if (reservaTec5.getSelectedItem().toString().equals(formularioAtual.getReservaTec5())) {
+                            break;
+                        }
+                    }
+                }
+                if (formularioAtual.getBackbone5().equals("-")) {
+                    backbone5.setSelection(0);
+                }else {
+                    for (int i = 0; i < backbone5.getAdapter().getCount(); i++) {
+                        backbone5.setSelection(i);
+                        if (backbone5.getSelectedItem().toString().equals(formularioAtual.getBackbone5())) {
+                            break;
+                        }
+                    }
+                }
+                if(formularioAtual.getPlacaIdent5().equals("Sim")){
+                    placaIdentificadora5.setChecked(true);
+                }
+                if(formularioAtual.getDescidaCabos5().equals("Sim")){
+                    descidaCabos5.setChecked(true);
+                }
+                descricaoIrregularidade5.setText(formularioAtual.getDescricaoIrregularidade5());
+                observacaoMutuo5.setText((formularioAtual.getObservacaoMutuo5()));
+
+                if (formularioAtual.getDimensaoVegetacao().equals("-")) {
+                    dimensaoVegetacao.setSelection(0);
+                }else {
+                    for (int i = 0; i < dimensaoVegetacao.getAdapter().getCount(); i++) {
+                        dimensaoVegetacao.setSelection(i);
+                        if (dimensaoVegetacao.getSelectedItem().toString().equals(formularioAtual.getDimensaoVegetacao())) {
+                            break;
+                        }
+                    }
+                }
+                if (formularioAtual.getDistaciaBaixa().equals("-")) {
+                    distaciaBaixa.setSelection(0);
+                }else {
+                    for (int i = 0; i < distaciaBaixa.getAdapter().getCount(); i++) {
+                        distaciaBaixa.setSelection(i);
+                        if (distaciaBaixa.getSelectedItem().toString().equals(formularioAtual.getDistaciaBaixa())) {
+                            break;
+                        }
+                    }
+                }
+                if (formularioAtual.getDistanciaMedia().equals("-")) {
+                    distanciaMedia.setSelection(0);
+                }else {
+                    for (int i = 0; i < distanciaMedia.getAdapter().getCount(); i++) {
+                        distanciaMedia.setSelection(i);
+                        if (dimensaoVegetacao.getSelectedItem().toString().equals(formularioAtual.getDistanciaMedia())) {
+                            break;
+                        }
+                    }
+                }
+                if (formularioAtual.getEstadoArvore().equals("-")) {
+                    estadoArvore.setSelection(0);
+                }else {
+                    for (int i = 0; i < estadoArvore.getAdapter().getCount(); i++) {
+                        estadoArvore.setSelection(i);
+                        if (estadoArvore.getSelectedItem().toString().equals(formularioAtual.getEstadoArvore())) {
+                            break;
+                        }
+                    }
+                }
+                if(formularioAtual.getQuedaArvore().equals("Sim")){
+                    quedaArvore.setChecked(true);
+                }
+                if (formularioAtual.getLocalArvore().equals("-")) {
+                    localArvore.setSelection(0);
+                }else {
+                    for (int i = 0; i < localArvore.getAdapter().getCount(); i++) {
+                        localArvore.setSelection(i);
+                        if (localArvore.getSelectedItem().toString().equals(formularioAtual.getLocalArvore())) {
+                            break;
+                        }
+                    }
+                }
+                observacaoVegetacao.setText(formularioAtual.getObservacaoVegetacao());
+                controle = false;
 
             }
         }catch (Exception e ){
          Log.e("ERRO", "erro: " + e);
         }
+
 
         normal.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -764,14 +1732,555 @@ public class CadastroFragment extends Fragment {
 
             }
         });
-        /*trafoTrifasico.setOnTouchListener(new View.OnTouchListener() {
-            @SuppressLint("ClickableViewAccessibility")
+
+        mutuo.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                trafoTrifasico.setFocusable(true);
-                return false;
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Log.i("CHAMADO", "FUI");
+                    if(mutuo.isChecked()){
+                    quantidadeOcupantes.setEnabled(true);
+                }else{
+                    quantidadeOcupantes.setSelection(0);
+                    quantidadeOcupantes.setEnabled(false);
+                }
             }
-        });*/
+        });
+
+        quantidadeOcupantes.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.i("CHAMADO", "FUI2");
+                if (controle){
+                    Log.i("CHAMADO", "PREVENIU");
+                }else{
+                    if (quantidadeOcupantes.getSelectedItem().toString().equals(quantidadeOcupantes.getItemAtPosition(0).toString())) {
+                        Log.i("Spinenr", "Apertei 0");
+                        // region MutuoDados0
+                        mutuoDados(quantidadeCabos, null, false);
+                        mutuoDados(quantidadeCabos2, null, false);
+                        mutuoDados(quantidadeCabos3, null, false);
+                        mutuoDados(quantidadeCabos4, null, false);
+                        mutuoDados(quantidadeCabos5, null, false);
+
+                        mutuoDados(null, tipoCabo, false);
+                        mutuoDados(null, tipoCabo2, false);
+                        mutuoDados(null, tipoCabo3, false);
+                        mutuoDados(null, tipoCabo4, false);
+                        mutuoDados(null, tipoCabo5, false);
+
+                        mutuoDados(nome, null, false);
+                        mutuoDados(nome2, null, false);
+                        mutuoDados(nome3, null, false);
+                        mutuoDados(nome4, null, false);
+                        mutuoDados(nome5, null, false);
+
+                        mutuoDados(null, finalidade, false);
+                        mutuoDados(null, finalidade2, false);
+                        mutuoDados(null, finalidade3, false);
+                        mutuoDados(null, finalidade4, false);
+                        mutuoDados(null, finalidade5, false);
+
+                        mutuoDados(null, ceans, false);
+                        mutuoDados(null, ceans2, false);
+                        mutuoDados(null, ceans3, false);
+                        mutuoDados(null, ceans4, false);
+                        mutuoDados(null, ceans5, false);
+
+                        mutuoDados(null, tar, false);
+                        mutuoDados(null, tar2, false);
+                        mutuoDados(null, tar3, false);
+                        mutuoDados(null, tar4, false);
+                        mutuoDados(null, tar5, false);
+
+                        mutuoDados(null, reservaTec, false);
+                        mutuoDados(null, reservaTec2, false);
+                        mutuoDados(null, reservaTec3, false);
+                        mutuoDados(null, reservaTec4, false);
+                        mutuoDados(null, reservaTec5, false);
+
+                        mutuoDados(null, backbone, false);
+                        mutuoDados(null, backbone2, false);
+                        mutuoDados(null, backbone3, false);
+                        mutuoDados(null, backbone4, false);
+                        mutuoDados(null, backbone5, false);
+
+                        mutuoDados(descricaoIrregularidade, null, false);
+                        mutuoDados(descricaoIrregularidade2, null, false);
+                        mutuoDados(descricaoIrregularidade3, null, false);
+                        mutuoDados(descricaoIrregularidade4, null, false);
+                        mutuoDados(descricaoIrregularidade5, null, false);
+
+                        mutuoDados(observacaoMutuo, null, false);
+                        mutuoDados(observacaoMutuo2, null, false);
+                        mutuoDados(observacaoMutuo3, null, false);
+                        mutuoDados(observacaoMutuo4, null, false);
+                        mutuoDados(observacaoMutuo5, null, false);
+
+                        placaIdentificadora.setChecked(false);
+                        placaIdentificadora.setEnabled(false);
+                        placaIdentificadora2.setChecked(false);
+                        placaIdentificadora2.setEnabled(false);
+                        placaIdentificadora3.setChecked(false);
+                        placaIdentificadora3.setEnabled(false);
+                        placaIdentificadora4.setChecked(false);
+                        placaIdentificadora4.setEnabled(false);
+                        placaIdentificadora5.setChecked(false);
+                        placaIdentificadora5.setEnabled(false);
+
+                        descidaCabos.setChecked(false);
+                        descidaCabos.setEnabled(false);
+                        descidaCabos2.setChecked(false);
+                        descidaCabos2.setEnabled(false);
+                        descidaCabos3.setChecked(false);
+                        descidaCabos3.setEnabled(false);
+                        descidaCabos4.setChecked(false);
+                        descidaCabos4.setEnabled(false);
+                        descidaCabos5.setChecked(false);
+                        descidaCabos5.setEnabled(false);
+
+                        // endregion
+                    } else if (quantidadeOcupantes.getSelectedItem().toString().equals(quantidadeOcupantes.getItemAtPosition(1).toString())) {
+                        Log.i("Spinenr", "Apertei 1");
+                        // region MutuoDados1
+                        mutuoDados(quantidadeCabos, null, true);
+                        mutuoDados(quantidadeCabos2, null, false);
+                        mutuoDados(quantidadeCabos3, null, false);
+                        mutuoDados(quantidadeCabos4, null, false);
+                        mutuoDados(quantidadeCabos5, null, false);
+
+                        mutuoDados(null, tipoCabo, true);
+                        mutuoDados(null, tipoCabo2, false);
+                        mutuoDados(null, tipoCabo3, false);
+                        mutuoDados(null, tipoCabo4, false);
+                        mutuoDados(null, tipoCabo5, false);
+
+                        mutuoDados(nome, null, true);
+                        mutuoDados(nome2, null, false);
+                        mutuoDados(nome3, null, false);
+                        mutuoDados(nome4, null, false);
+                        mutuoDados(nome5, null, false);
+
+                        mutuoDados(null, finalidade, true);
+                        mutuoDados(null, finalidade2, false);
+                        mutuoDados(null, finalidade3, false);
+                        mutuoDados(null, finalidade4, false);
+                        mutuoDados(null, finalidade5, false);
+
+                        mutuoDados(null, ceans, true);
+                        mutuoDados(null, ceans2, false);
+                        mutuoDados(null, ceans3, false);
+                        mutuoDados(null, ceans4, false);
+                        mutuoDados(null, ceans5, false);
+
+                        mutuoDados(null, tar, true);
+                        mutuoDados(null, tar2, false);
+                        mutuoDados(null, tar3, false);
+                        mutuoDados(null, tar4, false);
+                        mutuoDados(null, tar5, false);
+
+                        mutuoDados(null, reservaTec, true);
+                        mutuoDados(null, reservaTec2, false);
+                        mutuoDados(null, reservaTec3, false);
+                        mutuoDados(null, reservaTec4, false);
+                        mutuoDados(null, reservaTec5, false);
+
+                        mutuoDados(null, backbone, true);
+                        mutuoDados(null, backbone2, false);
+                        mutuoDados(null, backbone3, false);
+                        mutuoDados(null, backbone4, false);
+                        mutuoDados(null, backbone5, false);
+
+                        mutuoDados(descricaoIrregularidade, null, true);
+                        mutuoDados(descricaoIrregularidade2, null, false);
+                        mutuoDados(descricaoIrregularidade3, null, false);
+                        mutuoDados(descricaoIrregularidade4, null, false);
+                        mutuoDados(descricaoIrregularidade5, null, false);
+
+                        mutuoDados(observacaoMutuo, null, true);
+                        mutuoDados(observacaoMutuo2, null, false);
+                        mutuoDados(observacaoMutuo3, null, false);
+                        mutuoDados(observacaoMutuo4, null, false);
+                        mutuoDados(observacaoMutuo5, null, false);
+
+
+                        placaIdentificadora.setEnabled(true);
+                        placaIdentificadora2.setChecked(false);
+                        placaIdentificadora2.setEnabled(false);
+                        placaIdentificadora3.setChecked(false);
+                        placaIdentificadora3.setEnabled(false);
+                        placaIdentificadora4.setChecked(false);
+                        placaIdentificadora4.setEnabled(false);
+                        placaIdentificadora5.setChecked(false);
+                        placaIdentificadora5.setEnabled(false);
+
+
+                        descidaCabos.setEnabled(true);
+                        descidaCabos2.setChecked(false);
+                        descidaCabos2.setEnabled(false);
+                        descidaCabos3.setChecked(false);
+                        descidaCabos3.setEnabled(false);
+                        descidaCabos4.setChecked(false);
+                        descidaCabos4.setEnabled(false);
+                        descidaCabos5.setChecked(false);
+                        descidaCabos5.setEnabled(false);
+
+                        //endregion
+                    } else if (quantidadeOcupantes.getSelectedItem().toString().equals(quantidadeOcupantes.getItemAtPosition(2).toString())) {
+                        Log.i("Spinenr", "Apertei 2");
+                        //region MutuoDados2
+
+                        mutuoDados(quantidadeCabos, null, true);
+                        mutuoDados(quantidadeCabos2, null, true);
+                        mutuoDados(quantidadeCabos3, null, false);
+                        mutuoDados(quantidadeCabos4, null, false);
+                        mutuoDados(quantidadeCabos5, null, false);
+
+                        mutuoDados(null, tipoCabo, true);
+                        mutuoDados(null, tipoCabo2, true);
+                        mutuoDados(null, tipoCabo3, false);
+                        mutuoDados(null, tipoCabo4, false);
+                        mutuoDados(null, tipoCabo5, false);
+
+                        mutuoDados(nome, null, true);
+                        mutuoDados(nome2, null, true);
+                        mutuoDados(nome3, null, false);
+                        mutuoDados(nome4, null, false);
+                        mutuoDados(nome5, null, false);
+
+                        mutuoDados(null, finalidade, true);
+                        mutuoDados(null, finalidade2, true);
+                        mutuoDados(null, finalidade3, false);
+                        mutuoDados(null, finalidade4, false);
+                        mutuoDados(null, finalidade5, false);
+
+                        mutuoDados(null, ceans, true);
+                        mutuoDados(null, ceans2, true);
+                        mutuoDados(null, ceans3, false);
+                        mutuoDados(null, ceans4, false);
+                        mutuoDados(null, ceans5, false);
+
+                        mutuoDados(null, tar, true);
+                        mutuoDados(null, tar2, true);
+                        mutuoDados(null, tar3, false);
+                        mutuoDados(null, tar4, false);
+                        mutuoDados(null, tar5, false);
+
+                        mutuoDados(null, reservaTec, true);
+                        mutuoDados(null, reservaTec2, true);
+                        mutuoDados(null, reservaTec3, false);
+                        mutuoDados(null, reservaTec4, false);
+                        mutuoDados(null, reservaTec5, false);
+
+                        mutuoDados(null, backbone, true);
+                        mutuoDados(null, backbone2, true);
+                        mutuoDados(null, backbone3, false);
+                        mutuoDados(null, backbone4, false);
+                        mutuoDados(null, backbone5, false);
+
+                        mutuoDados(descricaoIrregularidade, null, true);
+                        mutuoDados(descricaoIrregularidade2, null, true);
+                        mutuoDados(descricaoIrregularidade3, null, false);
+                        mutuoDados(descricaoIrregularidade4, null, false);
+                        mutuoDados(descricaoIrregularidade5, null, false);
+
+                        mutuoDados(observacaoMutuo, null, true);
+                        mutuoDados(observacaoMutuo2, null, true);
+                        mutuoDados(observacaoMutuo3, null, false);
+                        mutuoDados(observacaoMutuo4, null, false);
+                        mutuoDados(observacaoMutuo5, null, false);
+
+
+                        placaIdentificadora.setEnabled(true);
+
+                        placaIdentificadora2.setEnabled(true);
+                        placaIdentificadora3.setChecked(false);
+                        placaIdentificadora3.setEnabled(false);
+                        placaIdentificadora4.setChecked(false);
+                        placaIdentificadora4.setEnabled(false);
+                        placaIdentificadora5.setChecked(false);
+                        placaIdentificadora5.setEnabled(false);
+
+
+                        descidaCabos.setEnabled(true);
+
+                        descidaCabos2.setEnabled(true);
+                        descidaCabos3.setChecked(false);
+                        descidaCabos3.setEnabled(false);
+                        descidaCabos4.setChecked(false);
+                        descidaCabos4.setEnabled(false);
+                        descidaCabos5.setChecked(false);
+                        descidaCabos5.setEnabled(false);
+
+                        //endregion
+                    } else if (quantidadeOcupantes.getSelectedItem().toString().equals(quantidadeOcupantes.getItemAtPosition(3).toString())) {
+                        Log.i("Spinenr", "Apertei 3");
+                        //region MutuoDados3
+
+                        mutuoDados(quantidadeCabos, null, true);
+                        mutuoDados(quantidadeCabos2, null, true);
+                        mutuoDados(quantidadeCabos3, null, true);
+                        mutuoDados(quantidadeCabos4, null, false);
+                        mutuoDados(quantidadeCabos5, null, false);
+
+                        mutuoDados(null, tipoCabo, true);
+                        mutuoDados(null, tipoCabo2, true);
+                        mutuoDados(null, tipoCabo3, true);
+                        mutuoDados(null, tipoCabo4, false);
+                        mutuoDados(null, tipoCabo5, false);
+
+                        mutuoDados(nome, null, true);
+                        mutuoDados(nome2, null, true);
+                        mutuoDados(nome3, null, true);
+                        mutuoDados(nome4, null, false);
+                        mutuoDados(nome5, null, false);
+
+                        mutuoDados(null, finalidade, true);
+                        mutuoDados(null, finalidade2, true);
+                        mutuoDados(null, finalidade3, true);
+                        mutuoDados(null, finalidade4, false);
+                        mutuoDados(null, finalidade5, false);
+
+                        mutuoDados(null, ceans, true);
+                        mutuoDados(null, ceans2, true);
+                        mutuoDados(null, ceans3, true);
+                        mutuoDados(null, ceans4, false);
+                        mutuoDados(null, ceans5, false);
+
+                        mutuoDados(null, tar, true);
+                        mutuoDados(null, tar2, true);
+                        mutuoDados(null, tar3, true);
+                        mutuoDados(null, tar4, false);
+                        mutuoDados(null, tar5, false);
+
+                        mutuoDados(null, reservaTec, true);
+                        mutuoDados(null, reservaTec2, true);
+                        mutuoDados(null, reservaTec3, true);
+                        mutuoDados(null, reservaTec4, false);
+                        mutuoDados(null, reservaTec5, false);
+
+                        mutuoDados(null, backbone, true);
+                        mutuoDados(null, backbone2, true);
+                        mutuoDados(null, backbone3, true);
+                        mutuoDados(null, backbone4, false);
+                        mutuoDados(null, backbone5, false);
+
+                        mutuoDados(descricaoIrregularidade, null, true);
+                        mutuoDados(descricaoIrregularidade2, null, true);
+                        mutuoDados(descricaoIrregularidade3, null, true);
+                        mutuoDados(descricaoIrregularidade4, null, false);
+                        mutuoDados(descricaoIrregularidade5, null, false);
+
+                        mutuoDados(observacaoMutuo, null, true);
+                        mutuoDados(observacaoMutuo2, null, true);
+                        mutuoDados(observacaoMutuo3, null, true);
+                        mutuoDados(observacaoMutuo4, null, false);
+                        mutuoDados(observacaoMutuo5, null, false);
+
+
+                        placaIdentificadora.setEnabled(true);
+
+                        placaIdentificadora2.setEnabled(true);
+
+                        placaIdentificadora3.setEnabled(true);
+                        placaIdentificadora4.setChecked(false);
+                        placaIdentificadora4.setEnabled(false);
+                        placaIdentificadora5.setChecked(false);
+                        placaIdentificadora5.setEnabled(false);
+
+
+                        descidaCabos.setEnabled(true);
+
+                        descidaCabos2.setEnabled(true);
+
+                        descidaCabos3.setEnabled(true);
+                        descidaCabos4.setChecked(false);
+                        descidaCabos4.setEnabled(false);
+                        descidaCabos5.setChecked(false);
+                        descidaCabos5.setEnabled(false);
+
+                        //endregion
+                    } else if (quantidadeOcupantes.getSelectedItem().toString().equals(quantidadeOcupantes.getItemAtPosition(4).toString())) {
+                        Log.i("Spinenr", "Apertei 4");
+                        //region MutuoDados4
+
+                        mutuoDados(quantidadeCabos, null, true);
+                        mutuoDados(quantidadeCabos2, null, true);
+                        mutuoDados(quantidadeCabos3, null, true);
+                        mutuoDados(quantidadeCabos4, null, true);
+                        mutuoDados(quantidadeCabos5, null, false);
+
+                        mutuoDados(null, tipoCabo, true);
+                        mutuoDados(null, tipoCabo2, true);
+                        mutuoDados(null, tipoCabo3, true);
+                        mutuoDados(null, tipoCabo4, true);
+                        mutuoDados(null, tipoCabo5, false);
+
+                        mutuoDados(nome, null, true);
+                        mutuoDados(nome2, null, true);
+                        mutuoDados(nome3, null, true);
+                        mutuoDados(nome4, null, true);
+                        mutuoDados(nome5, null, false);
+
+                        mutuoDados(null, finalidade, true);
+                        mutuoDados(null, finalidade2, true);
+                        mutuoDados(null, finalidade3, true);
+                        mutuoDados(null, finalidade4, true);
+                        mutuoDados(null, finalidade5, false);
+
+                        mutuoDados(null, ceans, true);
+                        mutuoDados(null, ceans2, true);
+                        mutuoDados(null, ceans3, true);
+                        mutuoDados(null, ceans4, true);
+                        mutuoDados(null, ceans5, false);
+
+                        mutuoDados(null, tar, true);
+                        mutuoDados(null, tar2, true);
+                        mutuoDados(null, tar3, true);
+                        mutuoDados(null, tar4, true);
+                        mutuoDados(null, tar5, false);
+
+                        mutuoDados(null, reservaTec, true);
+                        mutuoDados(null, reservaTec2, true);
+                        mutuoDados(null, reservaTec3, true);
+                        mutuoDados(null, reservaTec4, true);
+                        mutuoDados(null, reservaTec5, false);
+
+                        mutuoDados(null, backbone, true);
+                        mutuoDados(null, backbone2, true);
+                        mutuoDados(null, backbone3, true);
+                        mutuoDados(null, backbone4, true);
+                        mutuoDados(null, backbone5, false);
+
+                        mutuoDados(descricaoIrregularidade, null, true);
+                        mutuoDados(descricaoIrregularidade2, null, true);
+                        mutuoDados(descricaoIrregularidade3, null, true);
+                        mutuoDados(descricaoIrregularidade4, null, true);
+                        mutuoDados(descricaoIrregularidade5, null, false);
+
+                        mutuoDados(observacaoMutuo, null, true);
+                        mutuoDados(observacaoMutuo2, null, true);
+                        mutuoDados(observacaoMutuo3, null, true);
+                        mutuoDados(observacaoMutuo4, null, true);
+                        mutuoDados(observacaoMutuo5, null, false);
+
+
+                        placaIdentificadora.setEnabled(true);
+
+                        placaIdentificadora2.setEnabled(true);
+
+                        placaIdentificadora3.setEnabled(true);
+
+                        placaIdentificadora4.setEnabled(true);
+                        placaIdentificadora5.setChecked(false);
+                        placaIdentificadora5.setEnabled(false);
+
+
+                        descidaCabos.setEnabled(true);
+
+                        descidaCabos2.setEnabled(true);
+
+                        descidaCabos3.setEnabled(true);
+
+                        descidaCabos4.setEnabled(true);
+                        descidaCabos5.setChecked(false);
+                        descidaCabos5.setEnabled(false);
+
+                        //endregion
+                    } else if (quantidadeOcupantes.getSelectedItem().toString().equals(quantidadeOcupantes.getItemAtPosition(5).toString())) {
+                        Log.i("Spinenr", "Apertei 5");
+                        Log.i("Spinenr", "FUI3");
+                        //region MutuoDados5
+
+                        mutuoDados(quantidadeCabos, null, true);
+                        mutuoDados(quantidadeCabos2, null, true);
+                        mutuoDados(quantidadeCabos3, null, true);
+                        mutuoDados(quantidadeCabos4, null, true);
+                        mutuoDados(quantidadeCabos5, null, true);
+
+                        mutuoDados(null, tipoCabo, true);
+                        mutuoDados(null, tipoCabo2, true);
+                        mutuoDados(null, tipoCabo3, true);
+                        mutuoDados(null, tipoCabo4, true);
+                        mutuoDados(null, tipoCabo5, true);
+
+                        mutuoDados(nome, null, true);
+                        mutuoDados(nome2, null, true);
+                        mutuoDados(nome3, null, true);
+                        mutuoDados(nome4, null, true);
+                        mutuoDados(nome5, null, true);
+
+                        mutuoDados(null, finalidade, true);
+                        mutuoDados(null, finalidade2, true);
+                        mutuoDados(null, finalidade3, true);
+                        mutuoDados(null, finalidade4, true);
+                        mutuoDados(null, finalidade5, true);
+
+                        mutuoDados(null, ceans, true);
+                        mutuoDados(null, ceans2, true);
+                        mutuoDados(null, ceans3, true);
+                        mutuoDados(null, ceans4, true);
+                        mutuoDados(null, ceans5, true);
+
+                        mutuoDados(null, tar, true);
+                        mutuoDados(null, tar2, true);
+                        mutuoDados(null, tar3, true);
+                        mutuoDados(null, tar4, true);
+                        mutuoDados(null, tar5, true);
+
+                        mutuoDados(null, reservaTec, true);
+                        mutuoDados(null, reservaTec2, true);
+                        mutuoDados(null, reservaTec3, true);
+                        mutuoDados(null, reservaTec4, true);
+                        mutuoDados(null, reservaTec5, true);
+
+                        mutuoDados(null, backbone, true);
+                        mutuoDados(null, backbone2, true);
+                        mutuoDados(null, backbone3, true);
+                        mutuoDados(null, backbone4, true);
+                        mutuoDados(null, backbone5, true);
+
+                        mutuoDados(descricaoIrregularidade, null, true);
+                        mutuoDados(descricaoIrregularidade2, null, true);
+                        mutuoDados(descricaoIrregularidade3, null, true);
+                        mutuoDados(descricaoIrregularidade4, null, true);
+                        mutuoDados(descricaoIrregularidade5, null, true);
+
+                        mutuoDados(observacaoMutuo, null, true);
+                        mutuoDados(observacaoMutuo2, null, true);
+                        mutuoDados(observacaoMutuo3, null, true);
+                        mutuoDados(observacaoMutuo4, null, true);
+                        mutuoDados(observacaoMutuo5, null, true);
+
+
+                        placaIdentificadora.setEnabled(true);
+
+                        placaIdentificadora2.setEnabled(true);
+
+                        placaIdentificadora3.setEnabled(true);
+
+                        placaIdentificadora4.setEnabled(true);
+
+                        placaIdentificadora5.setEnabled(true);
+
+
+                        descidaCabos.setEnabled(true);
+
+                        descidaCabos2.setEnabled(true);
+
+                        descidaCabos3.setEnabled(true);
+
+                        descidaCabos4.setEnabled(true);
+
+                        descidaCabos5.setEnabled(true);
+
+                        //endregion
+                    }
+                }
+            }
+
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
 
         buttonCadastrar.setOnClickListener(new View.OnClickListener() {
@@ -933,9 +2442,9 @@ public class CadastroFragment extends Fragment {
 
                 //MUTUO
                 if (mutuo.isChecked()) {
-                    formulario.setAtivos("Sim");
+                    formulario.setMutuo("Sim");
                 } else {
-                    formulario.setAtivos("Não");
+                    formulario.setMutuo("Não");
                 }
                 setLista(formulario,quantidadeOcupantes,"quantidadeOcupantes");
 
@@ -947,6 +2456,17 @@ public class CadastroFragment extends Fragment {
                 setLista(formulario,tar,"tar");
                 setLista(formulario,reservaTec,"reservaTec");
                 setLista(formulario,backbone,"backbone");
+                if(placaIdentificadora.isChecked()){
+                    formulario.setPlacaIdent("Sim");
+                }else {
+                    formulario.setPlacaIdent("Não");
+                }
+
+                if(descidaCabos.isChecked()){
+                    formulario.setDescidaCabos("Sim");
+                }else {
+                    formulario.setDescidaCabos("Não");
+                }
                 formulario.setDescricaoIrregularidade(Objects.requireNonNull(descricaoIrregularidade.getText()).toString());
                 formulario.setObservacaoMutuo(Objects.requireNonNull(observacaoMutuo.getText()).toString());
 
@@ -958,6 +2478,17 @@ public class CadastroFragment extends Fragment {
                 setLista(formulario,tar2,"tar2");
                 setLista(formulario,reservaTec2,"reservaTec2");
                 setLista(formulario,backbone2,"backbone2");
+                if(placaIdentificadora2.isChecked()){
+                    formulario.setPlacaIdent2("Sim");
+                }else {
+                    formulario.setPlacaIdent2("Não");
+                }
+
+                if(descidaCabos2.isChecked()){
+                    formulario.setDescidaCabos2("Sim");
+                }else {
+                    formulario.setDescidaCabos2("Não");
+                }
                 formulario.setDescricaoIrregularidade2(Objects.requireNonNull(descricaoIrregularidade2.getText()).toString());
                 formulario.setObservacaoMutuo2(Objects.requireNonNull(observacaoMutuo2.getText()).toString());
 
@@ -969,6 +2500,17 @@ public class CadastroFragment extends Fragment {
                 setLista(formulario,tar3,"tar3");
                 setLista(formulario,reservaTec3,"reservaTec3");
                 setLista(formulario,backbone3,"backbone3");
+                if(placaIdentificadora3.isChecked()){
+                    formulario.setPlacaIdent3("Sim");
+                }else {
+                    formulario.setPlacaIdent3("Não");
+                }
+
+                if(descidaCabos3.isChecked()){
+                    formulario.setDescidaCabos3("Sim");
+                }else {
+                    formulario.setDescidaCabos3("Não");
+                }
                 formulario.setDescricaoIrregularidade3(Objects.requireNonNull(descricaoIrregularidade3.getText()).toString());
                 formulario.setObservacaoMutuo3(Objects.requireNonNull(observacaoMutuo3.getText()).toString());
 
@@ -980,6 +2522,17 @@ public class CadastroFragment extends Fragment {
                 setLista(formulario,tar4,"tar4");
                 setLista(formulario,reservaTec4,"reservaTec4");
                 setLista(formulario,backbone4,"backbone4");
+                if(placaIdentificadora4.isChecked()){
+                    formulario.setPlacaIdent4("Sim");
+                }else {
+                    formulario.setPlacaIdent4("Não");
+                }
+
+                if(descidaCabos4.isChecked()){
+                    formulario.setDescidaCabos4("Sim");
+                }else {
+                    formulario.setDescidaCabos4("Não");
+                }
                 formulario.setDescricaoIrregularidade4(Objects.requireNonNull(descricaoIrregularidade4.getText()).toString());
                 formulario.setObservacaoMutuo4(Objects.requireNonNull(observacaoMutuo4.getText()).toString());
 
@@ -991,26 +2544,35 @@ public class CadastroFragment extends Fragment {
                 setLista(formulario,tar5,"tar5");
                 setLista(formulario,reservaTec5,"reservaTec5");
                 setLista(formulario,backbone5,"backbone5");
+                if(placaIdentificadora5.isChecked()){
+                    formulario.setPlacaIdent5("Sim");
+                }else {
+                    formulario.setPlacaIdent5("Não");
+                }
+
+                if(descidaCabos5.isChecked()){
+                    formulario.setDescidaCabos5("Sim");
+                }else {
+                    formulario.setDescidaCabos5("Não");
+                }
                 formulario.setDescricaoIrregularidade5(Objects.requireNonNull(descricaoIrregularidade5.getText()).toString());
                 formulario.setObservacaoMutuo5(Objects.requireNonNull(observacaoMutuo5.getText()).toString());
 
+
                 //VEGETAÇÃO
-                formulario.setDistaciaBaixa(Objects.requireNonNull(distaciaBaixa.getText()).toString());
-                formulario.setDistanciaMedia(Objects.requireNonNull(distanciaMedia.getText()).toString());
+                setLista(formulario,dimensaoVegetacao,"dimensaoVegetacao");
+                setLista(formulario,distaciaBaixa,"distanciaBaixa");
+                setLista(formulario,distanciaMedia,"distanciaMedia");
+                setLista(formulario,estadoArvore,"estadoArvore");
+                if(quedaArvore.isChecked()){
+                    formulario.setQuedaArvore("Sim");
+                }else {
+                    formulario.setQuedaArvore("Não");
+                }
+                setLista(formulario,localArvore,"localArvore");
                 formulario.setObservacaoVegetacao(Objects.requireNonNull(observacaoVegetacao.getText()).toString());
 
 
-
-                formulario.setPlacaIdent(placaIdent.getSelectedItem().toString());
-                formulario.setDimensaoVegetacao(dimensaoVegetacao.getSelectedItem().toString());
-
-
-
-                if (descidaCabos.isChecked()) {
-                    formulario.setDescidaCabos("Sim");
-                } else {
-                    formulario.setDescidaCabos("Não");
-                }
                 formulario.setNome(Objects.requireNonNull(nome.getText()).toString());
                 if (formularioAtual != null) {
                     formulario.setId(formularioAtual.getId());
@@ -1074,5 +2636,25 @@ public class CadastroFragment extends Fragment {
         }else{
             formulario.GenericSetter(atributo,spinner.getSelectedItem().toString());
         }
+    }
+
+    public void mutuoDados(EditText editText, Spinner spinner, Boolean estado){
+        if((editText != null) && !estado){
+            editText.setText("");
+            editText.setEnabled(estado);
+
+        }
+        else if((editText != null) && estado){
+            editText.setEnabled(estado);
+
+        }
+        else if ((spinner != null) && !estado) {
+            spinner.setSelection(0);
+            spinner.setEnabled(estado);
+        }
+        else if ((spinner != null) && estado) {
+            spinner.setEnabled(estado);
+        }
+
     }
 }

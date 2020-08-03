@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import com.example.satelprojetos.R;
@@ -78,8 +79,14 @@ public class DrawerActivity extends AppCompatActivity {
     }
 
     public void onClick(View v) {
-        v.clearFocus();
-        Log.i("FOCUS", v.toString());
+        try {
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            v.clearFocus();
+            Log.i("FOCUS", v.toString());
+        }catch (Exception e){
+            Log.i("INFO DB", "Erro" + e.getMessage());
+        }
     }
     @Override
     public void onBackPressed() {
