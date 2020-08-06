@@ -11,12 +11,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.satelprojetos.R;
 import com.example.satelprojetos.helper.FormularioDAO;
 import com.example.satelprojetos.ui.cadastro.CadastroFragment;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -28,6 +31,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import org.w3c.dom.Text;
+
 import java.util.List;
 
 import static java.lang.Integer.valueOf;
@@ -36,6 +41,7 @@ public class DrawerActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private CadastroFragment cadastroFragment;
+    private TextView navEmail;
     private static final String SESSION_ID = "sessionId";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +74,8 @@ public class DrawerActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.drawer, menu);
+        navEmail = findViewById(R.id.lblNav_headerEmail);
+        navEmail.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
         return true;
     }
 

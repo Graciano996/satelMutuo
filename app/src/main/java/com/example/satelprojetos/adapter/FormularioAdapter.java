@@ -11,8 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.satelprojetos.R;
 import com.example.satelprojetos.model.Formulario;
 
-import org.w3c.dom.Text;
-
 import java.util.List;
 
 public class FormularioAdapter extends RecyclerView.Adapter<FormularioAdapter.MyViewHolder> {
@@ -34,9 +32,10 @@ public class FormularioAdapter extends RecyclerView.Adapter<FormularioAdapter.My
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         Formulario formulario = listaFormulario.get(position);
-        holder.formularioNome.setText(formulario.getNome());
-        holder.formularioData.setText(formulario.getData());
         holder.formularioEndereco.setText(formulario.getEndereco());
+        holder.formularioData.setText(formulario.getData());
+        holder.formularioLatitude.setText("Latitude: " + formulario.getLatitude());
+        holder.formularioLongitude.setText("Longitude: " + formulario.getLongitude());
     }
 
     @Override
@@ -46,14 +45,15 @@ public class FormularioAdapter extends RecyclerView.Adapter<FormularioAdapter.My
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
-        TextView formularioNome, formularioData, formularioEndereco;
+        TextView formularioLatitude, formularioLongitude, formularioData, formularioEndereco;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            formularioNome = itemView.findViewById(R.id.cadastradosNome);
+            formularioEndereco = itemView.findViewById(R.id.cadastradosEndereco);
             formularioData = itemView.findViewById(R.id.cadastradosData);
-            formularioEndereco= itemView.findViewById(R.id.cadastradosEndereco);
+            formularioLatitude= itemView.findViewById(R.id.cadastradosLatitude);
+            formularioLongitude= itemView.findViewById(R.id.cadastradosLongitude);
         }
     }
 }
