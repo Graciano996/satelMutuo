@@ -4,6 +4,12 @@ import java.io.Serializable;
 
 public class Formulario implements Serializable {
     private Long id;
+    private String caminhoImagem;
+    private String caminhoImagem2;
+    private String caminhoImagem3;
+    private String urlImagem;
+    private String urlImagem2;
+    private String urlImagem3;
     private String data;
     private String endereco;
     private String municipio;
@@ -130,6 +136,54 @@ public class Formulario implements Serializable {
     private String quedaArvore;
     private String localArvore;
     private String observacaoVegetacao;
+
+    public String getCaminhoImagem() {
+        return caminhoImagem;
+    }
+
+    public void setCaminhoImagem(String caminhoImagem) {
+        this.caminhoImagem = caminhoImagem;
+    }
+
+    public String getCaminhoImagem2() {
+        return caminhoImagem2;
+    }
+
+    public void setCaminhoImagem2(String caminhoImagem2) {
+        this.caminhoImagem2 = caminhoImagem2;
+    }
+
+    public String getCaminhoImagem3() {
+        return caminhoImagem3;
+    }
+
+    public void setCaminhoImagem3(String caminhoImagem3) {
+        this.caminhoImagem3 = caminhoImagem3;
+    }
+
+    public String getUrlImagem() {
+        return urlImagem;
+    }
+
+    public void setUrlImagem(String urlImagem) {
+        this.urlImagem = urlImagem;
+    }
+
+    public String getUrlImagem2() {
+        return urlImagem2;
+    }
+
+    public void setUrlImagem2(String urlImagem2) {
+        this.urlImagem2 = urlImagem2;
+    }
+
+    public String getUrlImagem3() {
+        return urlImagem3;
+    }
+
+    public void setUrlImagem3(String urlImagem3) {
+        this.urlImagem3 = urlImagem3;
+    }
 
     public Long getId() {
         return id;

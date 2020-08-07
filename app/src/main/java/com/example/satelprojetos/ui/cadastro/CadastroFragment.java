@@ -11,7 +11,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -34,6 +36,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.core.graphics.BitmapCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -42,11 +45,26 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.satelprojetos.R;
 import com.example.satelprojetos.activity.DrawerActivity;
 import com.example.satelprojetos.activity.MainActivity;
+import com.example.satelprojetos.config.ConfiguracaoFirebase;
+import com.example.satelprojetos.helper.Base64Custom;
 import com.example.satelprojetos.helper.FormularioDAO;
 import com.example.satelprojetos.model.Formulario;
 import com.example.satelprojetos.ui.cadastrados.CadastradosFragment;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCanceledListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.net.URLStreamHandlerFactory;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
@@ -57,6 +75,12 @@ public class CadastroFragment extends Fragment {
     private static final int REQUEST_CODE = 1;
     private static final int IMAGE_CAPTURE_CODE =2 ;
     private static final int IMAGE_PICK_CODE =3 ;
+    private static final int IMAGE_CAPTURE_CODE2 =5 ;
+    private static final int IMAGE_PICK_CODE2 =6 ;
+    private static final int IMAGE_CAPTURE_CODE3 =4 ;
+    private static final int IMAGE_PICK_CODE3 =7 ;
+    private StorageReference storageReference;
+    private FirebaseAuth autentificacao;
     private EditText endereco, latitude, longitude, observacaoFisicas,
               observacaoAtivos,quantidadeLampada,quantidadeLampada2,quantidadeLampada3,
             potReator,potReator2,potReator3,quantidade24H,quantidade24H2,quantidade24H3 ,
@@ -82,10 +106,11 @@ public class CadastroFragment extends Fragment {
     private Formulario formularioAtual;
     private Boolean controle = false;
     private TextView mutuo2, mutuo3, mutuo4, mutuo5;
-    private ImageView foto, foto2;
-    private EditText fotoCaminho, fotoCaminho2;
-    Uri image_uri;
-    private String imgPath;
+    private ImageView foto, foto2, foto3;
+    String imgPath, imgPath2, imgPath3;
+    File photoFile = null;
+    Bitmap imagem, imagem2, imagem3;
+    Uri urlFoto, urlFoto2, urlFoto3;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -94,9 +119,10 @@ public class CadastroFragment extends Fragment {
 
         final View root = inflater.inflate(R.layout.fragment_cadastro, container, false);
         foto = root.findViewById(R.id.imageCadastroFoto);
-        fotoCaminho = root.findViewById(R.id.textCadastroDiretorio);
         foto2 = root.findViewById(R.id.imageCadastroFoto2);
-        fotoCaminho2 = root.findViewById(R.id.textCadastroDiretorio2);
+        foto3 = root.findViewById(R.id.imageCadastroFoto3);
+        storageReference = ConfiguracaoFirebase.getStorageReference();
+        autentificacao = ConfiguracaoFirebase.getFirebaseAuth();
         Button btnFoto = root.findViewById(R.id.btnFoto);
         btnFoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -126,7 +152,179 @@ public class CadastroFragment extends Fragment {
         btnFoto2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                verificarPermissao();
+                if(verificarPermissao()){
+                    final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity(), R.style.LightDialogTheme);
+                    dialog.setPositiveButton("Tirar foto", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            chamarCamera(IMAGE_CAPTURE_CODE2);
+
+                        }
+                    });
+                    dialog.setNegativeButton("Escolher na galeria", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            chamarGaleria(IMAGE_PICK_CODE2);
+                        }
+                    });
+                    dialog.create();
+                    dialog.show();
+                };
+            }
+        });
+        Button btnFoto3 = root.findViewById(R.id.btnFoto3);
+        btnFoto3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(verificarPermissao()){
+                    final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity(), R.style.LightDialogTheme);
+                    dialog.setPositiveButton("Tirar foto", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            chamarCamera(IMAGE_CAPTURE_CODE3);
+
+                        }
+                    });
+                    dialog.setNegativeButton("Escolher na galeria", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            chamarGaleria(IMAGE_PICK_CODE3);
+                        }
+                    });
+                    dialog.create();
+                    dialog.show();
+                };
+            }
+        });
+
+        Button btnUpload = root.findViewById(R.id.btnUpload);
+        btnUpload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(imagem == null){
+                    Toast.makeText(requireActivity().getApplicationContext(), "Escolha primeiro uma foto para fazer o upload", Toast.LENGTH_SHORT).show();
+                }else {
+                    final AlertDialog optionDialog = new AlertDialog.Builder(requireContext(),R.style.LightDialogTheme).create();
+                    optionDialog.setMessage("Por favor espere o fim do upload");
+                    optionDialog.show();
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        imagem.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+                        byte[] dadosImagem = baos.toByteArray();
+
+                        final StorageReference imageRef = storageReference
+                                .child("imagens")
+                                .child(Base64Custom.codificarBase64(autentificacao.getCurrentUser().getEmail()))
+                                .child(endereco.getText().toString() + " " + latitude.getText().toString() + " " + longitude.getText().toString())
+                                .child("foto1.jpeg");
+                        UploadTask uploadTask = imageRef.putBytes(dadosImagem);
+                        uploadTask.addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.i("ERRO","EERO1");
+                            }
+                        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                                Log.i("ERRO","EERO2");
+                                imageRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Uri> task) {
+                                        urlFoto = task.getResult();
+                                        optionDialog.dismiss();
+                                    }
+                                });
+                            }
+                        }).addOnCanceledListener(new OnCanceledListener() {
+                            @Override
+                            public void onCanceled() {
+                                Log.i("ERRO","EERO3");
+                            }
+                        });
+                }
+            }
+        });
+
+        Button btnUpload2 = root.findViewById(R.id.btnUpload2);
+        btnUpload2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(imagem2 == null){
+                    Toast.makeText(requireActivity().getApplicationContext(), "Escolha primeiro uma foto para fazer o upload", Toast.LENGTH_SHORT).show();
+                }else{
+                    final AlertDialog optionDialog = new AlertDialog.Builder(requireContext(),R.style.LightDialogTheme).create();
+                    optionDialog.setMessage("Por favor espere o fim do upload");
+                    optionDialog.show();
+                    ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
+                    imagem2.compress(Bitmap.CompressFormat.JPEG, 70, baos2);
+                    byte[] dadosImagem2 = baos2.toByteArray();
+
+                    final StorageReference imageRef2 = storageReference
+                            .child("imagens")
+                            .child(Base64Custom.codificarBase64(autentificacao.getCurrentUser().getEmail()))
+                            .child(endereco.getText().toString() + " " + latitude.getText().toString() + " " + longitude.getText().toString())
+                            .child("foto2.jpeg");
+                    UploadTask uploadTask2 = imageRef2.putBytes(dadosImagem2);
+                    uploadTask2.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(requireActivity().getApplicationContext(), "Falha ao fazer Upload", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            imageRef2.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    urlFoto2 = task.getResult();
+                                    optionDialog.dismiss();
+
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+        });
+
+        Button btnUpload3 = root.findViewById(R.id.btnUpload3);
+        btnUpload3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(imagem3 == null){
+                    Toast.makeText(requireActivity().getApplicationContext(), "Escolha primeiro uma foto para fazer o upload", Toast.LENGTH_SHORT).show();
+                }else{
+                    final AlertDialog optionDialog = new AlertDialog.Builder(requireContext(),R.style.LightDialogTheme).create();
+                    optionDialog.setMessage("Por favor espere o fim do upload");
+                    optionDialog.show();
+                    ByteArrayOutputStream baos3 = new ByteArrayOutputStream();
+                    imagem3.compress(Bitmap.CompressFormat.JPEG, 70, baos3);
+                    byte[] dadosImagem3 = baos3.toByteArray();
+
+                    final StorageReference imageRef3 = storageReference
+                            .child("imagens")
+                            .child(Base64Custom.codificarBase64(autentificacao.getCurrentUser().getEmail()))
+                            .child(endereco.getText().toString() + " " + latitude.getText().toString() + " " + longitude.getText().toString())
+                            .child("foto3.jpeg");
+                    UploadTask uploadTask3 = imageRef3.putBytes(dadosImagem3);
+                    uploadTask3.addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(requireActivity().getApplicationContext(), "Falha ao fazer Upload", Toast.LENGTH_SHORT).show();
+                        }
+                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            imageRef3.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Uri> task) {
+                                    urlFoto3 = task.getResult();
+                                    optionDialog.dismiss();
+
+                                }
+                            });
+                        }
+                    });
+                }
             }
         });
 
@@ -324,6 +522,12 @@ public class CadastroFragment extends Fragment {
             if(formularioAtual != null){
                 //LOCALIZAÇÃO
                 controle = true;
+                imgPath = formularioAtual.getCaminhoImagem();
+                foto.setImageBitmap(BitmapFactory.decodeFile(imgPath));
+                imgPath2 = formularioAtual.getCaminhoImagem2();
+                foto2.setImageBitmap(BitmapFactory.decodeFile(imgPath2));
+                imgPath3 = formularioAtual.getCaminhoImagem3();
+                foto3.setImageBitmap(BitmapFactory.decodeFile(imgPath3));
                 endereco.setText(formularioAtual.getEndereco());
                 if (formularioAtual.getMunicipio().equals("-")) {
                     municipio.setSelection(0);
@@ -2934,7 +3138,26 @@ public class CadastroFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 FormularioDAO formularioDAO = new FormularioDAO(requireActivity().getApplicationContext());
-                    Formulario formulario = new Formulario();
+                final Formulario formulario = new Formulario();
+                if (imgPath != null) {
+                    formulario.setCaminhoImagem(imgPath);
+                } else {
+                    formulario.setCaminhoImagem("");
+                }
+                if (imgPath2 != null) {
+                    formulario.setCaminhoImagem2(imgPath2);
+                } else {
+                    formulario.setCaminhoImagem2("");
+                }
+                if (imgPath3 != null) {
+                    formulario.setCaminhoImagem3(imgPath3);
+                } else {
+                    formulario.setCaminhoImagem3("");
+                }
+                formulario.setUrlImagem(urlFoto.toString());
+                formulario.setUrlImagem2(urlFoto2.toString());
+                formulario.setUrlImagem3(urlFoto3.toString());
+
                 //LOCALIZAÇÂO
 
                 formulario.setEndereco(Objects.requireNonNull(endereco.getText()).toString());
@@ -3204,8 +3427,6 @@ public class CadastroFragment extends Fragment {
                 }
                 formulario.setDescricaoIrregularidade5(Objects.requireNonNull(descricaoIrregularidade5.getText()).toString());
                 formulario.setObservacaoMutuo5(Objects.requireNonNull(observacaoMutuo5.getText()).toString());
-
-
                 //VEGETAÇÃO
                 setLista(formulario,dimensaoVegetacao,"dimensaoVegetacao");
                 setLista(formulario,distaciaBaixa,"distanciaBaixa");
@@ -3218,9 +3439,21 @@ public class CadastroFragment extends Fragment {
                 }
                 setLista(formulario,localArvore,"localArvore");
                 formulario.setObservacaoVegetacao(Objects.requireNonNull(observacaoVegetacao.getText()).toString());
-
-
                 formulario.setNome(Objects.requireNonNull(nome.getText()).toString());
+                while(formulario.getUrlImagem() == null){
+                    new CountDownTimer(2000,1000){
+
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+
+                        }
+
+                        @Override
+                        public void onFinish() {
+
+                        }
+                    };
+                }
                 if (formularioAtual != null) {
                     formulario.setId(formularioAtual.getId());
                     formulario.setData(formularioAtual.getData());
@@ -3339,24 +3572,90 @@ public class CadastroFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         Log.i("CODE", String.valueOf(requestCode));
         if(resultCode == RESULT_OK){
-            Bitmap imagem = null;
+            Uri localImagemSelecionada;
+            Cursor cursor;
+            int columnIndex;
+
 
             try{
                 switch (requestCode){
                     case IMAGE_CAPTURE_CODE:
-                        imagem = (Bitmap) data.getExtras().get("data");
+                        imgPath = photoFile.getAbsolutePath();
+                        imagem = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                         foto.setImageBitmap(imagem);
                         break;
                     case IMAGE_PICK_CODE:
-                        Uri localImagemSelecionada = data.getData();
+                        Log.i("TAH2", data.getData().toString());
+                        localImagemSelecionada = data.getData();
                         imagem = MediaStore.Images.Media.getBitmap(requireActivity().getApplicationContext().getContentResolver(),localImagemSelecionada);
                         foto.setImageBitmap(imagem);
+                        String[] filePathColumn = { MediaStore.Images.Media.DATA };
+                        // Get the cursor
+                        cursor = requireActivity().getApplicationContext().getContentResolver().query(localImagemSelecionada,
+                                filePathColumn, null, null, null);
+                        // Move to first row
+                        cursor.moveToFirst();
+
+                        columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                        imgPath = cursor.getString(columnIndex);
+                        cursor.close();
+                        // Set the Image in ImageView after decoding the String
+                        foto.setImageBitmap(BitmapFactory.decodeFile(imgPath));
+                        break;
+                    case IMAGE_CAPTURE_CODE2:
+                        imgPath2 = photoFile.getAbsolutePath();
+                        imagem2 = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+                        foto2.setImageBitmap(imagem2);
+                        break;
+                    case IMAGE_PICK_CODE2:
+                        Log.i("TAH2", data.getData().toString());
+                        localImagemSelecionada = data.getData();
+                        imagem2 = MediaStore.Images.Media.getBitmap(requireActivity().getApplicationContext().getContentResolver(),localImagemSelecionada);
+                        foto2.setImageBitmap(imagem2);
+                        Log.i("ERROAntes", imagem2.toString());
+                        String[] filePathColumn2 = { MediaStore.Images.Media.DATA };
+                        // Get the cursor
+                        cursor = requireActivity().getApplicationContext().getContentResolver().query(localImagemSelecionada,
+                                filePathColumn2, null, null, null);
+                        // Move to first row
+                        cursor.moveToFirst();
+
+                        columnIndex = cursor.getColumnIndex(filePathColumn2[0]);
+                        imgPath2 = cursor.getString(columnIndex);
+                        cursor.close();
+                        // Set the Image in ImageView after decoding the String
+                        foto2.setImageBitmap(BitmapFactory.decodeFile(imgPath2));
+                        break;
+
+                    case IMAGE_CAPTURE_CODE3:
+                        imgPath3 = photoFile.getAbsolutePath();
+                        imagem3 = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
+                        foto3.setImageBitmap(imagem3);
+                        break;
+                    case IMAGE_PICK_CODE3:
+                        Log.i("TAH2", data.getData().toString());
+                        localImagemSelecionada = data.getData();
+                        imagem3 = MediaStore.Images.Media.getBitmap(requireActivity().getApplicationContext().getContentResolver(),localImagemSelecionada);
+                        foto3.setImageBitmap(imagem3);
+                        String[] filePathColumn3 = { MediaStore.Images.Media.DATA };
+                        // Get the cursor
+                        cursor = requireActivity().getApplicationContext().getContentResolver().query(localImagemSelecionada,
+                                filePathColumn3, null, null, null);
+                        // Move to first row
+                        cursor.moveToFirst();
+
+                        columnIndex = cursor.getColumnIndex(filePathColumn3[0]);
+                        imgPath3 = cursor.getString(columnIndex);
+                        cursor.close();
+                        // Set the Image in ImageView after decoding the String
+                        foto3.setImageBitmap(BitmapFactory.decodeFile(imgPath3));
                         break;
                 }
 
             }catch (Exception e){
                 e.printStackTrace();
             }
+
 
         }
 
@@ -3370,10 +3669,50 @@ public class CadastroFragment extends Fragment {
 
     public void chamarCamera(int imagemCodigo){
          Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-         if(cameraIntent.resolveActivity(requireActivity().getApplicationContext().getPackageManager()) != null){
+        if (cameraIntent.resolveActivity(requireActivity().getApplicationContext().getPackageManager()) != null) {
+            // Create the File where the photo should go
+            try {
+
+                photoFile = createImageFile();
+
+                Log.i("TAG",photoFile.getAbsolutePath());
+
+                // Continue only if the File was successfully created
+                if (photoFile != null) {
+                    Uri photoURI = FileProvider.getUriForFile(requireActivity().getApplicationContext(),
+                            "com.example.satelprojetos.provider",
+                            photoFile);
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                    startActivityForResult(cameraIntent, imagemCodigo);
+                }
+            } catch (Exception ex) {
+                // Error occurred while creating the File
+
+            }
+
+
+        }else
+        {
+
+        }
+    }
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = requireActivity().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        imgPath = image.getAbsolutePath();
+        return image;
+    }
+
+         /*if(cameraIntent.resolveActivity(requireActivity().getApplicationContext().getPackageManager()) != null){
              startActivityForResult(cameraIntent, imagemCodigo);
-         }
-
+         }*/
      }
-
-}

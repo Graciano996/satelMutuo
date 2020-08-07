@@ -61,7 +61,9 @@ public class DbHelper extends SQLiteOpenHelper {
                 " observacaoMutuo5 TEXT NOT NULL, descricaoIrregularidade5 TEXT NOT NULL," +
                 " dimensaoVegetacao TEXT NOT NULL, distanciaBaixa TEXT NOT NULL, distanciaMedia TEXT NOT NULL," +
                 " estadoArvore TEXT NOT NULL,quedaArvore TEXT NOT NULL, localArvore TEXT NOT NULL, " +
-                " observacaoVegetacao TEXT NOT NULL);";
+                " observacaoVegetacao TEXT NOT NULL," +
+                " caminhoImagem TEXT NOT NULL, caminhoImagem2 TEXT NOT NULL, caminhoImagem3 TEXT NOT NULL," +
+                " urlImagem TEXT NOT NULL, urlImagem2 TEXT NOT NULL, urlImagem3 TEXT NOT NULL);";
 
         try{
             db.execSQL(sql);

@@ -27,6 +27,13 @@ public class FormularioDAO implements IFormularioDAO {
     @Override
     public boolean salvar(Formulario formulario) {
         ContentValues cv = new ContentValues();
+        cv.put("caminhoImagem", formulario.getCaminhoImagem());
+        cv.put("caminhoImagem2", formulario.getCaminhoImagem2());
+        cv.put("caminhoImagem3", formulario.getCaminhoImagem3());
+        cv.put("urlImagem", formulario.getUrlImagem());
+        cv.put("urlImagem2", formulario.getUrlImagem2());
+        cv.put("urlImagem3", formulario.getUrlImagem3());
+
         cv.put("data", formulario.getData());
         cv.put("endereco", formulario.getEndereco());
         cv.put("nome", formulario.getNome());
@@ -180,6 +187,13 @@ public class FormularioDAO implements IFormularioDAO {
     @Override
     public boolean atualizar(Formulario formulario) {
         ContentValues cv = new ContentValues();
+        cv.put("caminhoImagem", formulario.getCaminhoImagem());
+        cv.put("caminhoImagem2", formulario.getCaminhoImagem2());
+        cv.put("caminhoImagem3", formulario.getCaminhoImagem3());
+        cv.put("urlImagem", formulario.getUrlImagem());
+        cv.put("urlImagem2", formulario.getUrlImagem2());
+        cv.put("urlImagem3", formulario.getUrlImagem3());
+
         cv.put("data", formulario.getData());
         cv.put("endereco", formulario.getEndereco());
         cv.put("nome", formulario.getNome());
@@ -360,6 +374,15 @@ public class FormularioDAO implements IFormularioDAO {
 
         while (c.moveToNext()){
             Long id = c.getLong(c.getColumnIndex("id"));
+
+            String caminhoImagem = c.getString((c.getColumnIndex("caminhoImagem")));
+            String caminhoImagem2 = c.getString((c.getColumnIndex("caminhoImagem2")));
+            String caminhoImagem3 = c.getString((c.getColumnIndex("caminhoImagem3")));
+
+            String urlImagem = c.getString((c.getColumnIndex("urlImagem")));
+            String urlImagem2 = c.getString((c.getColumnIndex("urlImagem2")));
+            String urlImagem3 = c.getString((c.getColumnIndex("urlImagem3")));
+
             String endereco = c.getString((c.getColumnIndex("endereco")));
             String data = c.getString(c.getColumnIndex("data"));
             String municipio = c.getString(c.getColumnIndex("municipio"));
@@ -500,6 +523,13 @@ public class FormularioDAO implements IFormularioDAO {
             String observacaoVegetacao = c.getString(c.getColumnIndex("observacaoVegetacao"));
 
             Formulario formulario = new Formulario();
+            formulario.setCaminhoImagem(caminhoImagem);
+            formulario.setCaminhoImagem2(caminhoImagem2);
+            formulario.setCaminhoImagem3(caminhoImagem3);
+            formulario.setUrlImagem(urlImagem);
+            formulario.setUrlImagem2(urlImagem2);
+            formulario.setUrlImagem3(urlImagem3);
+
             formulario.setId(id);
             formulario.setEndereco(endereco);
             formulario.setData(data);

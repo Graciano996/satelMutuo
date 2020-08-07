@@ -19,10 +19,72 @@
         tools:context=".ui.cadastro.CadastroFragment">
 
         <Button
-            android:id="@+id/btnFoto2"
-            android:layout_width="wrap_content"
+            android:id="@+id/btnUpload3"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/design_default_color_secondary_variant"
+            android:padding="5dp"
+            android:text="Upload Foto 3"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageCadastroFoto3" />
+
+        <Button
+            android:id="@+id/btnUpload2"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/design_default_color_secondary_variant"
+            android:padding="5dp"
+            android:text="Upload de Foto 2"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageCadastroFoto2" />
+
+        <Button
+            android:id="@+id/btnUpload"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/design_default_color_secondary_variant"
+            android:padding="5dp"
+            android:text="Upload de Foto"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageCadastroFoto" />
+
+        <ImageView
+            android:id="@+id/imageCadastroFoto3"
+            android:layout_width="300dp"
+            android:layout_height="200dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnFoto2"
+            app:srcCompat="@drawable/ic_menu_camera" />
+
+        <Button
+            android:id="@+id/btnFoto3"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/colorPrimary"
+            android:padding="5dp"
+            android:text="Adicionar Foto 3"
+            android:textColor="@color/textColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageCadastroFoto3" />
+
+        <Button
+            android:id="@+id/btnFoto2"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:background="@color/colorPrimary"
             android:padding="5dp"
@@ -40,18 +102,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnFoto"
             app:srcCompat="@drawable/ic_menu_camera" />
-
-        <EditText
-            android:id="@+id/textCadastroDiretorio2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:hint="Caminho do Arquivo"
-            android:inputType="textPersonName"
-            android:textColor="@color/textColor"
-            app:layout_constraintBaseline_toBaselineOf="@+id/btnFoto2"
-            app:layout_constraintEnd_toEndOf="parent" />
 
         <Spinner
             android:id="@+id/spinCadastroMutuoTipoCabo5"
@@ -919,7 +969,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="700dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
             android:focusable="auto"
@@ -928,7 +978,7 @@
             android:textColor="@color/textColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/btnFoto3" />
 
         <Spinner
             android:id="@+id/spinCadastroMunicipio"
@@ -1794,7 +1844,7 @@
 
         <Button
             android:id="@+id/btnFoto"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
@@ -1804,18 +1854,6 @@
             android:textColor="@color/textColor"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageCadastroFoto" />
-
-        <EditText
-            android:id="@+id/textCadastroDiretorio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:ems="10"
-            android:hint="Caminho do Arquivo"
-            android:inputType="textPersonName"
-            android:textColor="@color/textColor"
-            app:layout_constraintBaseline_toBaselineOf="@+id/btnFoto"
-            app:layout_constraintEnd_toEndOf="parent" />
 
         <ImageView
             android:id="@+id/imageCadastroFoto"
