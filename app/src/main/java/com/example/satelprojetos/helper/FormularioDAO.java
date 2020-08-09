@@ -27,6 +27,10 @@ public class FormularioDAO implements IFormularioDAO {
     @Override
     public boolean salvar(Formulario formulario) {
         ContentValues cv = new ContentValues();
+        cv.put("color", formulario.getColor());
+        cv.put("color2", formulario.getColor2());
+        cv.put("color3", formulario.getColor3());
+
         cv.put("caminhoImagem", formulario.getCaminhoImagem());
         cv.put("caminhoImagem2", formulario.getCaminhoImagem2());
         cv.put("caminhoImagem3", formulario.getCaminhoImagem3());
@@ -187,6 +191,10 @@ public class FormularioDAO implements IFormularioDAO {
     @Override
     public boolean atualizar(Formulario formulario) {
         ContentValues cv = new ContentValues();
+        cv.put("color", formulario.getColor());
+        cv.put("color2", formulario.getColor2());
+        cv.put("color3", formulario.getColor3());
+
         cv.put("caminhoImagem", formulario.getCaminhoImagem());
         cv.put("caminhoImagem2", formulario.getCaminhoImagem2());
         cv.put("caminhoImagem3", formulario.getCaminhoImagem3());
@@ -368,12 +376,17 @@ public class FormularioDAO implements IFormularioDAO {
     @Override
     public List<Formulario> listar() {
         List<Formulario> formularios = new ArrayList<>();
+        
 
         String sql = "SELECT * FROM " + DbHelper.TABLE_FORMULARIO + " ;";
         Cursor c = le.rawQuery(sql,null);
 
         while (c.moveToNext()){
             Long id = c.getLong(c.getColumnIndex("id"));
+
+            String color = c.getString((c.getColumnIndex("color")));
+            String color2 = c.getString((c.getColumnIndex("color2")));
+            String color3 = c.getString((c.getColumnIndex("color3")));
 
             String caminhoImagem = c.getString((c.getColumnIndex("caminhoImagem")));
             String caminhoImagem2 = c.getString((c.getColumnIndex("caminhoImagem2")));
@@ -523,6 +536,10 @@ public class FormularioDAO implements IFormularioDAO {
             String observacaoVegetacao = c.getString(c.getColumnIndex("observacaoVegetacao"));
 
             Formulario formulario = new Formulario();
+            formulario.setColor(color);
+            formulario.setColor2(color2);
+            formulario.setColor3(color3);
+
             formulario.setCaminhoImagem(caminhoImagem);
             formulario.setCaminhoImagem2(caminhoImagem2);
             formulario.setCaminhoImagem3(caminhoImagem3);

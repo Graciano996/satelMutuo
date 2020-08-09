@@ -3,12 +3,18 @@ package com.example.satelprojetos.ui.cadastro;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -68,49 +74,54 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Objects;
+import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
 
 public class CadastroFragment extends Fragment {
     private static final int REQUEST_CODE = 1;
-    private static final int IMAGE_CAPTURE_CODE =2 ;
-    private static final int IMAGE_PICK_CODE =3 ;
-    private static final int IMAGE_CAPTURE_CODE2 =5 ;
-    private static final int IMAGE_PICK_CODE2 =6 ;
-    private static final int IMAGE_CAPTURE_CODE3 =4 ;
-    private static final int IMAGE_PICK_CODE3 =7 ;
+    private static final int IMAGE_CAPTURE_CODE = 2;
+    private static final int IMAGE_PICK_CODE = 3;
+    private static final int IMAGE_CAPTURE_CODE2 = 5;
+    private static final int IMAGE_PICK_CODE2 = 6;
+    private static final int IMAGE_CAPTURE_CODE3 = 4;
+    private static final int IMAGE_PICK_CODE3 = 7;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
     private StorageReference storageReference;
     private FirebaseAuth autentificacao;
     private EditText endereco, latitude, longitude, observacaoFisicas,
-              observacaoAtivos,quantidadeLampada,quantidadeLampada2,quantidadeLampada3,
-            potReator,potReator2,potReator3,quantidade24H,quantidade24H2,quantidade24H3 ,
-                observacaoVegetacao, observacaoIP,
-                quantidadeCabos, quantidadeCabos2, quantidadeCabos3, quantidadeCabos4, quantidadeCabos5,
-                nome, nome2, nome3, nome4, nome5, descricaoIrregularidade, descricaoIrregularidade2,
-                descricaoIrregularidade3, descricaoIrregularidade4,descricaoIrregularidade5,
-                observacaoMutuo, observacaoMutuo2, observacaoMutuo3, observacaoMutuo4, observacaoMutuo5;
-    private Spinner municipio,alturaCarga, tipoPoste,ipEstrutura,ipEstrutura2,ipEstrutura3,tipoPot,
-            tipoPot2,tipoPot3, dimensaoVegetacao, ipAtivacao,ipAtivacao2,ipAtivacao3,
-            trafoTrifasico, trafoMono,ramalSubt, quantidadeOcupantes,
+            observacaoAtivos, quantidadeLampada, quantidadeLampada2, quantidadeLampada3,
+            potReator, potReator2, potReator3, quantidade24H, quantidade24H2, quantidade24H3,
+            observacaoVegetacao, observacaoIP,
+            quantidadeCabos, quantidadeCabos2, quantidadeCabos3, quantidadeCabos4, quantidadeCabos5,
+            nome, nome2, nome3, nome4, nome5, descricaoIrregularidade, descricaoIrregularidade2,
+            descricaoIrregularidade3, descricaoIrregularidade4, descricaoIrregularidade5,
+            observacaoMutuo, observacaoMutuo2, observacaoMutuo3, observacaoMutuo4, observacaoMutuo5;
+    private Spinner municipio, alturaCarga, tipoPoste, ipEstrutura, ipEstrutura2, ipEstrutura3, tipoPot,
+            tipoPot2, tipoPot3, dimensaoVegetacao, ipAtivacao, ipAtivacao2, ipAtivacao3,
+            trafoTrifasico, trafoMono, ramalSubt, quantidadeOcupantes,
             tipoCabo, tipoCabo2, tipoCabo3, tipoCabo4, tipoCabo5, finalidade, finalidade2, finalidade3,
             finalidade4, finalidade5, ceans, ceans2, ceans3, ceans4, ceans5, tar, tar2, tar3, tar4,
             tar5, reservaTec, reservaTec2, reservaTec3, reservaTec4, reservaTec5, backbone,
-            backbone2, backbone3, backbone4,backbone5,distaciaBaixa, distanciaMedia,estadoArvore,
+            backbone2, backbone3, backbone4, backbone5, distaciaBaixa, distanciaMedia, estadoArvore,
             localArvore;
     private CheckBox normal, ferragemExposta, fletido, danificado, abalrroado, trincado, religador, medicao,
-            chFusivel, chFaca,vinteEQuatro,vinteEQuatro2,vinteEQuatro3,
-            ativos,chkTrafoTrifasico, chkTrafoMono, ip,ip2,ip3,chFusivelReligador, chBanco, mutuo,
+            chFusivel, chFaca, vinteEQuatro, vinteEQuatro2, vinteEQuatro3,
+            ativos, chkTrafoTrifasico, chkTrafoMono, ip, ip2, ip3, chFusivelReligador, chBanco, mutuo,
             placaIdentificadora, placaIdentificadora2, placaIdentificadora3, placaIdentificadora4,
-            placaIdentificadora5,descidaCabos, descidaCabos2, descidaCabos3, descidaCabos4, descidaCabos5,
+            placaIdentificadora5, descidaCabos, descidaCabos2, descidaCabos3, descidaCabos4, descidaCabos5,
             quedaArvore;
     private Formulario formularioAtual;
     private Boolean controle = false;
     private TextView mutuo2, mutuo3, mutuo4, mutuo5;
     private ImageView foto, foto2, foto3;
-    String imgPath, imgPath2, imgPath3;
-    File photoFile = null;
-    Bitmap imagem, imagem2, imagem3;
-    Uri urlFoto, urlFoto2, urlFoto3;
+    private String imgPath, imgPath2, imgPath3, imgPathFile;
+    private File photoFile = null;
+    private Bitmap imagem, imagem2, imagem3;
+    private Uri urlFoto, urlFoto2, urlFoto3;
+    private Boolean novoUpload = false, novoUpload2 = false, novoUpload3 = false;
+    private Location localizacao;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -121,6 +132,60 @@ public class CadastroFragment extends Fragment {
         foto = root.findViewById(R.id.imageCadastroFoto);
         foto2 = root.findViewById(R.id.imageCadastroFoto2);
         foto3 = root.findViewById(R.id.imageCadastroFoto3);
+        locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(Location location) {
+                Log.i("TESTE","ENTREI AQUI2");
+                localizacao = location;
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+                Log.i("TESTE","ENTREI AQUI3");
+            }
+
+            @Override
+            public void onProviderEnabled(String provider) {
+                Log.i("TESTE","ENTREI AQUI4");
+            }
+
+            @Override
+            public void onProviderDisabled(String provider) {
+                Toast.makeText(requireActivity().getApplicationContext(), "Por favor ative seu GPS", Toast.LENGTH_SHORT).show();
+            }
+        };
+        if (verificarPermissaoLocaliza()) {
+
+            if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+            {
+                Log.i("TESTE","ENTREI AQUI");
+                locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        10000,
+                        10,
+                        locationListener);
+
+            }
+
+
+
+        }
+        Button btnLocaliza = root.findViewById(R.id.btnCadastroGetMap);
+        btnLocaliza.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (localizacao == null) {
+                    Toast.makeText(requireActivity().getApplicationContext(), "Não é possui utilizar essa função no estado de economia de energia", Toast.LENGTH_SHORT).show();
+                } else {
+                    latitude.setText(String.format("%.5f",localizacao.getLatitude()));
+                    longitude.setText(String.format("%.5f",localizacao.getLongitude()));
+                }
+            }
+        });
+
+
+
         storageReference = ConfiguracaoFirebase.getStorageReference();
         autentificacao = ConfiguracaoFirebase.getFirebaseAuth();
         Button btnFoto = root.findViewById(R.id.btnFoto);
@@ -204,9 +269,11 @@ public class CadastroFragment extends Fragment {
                 if(imagem == null){
                     Toast.makeText(requireActivity().getApplicationContext(), "Escolha primeiro uma foto para fazer o upload", Toast.LENGTH_SHORT).show();
                 }else {
-                    final AlertDialog optionDialog = new AlertDialog.Builder(requireContext(),R.style.LightDialogTheme).create();
-                    optionDialog.setMessage("Por favor espere o fim do upload");
-                    optionDialog.show();
+                    if(isNetworkAvailable()) {
+                        final AlertDialog optionDialog = new AlertDialog.Builder(requireContext(), R.style.LightDialogTheme).create();
+                        optionDialog.setMessage("Por favor espere o fim do upload");
+                        optionDialog.show();
+                        String nomeFoto = UUID.randomUUID().toString();
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         imagem.compress(Bitmap.CompressFormat.JPEG, 70, baos);
                         byte[] dadosImagem = baos.toByteArray();
@@ -214,32 +281,36 @@ public class CadastroFragment extends Fragment {
                         final StorageReference imageRef = storageReference
                                 .child("imagens")
                                 .child(Base64Custom.codificarBase64(autentificacao.getCurrentUser().getEmail()))
-                                .child(endereco.getText().toString() + " " + latitude.getText().toString() + " " + longitude.getText().toString())
-                                .child("foto1.jpeg");
+                                .child(nomeFoto + ".jpeg");
                         UploadTask uploadTask = imageRef.putBytes(dadosImagem);
                         uploadTask.addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                Log.i("ERRO","EERO1");
+                                optionDialog.dismiss();
+                                Toast.makeText(requireActivity().getApplicationContext(), "Erro ao fazer upload verifique a conexão com a internet", Toast.LENGTH_SHORT).show();
                             }
                         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                Log.i("ERRO","EERO2");
+                                Log.i("ERRO", "EERO2");
                                 imageRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Uri> task) {
                                         urlFoto = task.getResult();
                                         optionDialog.dismiss();
+                                        novoUpload = true;
                                     }
                                 });
                             }
                         }).addOnCanceledListener(new OnCanceledListener() {
                             @Override
                             public void onCanceled() {
-                                Log.i("ERRO","EERO3");
+                                Log.i("ERRO", "EERO3");
                             }
                         });
+                    }else {
+                        Toast.makeText(requireActivity().getApplicationContext(), "Erro ao fazer upload verifique a conexão com a internet", Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
         });
@@ -254,6 +325,7 @@ public class CadastroFragment extends Fragment {
                     final AlertDialog optionDialog = new AlertDialog.Builder(requireContext(),R.style.LightDialogTheme).create();
                     optionDialog.setMessage("Por favor espere o fim do upload");
                     optionDialog.show();
+                    String nomeFoto = UUID.randomUUID().toString();
                     ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
                     imagem2.compress(Bitmap.CompressFormat.JPEG, 70, baos2);
                     byte[] dadosImagem2 = baos2.toByteArray();
@@ -261,13 +333,13 @@ public class CadastroFragment extends Fragment {
                     final StorageReference imageRef2 = storageReference
                             .child("imagens")
                             .child(Base64Custom.codificarBase64(autentificacao.getCurrentUser().getEmail()))
-                            .child(endereco.getText().toString() + " " + latitude.getText().toString() + " " + longitude.getText().toString())
-                            .child("foto2.jpeg");
+                            .child(nomeFoto +".jpeg");
                     UploadTask uploadTask2 = imageRef2.putBytes(dadosImagem2);
                     uploadTask2.addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(requireActivity().getApplicationContext(), "Falha ao fazer Upload", Toast.LENGTH_SHORT).show();
+                            optionDialog.dismiss();
+                            Toast.makeText(requireActivity().getApplicationContext(), "Erro ao fazer upload verifique a conexão com a internet", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -277,6 +349,7 @@ public class CadastroFragment extends Fragment {
                                 public void onComplete(@NonNull Task<Uri> task) {
                                     urlFoto2 = task.getResult();
                                     optionDialog.dismiss();
+                                    novoUpload2 = true;
 
                                 }
                             });
@@ -299,17 +372,17 @@ public class CadastroFragment extends Fragment {
                     ByteArrayOutputStream baos3 = new ByteArrayOutputStream();
                     imagem3.compress(Bitmap.CompressFormat.JPEG, 70, baos3);
                     byte[] dadosImagem3 = baos3.toByteArray();
-
+                    String nomeFoto = UUID.randomUUID().toString();
                     final StorageReference imageRef3 = storageReference
                             .child("imagens")
                             .child(Base64Custom.codificarBase64(autentificacao.getCurrentUser().getEmail()))
-                            .child(endereco.getText().toString() + " " + latitude.getText().toString() + " " + longitude.getText().toString())
-                            .child("foto3.jpeg");
+                            .child(nomeFoto +".jpeg");
                     UploadTask uploadTask3 = imageRef3.putBytes(dadosImagem3);
                     uploadTask3.addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(requireActivity().getApplicationContext(), "Falha ao fazer Upload", Toast.LENGTH_SHORT).show();
+                            optionDialog.dismiss();
+                            Toast.makeText(requireActivity().getApplicationContext(), "Erro ao fazer upload verifique a conexão com a internet", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -319,6 +392,7 @@ public class CadastroFragment extends Fragment {
                                 public void onComplete(@NonNull Task<Uri> task) {
                                     urlFoto3 = task.getResult();
                                     optionDialog.dismiss();
+                                    novoUpload3 = true;
 
                                 }
                             });
@@ -524,11 +598,18 @@ public class CadastroFragment extends Fragment {
                 controle = true;
                 imgPath = formularioAtual.getCaminhoImagem();
                 foto.setImageBitmap(BitmapFactory.decodeFile(imgPath));
+                imagem = BitmapFactory.decodeFile(imgPath);
                 imgPath2 = formularioAtual.getCaminhoImagem2();
                 foto2.setImageBitmap(BitmapFactory.decodeFile(imgPath2));
+                imagem2 = BitmapFactory.decodeFile(imgPath2);
                 imgPath3 = formularioAtual.getCaminhoImagem3();
                 foto3.setImageBitmap(BitmapFactory.decodeFile(imgPath3));
+                imagem3 = BitmapFactory.decodeFile(imgPath3);
                 endereco.setText(formularioAtual.getEndereco());
+                urlFoto = Uri.parse(formularioAtual.getUrlImagem());
+                Log.i("TAG", urlFoto.toString());
+                urlFoto2 = Uri.parse(formularioAtual.getUrlImagem2());
+                urlFoto3 = Uri.parse(formularioAtual.getUrlImagem3());
                 if (formularioAtual.getMunicipio().equals("-")) {
                     municipio.setSelection(0);
                 }else {
@@ -1842,6 +1923,60 @@ public class CadastroFragment extends Fragment {
                         //region pegar dados
                         FormularioDAO formularioDAO = new FormularioDAO(requireActivity().getApplicationContext());
                         Formulario formulario = new Formulario();
+
+                        Log.i("TAG", imgPath);
+                        if (imgPath != null) {
+                            formulario.setCaminhoImagem(imgPath);
+                        } else {
+                            formulario.setCaminhoImagem("");
+                        }
+                        Log.i("TAG2", imgPath2);
+                        if (imgPath2 != null) {
+                            formulario.setCaminhoImagem2(imgPath2);
+                        } else {
+                            formulario.setCaminhoImagem2("");
+                        }
+                        Log.i("TAG3", imgPath3);
+                        if (imgPath3 != null) {
+                            formulario.setCaminhoImagem3(imgPath3);
+                        } else {
+                            formulario.setCaminhoImagem3("");
+                        }
+                        try {
+                            Log.i("URL", urlFoto.toString());
+                        }catch (Exception e){
+
+                        }
+                        if(!novoUpload){
+                            urlFoto=null;
+                        }
+                        if(!novoUpload2){
+                            urlFoto2=null;
+                        }
+                        if(!novoUpload3){
+                            urlFoto3=null;
+                        }
+                        if((urlFoto == null) || ((urlFoto.toString()).equals(""))) {
+                            formulario.setUrlImagem("");
+                            formulario.setColor(String.valueOf(R.color.design_default_color_error));
+                        }else {
+                            formulario.setUrlImagem(urlFoto.toString());
+                            formulario.setColor(String.valueOf(R.color.colorPrimary));
+                        }
+                        if((urlFoto2 == null) || ((urlFoto2.toString()).equals(""))) {
+                            formulario.setUrlImagem2("");
+                            formulario.setColor2(String.valueOf(R.color.design_default_color_error));
+                        }else {
+                            formulario.setUrlImagem2(urlFoto2.toString());
+                            formulario.setColor2(String.valueOf(R.color.colorPrimary));
+                        }
+                        if((urlFoto3 == null) || ((urlFoto3.toString()).equals(""))) {
+                            formulario.setUrlImagem3("");
+                            formulario.setColor3(String.valueOf(R.color.design_default_color_error));
+                        }else {
+                            formulario.setUrlImagem3(urlFoto3.toString());
+                            formulario.setColor3(String.valueOf(R.color.colorPrimary));
+                        }
                         //LOCALIZAÇÂO
 
                         formulario.setEndereco(Objects.requireNonNull(endereco.getText()).toString());
@@ -3139,24 +3274,52 @@ public class CadastroFragment extends Fragment {
             public void onClick(View view) {
                 FormularioDAO formularioDAO = new FormularioDAO(requireActivity().getApplicationContext());
                 final Formulario formulario = new Formulario();
+                Log.i("TAG", imgPath);
                 if (imgPath != null) {
                     formulario.setCaminhoImagem(imgPath);
                 } else {
                     formulario.setCaminhoImagem("");
                 }
+                Log.i("TAG2", imgPath2);
                 if (imgPath2 != null) {
                     formulario.setCaminhoImagem2(imgPath2);
                 } else {
                     formulario.setCaminhoImagem2("");
                 }
+                Log.i("TAG3", imgPath3);
                 if (imgPath3 != null) {
                     formulario.setCaminhoImagem3(imgPath3);
                 } else {
                     formulario.setCaminhoImagem3("");
                 }
-                formulario.setUrlImagem(urlFoto.toString());
-                formulario.setUrlImagem2(urlFoto2.toString());
-                formulario.setUrlImagem3(urlFoto3.toString());
+
+                try {
+                    Log.i("URL", urlFoto.toString());
+                }catch (Exception e){
+
+                }
+                if((urlFoto == null) || ((urlFoto.toString()).equals(""))) {
+                    formulario.setUrlImagem("");
+                    formulario.setColor(String.valueOf(R.color.design_default_color_error));
+                }else {
+                    formulario.setUrlImagem(urlFoto.toString());
+                    formulario.setColor(String.valueOf(R.color.colorPrimary));
+                }
+                if((urlFoto2 == null) || ((urlFoto2.toString()).equals(""))) {
+                    formulario.setUrlImagem2("");
+                    formulario.setColor2(String.valueOf(R.color.design_default_color_error));
+                }else {
+                    formulario.setUrlImagem2(urlFoto2.toString());
+                    formulario.setColor2(String.valueOf(R.color.colorPrimary));
+                }
+                if((urlFoto3 == null) || ((urlFoto3.toString()).equals(""))) {
+                    formulario.setUrlImagem3("");
+                    formulario.setColor3(String.valueOf(R.color.design_default_color_error));
+                }else {
+                    formulario.setUrlImagem3(urlFoto3.toString());
+                    formulario.setColor3(String.valueOf(R.color.colorPrimary));
+                }
+
 
                 //LOCALIZAÇÂO
 
@@ -3541,6 +3704,28 @@ public class CadastroFragment extends Fragment {
         }
 
     }
+    public Boolean verificarPermissaoLocaliza() {
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.ACCESS_COARSE_LOCATION};
+
+        if(ContextCompat.checkSelfPermission(requireActivity().getApplicationContext(),
+                permissions[0]) == PackageManager.PERMISSION_GRANTED
+                && ContextCompat.checkSelfPermission(requireActivity().getApplicationContext(),
+                permissions[1]) == PackageManager.PERMISSION_GRANTED
+        ){
+            return true;
+
+
+        }else{
+            ActivityCompat.requestPermissions(requireActivity(),permissions,REQUEST_CODE);
+            return false;
+        }
+    }
+
+
+
+
+
 
     public Boolean verificarPermissao() {
         String[] permissions = {Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -3581,6 +3766,7 @@ public class CadastroFragment extends Fragment {
                 switch (requestCode){
                     case IMAGE_CAPTURE_CODE:
                         imgPath = photoFile.getAbsolutePath();
+                        Log.i("TAHA", imgPath);
                         imagem = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                         foto.setImageBitmap(imagem);
                         break;
@@ -3629,6 +3815,7 @@ public class CadastroFragment extends Fragment {
 
                     case IMAGE_CAPTURE_CODE3:
                         imgPath3 = photoFile.getAbsolutePath();
+                        Log.i("TAHC", imgPath3);
                         imagem3 = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                         foto3.setImageBitmap(imagem3);
                         break;
@@ -3708,11 +3895,17 @@ public class CadastroFragment extends Fragment {
         );
 
         // Save a file: path for use with ACTION_VIEW intents
-        imgPath = image.getAbsolutePath();
+        imgPathFile = image.getAbsolutePath();
         return image;
     }
 
          /*if(cameraIntent.resolveActivity(requireActivity().getApplicationContext().getPackageManager()) != null){
              startActivityForResult(cameraIntent, imagemCodigo);
          }*/
+         private boolean isNetworkAvailable() {
+             ConnectivityManager connectivityManager
+                     = (ConnectivityManager) requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+             NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+             return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+         }
      }

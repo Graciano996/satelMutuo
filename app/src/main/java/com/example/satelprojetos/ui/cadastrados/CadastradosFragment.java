@@ -1,9 +1,11 @@
 package com.example.satelprojetos.ui.cadastrados;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +23,14 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.satelprojetos.R;
 import com.example.satelprojetos.activity.DrawerActivity;
 import com.example.satelprojetos.adapter.FormularioAdapter;
@@ -36,7 +46,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CadastradosFragment extends Fragment {
 
@@ -122,6 +134,17 @@ public class CadastradosFragment extends Fragment {
                 for(int i=0; i<listaFormulario.size();i++){
                     formularios.child(listaFormulario.get(i).getId().toString()).setValue(listaFormulario.get(i));
                 }
+                for(int a=0; a<listaFormulario.size();a++){
+                                enviarParaGS(listaFormulario.get(a), autentificacao.getCurrentUser().getEmail(), a);
+                                Log.i("TAGB", "entrei no " + a);
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+
+                }
                 Toast.makeText(getActivity().getApplicationContext(), "Sucesso ao enviar formulários", Toast.LENGTH_SHORT).show();
             }
         });
@@ -152,5 +175,49 @@ public class CadastradosFragment extends Fragment {
     public void onStart() {
         super.onStart();
         carregarFormulariosCadastrados();
+    }
+
+    public void enviarParaGS(final Formulario formulario, final String data, final int a){
+        final ProgressDialog loading = ProgressDialog.show(requireContext(),"Enviando dados para banco de dados","Por favor espere");
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbzZJUnvHaDYfO13T9t7NyhLcweYuuYp38D1n0JzH0Hs4FVR0mrO/exec",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        loading.dismiss();
+                        Toast.makeText(requireActivity().getApplicationContext(),response,Toast.LENGTH_LONG).show();
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i("TAGB","ENTREI AQUI1");
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> parmas = new HashMap<>();
+                //here we pass params
+                Log.i("TAGB",String.valueOf(a));
+                parmas.put("action","addItem");
+                parmas.put("itemName",formulario.getUrlImagem());
+                parmas.put("brand",data);
+
+                return parmas;
+            }
+        };
+
+        int socketTimeOut = 50000;// u can change this .. here it is 50 seconds
+
+        RetryPolicy retryPolicy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        stringRequest.setRetryPolicy(retryPolicy);
+        Log.i("TAGB","ENTREI AQUI 3");
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+
+        queue.add(stringRequest);
     }
 }

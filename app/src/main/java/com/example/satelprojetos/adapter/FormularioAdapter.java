@@ -1,5 +1,6 @@
 package com.example.satelprojetos.adapter;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,8 +35,14 @@ public class FormularioAdapter extends RecyclerView.Adapter<FormularioAdapter.My
         Formulario formulario = listaFormulario.get(position);
         holder.formularioEndereco.setText(formulario.getEndereco());
         holder.formularioData.setText(formulario.getData());
-        holder.formularioLatitude.setText("Latitude: " + formulario.getLatitude());
-        holder.formularioLongitude.setText("Longitude: " + formulario.getLongitude());
+        holder.formularioLatitude.setText("Lat:" + formulario.getLatitude());
+        holder.formularioLongitude.setText("Lon: " + formulario.getLongitude());
+        int color = Integer.parseInt(formulario.getColor());
+        int color2 = Integer.parseInt(formulario.getColor2());
+        int color3 = Integer.parseInt(formulario.getColor3());
+        holder.formularioUpload.setBackgroundResource(color);
+        holder.formularioUpload2.setBackgroundResource(color2);
+        holder.formularioUpload3.setBackgroundResource(color3);
     }
 
     @Override
@@ -45,7 +52,8 @@ public class FormularioAdapter extends RecyclerView.Adapter<FormularioAdapter.My
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
-        TextView formularioLatitude, formularioLongitude, formularioData, formularioEndereco;
+        TextView formularioLatitude, formularioLongitude, formularioData, formularioEndereco,
+        formularioUpload, formularioUpload2, formularioUpload3;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -54,6 +62,9 @@ public class FormularioAdapter extends RecyclerView.Adapter<FormularioAdapter.My
             formularioData = itemView.findViewById(R.id.cadastradosData);
             formularioLatitude= itemView.findViewById(R.id.cadastradosLatitude);
             formularioLongitude= itemView.findViewById(R.id.cadastradosLongitude);
+            formularioUpload = itemView.findViewById(R.id.cadastroUpload);
+            formularioUpload2 = itemView.findViewById(R.id.cadastroUpload2);
+            formularioUpload3 = itemView.findViewById(R.id.cadastroUpload3);
         }
     }
 }

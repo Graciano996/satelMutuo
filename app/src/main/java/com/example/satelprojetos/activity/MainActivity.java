@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -35,11 +36,14 @@ public class MainActivity extends AppCompatActivity {
     private EditText emailUsuario, senhaUsuario;
     private FirebaseAuth autentificacao;
     private Usuario usuario;
+    private Button btnLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        btnLogin = findViewById(R.id.button);
+
 
     }
     public void abrirDrawer(View view){
@@ -59,10 +63,13 @@ public class MainActivity extends AppCompatActivity {
             }
         }else {
             Toast.makeText(MainActivity.this, "Digite um email", Toast.LENGTH_SHORT).show();
+
         }
+
     }
 
     public void validarLogin(){
+        btnLogin.setEnabled(false);
         autentificacao = ConfiguracaoFirebase.getFirebaseAuth();
         autentificacao.signInWithEmailAndPassword(
                 usuario.getEmail(),
@@ -77,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     Toast.makeText(MainActivity.this, "Sucesso ao fazer login", Toast.LENGTH_SHORT).show();
                 }else {
-                    String excecao = "";
+                    String excecao = "Erro ao fazer Login, por favor verifique sua conexão";
                     try{
                         throw task.getException();
                     }catch (FirebaseAuthInvalidUserException e){
@@ -89,7 +96,9 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                     }
                     Toast.makeText(MainActivity.this, excecao, Toast.LENGTH_SHORT).show();
+                    btnLogin.setEnabled(true);
                 }
+
             }
         });
     }
