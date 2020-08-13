@@ -345,4 +345,5 @@
         <item>Vale do Paraíso</item>
         <item>Vilhena</item>
     </string-array>
+    <string name="title_activity_maps">Map</string>
 </resources>

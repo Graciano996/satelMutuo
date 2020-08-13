@@ -13,6 +13,15 @@
             android:icon="@drawable/ic_baseline_assignment_24"
             android:title="@string/menu_cadastro" />
         <item
+            android:id="@+id/nav_mapa"
+            android:icon="@drawable/ic_baseline_map_24"
+            android:title="Mapa" />
+        <item
+            android:id="@+id/nav_enviado"
+            android:icon="@drawable/ic_baseline_backup_24"
+            android:title="Enviados"/>
+
+        <item
             android:id="@+id/nav_suporte"
             android:icon="@drawable/ic_baseline_help_24"
             android:title="@string/menu_suporte" />

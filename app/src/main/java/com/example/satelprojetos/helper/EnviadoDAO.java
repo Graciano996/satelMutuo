@@ -2,10 +2,8 @@ package com.example.satelprojetos.helper;
 
 import android.content.ContentValues;
 import android.content.Context;
-
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-
 import android.util.Log;
 
 import com.example.satelprojetos.model.Formulario;
@@ -13,12 +11,12 @@ import com.example.satelprojetos.model.Formulario;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FormularioDAO implements IFormularioDAO {
+public class EnviadoDAO implements IFormularioDAO {
 
     private SQLiteDatabase escreve;
     private SQLiteDatabase le;
 
-    public FormularioDAO(Context context){
+    public EnviadoDAO(Context context){
         DbHelper db = new DbHelper(context);
         escreve = db.getWritableDatabase();
         le = db.getReadableDatabase();
@@ -182,7 +180,7 @@ public class FormularioDAO implements IFormularioDAO {
         cv.put("observacaoVegetacao", formulario.getObservacaoVegetacao());
 
         try{
-            escreve.insert(DbHelper.TABLE_FORMULARIO,null, cv);
+            escreve.insert(DbHelper.TABLE_ENVIADO,null, cv);
             Log.i("INFO","Formulario salvo com sucesso!");
 
         }catch (Exception e){
@@ -352,7 +350,7 @@ public class FormularioDAO implements IFormularioDAO {
         String[] args = {formulario.getId().toString()};
 
         try{
-            escreve.update(DbHelper.TABLE_FORMULARIO,cv,"id=?",args);
+            escreve.update(DbHelper.TABLE_ENVIADO,cv,"id=?",args);
             Log.i("INFO","Formulario atualizado com sucesso!");
 
         }catch (Exception e){
@@ -370,7 +368,7 @@ public class FormularioDAO implements IFormularioDAO {
 
         try{
             String[] args = {formulario.getId().toString()};
-            escreve.delete(DbHelper.TABLE_FORMULARIO,"id=?",args);
+            escreve.delete(DbHelper.TABLE_ENVIADO,"id=?",args);
             Log.i("INFO","Formulario atualizado com sucesso!");
 
         }catch (Exception e){
@@ -385,7 +383,7 @@ public class FormularioDAO implements IFormularioDAO {
         List<Formulario> formularios = new ArrayList<>();
         
 
-        String sql = "SELECT * FROM " + DbHelper.TABLE_FORMULARIO + " ;";
+        String sql = "SELECT * FROM " + DbHelper.TABLE_ENVIADO + " ;";
         Cursor c = le.rawQuery(sql,null);
 
         while (c.moveToNext()){

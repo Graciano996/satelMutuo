@@ -24,7 +24,7 @@ public class Formulario implements Serializable {
     private String ferragemExposta;
     private String fletido;
     private String danificado;
-    private String abalrroado;
+    private String abalroado;
     private String trincado;
     private String ramalSubt;
     private String observacaoFisicas;
@@ -39,6 +39,7 @@ public class Formulario implements Serializable {
     private String chFaca;
     private String banco;
     private String chFusivelReligador;;
+    private String outros;
     private String observacaoAtivos;
     private String ip;
     private String ipEstrutura;
@@ -82,6 +83,8 @@ public class Formulario implements Serializable {
 
     private String quantidadeCabos2;
     private String tipoCabo2;
+    private String quantidadeCabos2dois;
+    private String tipoCabo2dois;
     private String nome2;
     private String finalidade2;
     private String ceans2;
@@ -139,6 +142,30 @@ public class Formulario implements Serializable {
     private String quedaArvore;
     private String localArvore;
     private String observacaoVegetacao;
+
+    public String getQuantidadeCabos2dois() {
+        return quantidadeCabos2dois;
+    }
+
+    public void setQuantidadeCabos2dois(String quantidadeCabos2dois) {
+        this.quantidadeCabos2dois = quantidadeCabos2dois;
+    }
+
+    public String getTipoCabo2dois() {
+        return tipoCabo2dois;
+    }
+
+    public void setTipoCabo2dois(String tipoCabo2dois) {
+        this.tipoCabo2dois = tipoCabo2dois;
+    }
+
+    public String getOutros() {
+        return outros;
+    }
+
+    public void setOutros(String outros) {
+        this.outros = outros;
+    }
 
     public String getColor() {
         return color;
@@ -308,12 +335,12 @@ public class Formulario implements Serializable {
         this.danificado = danificado;
     }
 
-    public String getAbalrroado() {
-        return abalrroado;
+    public String getAbalroado() {
+        return abalroado;
     }
 
-    public void setAbalrroado(String abalrroado) {
-        this.abalrroado = abalrroado;
+    public void setAbalroado(String abalroado) {
+        this.abalroado = abalroado;
     }
 
     public String getTrincado() {
@@ -1258,6 +1285,9 @@ public class Formulario implements Serializable {
 
         else if (atributo.equals("tipoCabo2")){
             setTipoCabo2(dado);
+        }
+        else if (atributo.equals("tipoCabo2dois")){
+            setTipoCabo2dois(dado);
         }
         else if (atributo.equals("finalidade2")){
             setFinalidade2(dado);

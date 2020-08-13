@@ -16,10 +16,21 @@
         android:name="com.example.satelprojetos.ui.cadastro.CadastroFragment"
         android:label="@string/menu_cadastro"
         tools:layout="@layout/fragment_cadastro" />
+    <fragment
+        android:id="@+id/nav_mapa"
+        android:name="com.example.satelprojetos.ui.mapa.MapsFragment"
+        android:label="Mapa"
+        tools:layout="@layout/fragment_suporte" />
+    <fragment
+        android:id="@+id/nav_enviado"
+        android:name="com.example.satelprojetos.ui.enviados.EnviadoFragment"
+        android:label="Enviados"
+        tools:layout="@layout/fragment_enviados" />
 
     <fragment
         android:id="@+id/nav_suporte"
         android:name="com.example.satelprojetos.ui.suporte.SuporteFragment"
         android:label="@string/menu_suporte"
         tools:layout="@layout/fragment_suporte" />
+
 </navigation>

@@ -10,6 +10,8 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -70,10 +72,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URLStreamHandlerFactory;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
+import java.util.TimeZone;
 import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
@@ -90,23 +96,25 @@ public class CadastroFragment extends Fragment {
     private LocationListener locationListener;
     private StorageReference storageReference;
     private FirebaseAuth autentificacao;
+    Geocoder geocoder;
+    List<Address> addresses;
     private EditText endereco, latitude, longitude, observacaoFisicas,
             observacaoAtivos, quantidadeLampada, quantidadeLampada2, quantidadeLampada3,
             potReator, potReator2, potReator3, quantidade24H, quantidade24H2, quantidade24H3,
-            observacaoVegetacao, observacaoIP,
-            quantidadeCabos, quantidadeCabos2, quantidadeCabos3, quantidadeCabos4, quantidadeCabos5,
+            observacaoVegetacao, observacaoIP,outros,
+            quantidadeCabos, quantidadeCabos2, quantidadeCabos2dois, quantidadeCabos3, quantidadeCabos4, quantidadeCabos5,
             nome, nome2, nome3, nome4, nome5, descricaoIrregularidade, descricaoIrregularidade2,
             descricaoIrregularidade3, descricaoIrregularidade4, descricaoIrregularidade5,
             observacaoMutuo, observacaoMutuo2, observacaoMutuo3, observacaoMutuo4, observacaoMutuo5;
     private Spinner municipio, alturaCarga, tipoPoste, ipEstrutura, ipEstrutura2, ipEstrutura3, tipoPot,
             tipoPot2, tipoPot3, dimensaoVegetacao, ipAtivacao, ipAtivacao2, ipAtivacao3,
             trafoTrifasico, trafoMono, ramalSubt, quantidadeOcupantes,
-            tipoCabo, tipoCabo2, tipoCabo3, tipoCabo4, tipoCabo5, finalidade, finalidade2, finalidade3,
+            tipoCabo, tipoCabo2, tipoCabo2dois, tipoCabo3, tipoCabo4, tipoCabo5, finalidade, finalidade2, finalidade3,
             finalidade4, finalidade5, ceans, ceans2, ceans3, ceans4, ceans5, tar, tar2, tar3, tar4,
             tar5, reservaTec, reservaTec2, reservaTec3, reservaTec4, reservaTec5, backbone,
             backbone2, backbone3, backbone4, backbone5, distaciaBaixa, distanciaMedia, estadoArvore,
             localArvore;
-    private CheckBox normal, ferragemExposta, fletido, danificado, abalrroado, trincado, religador, medicao,
+    private CheckBox normal, ferragemExposta, fletido, danificado, abalroado, trincado, religador, medicao,
             chFusivel, chFaca, vinteEQuatro, vinteEQuatro2, vinteEQuatro3,
             ativos, chkTrafoTrifasico, chkTrafoMono, ip, ip2, ip3, chFusivelReligador, chBanco, mutuo,
             placaIdentificadora, placaIdentificadora2, placaIdentificadora3, placaIdentificadora4,
@@ -155,6 +163,7 @@ public class CadastroFragment extends Fragment {
                 Toast.makeText(requireActivity().getApplicationContext(), "Por favor ative seu GPS", Toast.LENGTH_SHORT).show();
             }
         };
+        geocoder = new Geocoder(requireContext(),Locale.getDefault());
         if (verificarPermissaoLocaliza()) {
 
             if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
@@ -180,7 +189,19 @@ public class CadastroFragment extends Fragment {
                 } else {
                     latitude.setText(String.format("%.5f",localizacao.getLatitude()));
                     longitude.setText(String.format("%.5f",localizacao.getLongitude()));
-                }
+                    try {
+                        addresses = geocoder.getFromLocation(localizacao.getLatitude(), localizacao.getLongitude(), 1);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    endereco.setText(addresses.get(0).getAddressLine(0));
+                    String municipioTexto = addresses.get(0).getAdminArea();
+                    for (int i = 0; i < municipio.getAdapter().getCount(); i++) {
+                        municipio.setSelection(i);
+                        if (municipio.getSelectedItem().toString().equals(municipioTexto)) {
+                            break;
+                        }
+                }}
             }
         });
 
@@ -415,7 +436,7 @@ public class CadastroFragment extends Fragment {
         ferragemExposta = root.findViewById(R.id.chkCadastroFerragem);
         fletido = root.findViewById(R.id.chkCadastroFletido);
         danificado = root.findViewById(R.id.chkCadastroDanificado);
-        abalrroado = root.findViewById(R.id.chkCadastroAbalrroado);
+        abalroado = root.findViewById(R.id.chkCadastroAbalrroado);
         trincado = root.findViewById(R.id.chkCadastroTrincado);
         observacaoFisicas = root.findViewById(R.id.textCadastroObservacaoFisicas);
 
@@ -427,6 +448,24 @@ public class CadastroFragment extends Fragment {
         tipoPot = root.findViewById(R.id.spinCadastroTipoPot);
         tipoPot.setEnabled(false);
         potReator = root.findViewById(R.id.textCadastroPotReator);
+        potReator.setEnabled(false);
+        tipoPot.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String[] texto =  (tipoPot.getSelectedItem().toString()).split(" ");
+                try {
+                    potReator.setText(texto[1]);
+                }
+                catch (Exception e){
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         ipAtivacao = root.findViewById(R.id.spinCadastroIPAtivacao);
         ipAtivacao.setEnabled(false);
         vinteEQuatro = root.findViewById(R.id.chkCadastroVinteEQuatro);
@@ -439,6 +478,24 @@ public class CadastroFragment extends Fragment {
         tipoPot2 = root.findViewById(R.id.spinCadastroTipoPot2);
         tipoPot2.setEnabled(false);
         potReator2 = root.findViewById(R.id.textCadastroPotReator2);
+        potReator2.setEnabled(false);
+        tipoPot2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String[] texto =  tipoPot2.getSelectedItem().toString().split(" ");
+                try {
+                    potReator2.setText(texto[1]);
+                }
+                catch (Exception e){
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         ipAtivacao2 = root.findViewById(R.id.spinCadastroIPAtivacao2);
         ipAtivacao2.setEnabled(false);
         vinteEQuatro2 = root.findViewById(R.id.chkCadastroVinteEQuatro2);
@@ -451,6 +508,24 @@ public class CadastroFragment extends Fragment {
         tipoPot3 = root.findViewById(R.id.spinCadastroTipoPot3);
         tipoPot3.setEnabled(false);
         potReator3 = root.findViewById(R.id.textCadastroPotReator3);
+        potReator3.setEnabled(false);
+        tipoPot3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String[] texto =  tipoPot3.getSelectedItem().toString().split(" ");
+                try {
+                    potReator3.setText(texto[1]);
+                }
+                catch (Exception e){
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         ipAtivacao3 = root.findViewById(R.id.spinCadastroIPAtivacao3);
         ipAtivacao3.setEnabled(false);
         vinteEQuatro3 = root.findViewById(R.id.chkCadastroVinteEQuatro3);
@@ -473,6 +548,7 @@ public class CadastroFragment extends Fragment {
         chFusivelReligador = root.findViewById(R.id.chkCadastroFusivelReligador);
         ramalSubt = root.findViewById(R.id.spinCadastroRamalSubt);
         ramalSubt.setEnabled(false);
+        outros = root.findViewById(R.id.textCadastroOutrosAtivos);
         observacaoAtivos = root.findViewById(R.id.textCadastroObservacaoAtivo);
 
         //MUTUO
@@ -505,6 +581,8 @@ public class CadastroFragment extends Fragment {
 
         quantidadeCabos2 = root.findViewById(R.id.textCadastroMutuoQuantidadeCabos2);
         tipoCabo2 = root.findViewById(R.id.spinCadastroMutuoTipoCabo2);
+        quantidadeCabos2dois = root.findViewById(R.id.textCadastroMutuoQuantidadeCabos2dois);
+        tipoCabo2dois = root.findViewById(R.id.spinCadastroMutuoTipoCabo2dois);
         tipoCabo2.setEnabled(false);
         nome2 = root.findViewById(R.id.textCadastroNome2);
         finalidade2 = root.findViewById(R.id.spinCadastroFinalidade2);
@@ -652,7 +730,7 @@ public class CadastroFragment extends Fragment {
                     normal.setChecked(false);
                     ferragemExposta.setEnabled(true);
                     fletido.setEnabled(true);
-                    abalrroado.setEnabled(true);
+                    abalroado.setEnabled(true);
                     trincado.setEnabled(true);
                     danificado.setEnabled(true);
                 }
@@ -665,8 +743,8 @@ public class CadastroFragment extends Fragment {
                 if(formularioAtual.getDanificado().equals("Sim")){
                     danificado.setChecked(true);
                 }
-                if(formularioAtual.getAbalrroado().equals("Sim")){
-                    abalrroado.setChecked(true);
+                if(formularioAtual.getAbalroado().equals("Sim")){
+                    abalroado.setChecked(true);
                 }
                 if(formularioAtual.getTrincado().equals("Sim")){
                     trincado.setChecked(true);
@@ -861,6 +939,7 @@ public class CadastroFragment extends Fragment {
                     chBanco.setEnabled(true);
                     chFusivelReligador.setEnabled(true);
                     ramalSubt.setEnabled(true);
+                    outros.setEnabled(true);
 
                     ativos.setVisibility(View.VISIBLE);
                     chkTrafoMono.setVisibility(View.VISIBLE);
@@ -874,6 +953,7 @@ public class CadastroFragment extends Fragment {
                     chBanco.setVisibility(View.VISIBLE);
                     chFusivelReligador.setVisibility(View.VISIBLE);
                     ramalSubt.setVisibility(View.VISIBLE);
+                    outros.setVisibility(View.VISIBLE);
                 }
                 if(formularioAtual.getChkTrafoTrifasico().equals("Sim")){
                     chkTrafoTrifasico.setChecked(true);
@@ -931,6 +1011,7 @@ public class CadastroFragment extends Fragment {
                     }
                 }
                 observacaoAtivos.setText(formularioAtual.getObservacaoAtivos());
+                outros.setText(formularioAtual.getOutros());
 
                 //MUTUO
                if (formularioAtual.getQuantidadeOcupantes().equals("-")) {
@@ -950,18 +1031,19 @@ public class CadastroFragment extends Fragment {
                         // region MutuoDados0
                         mutuoDados(quantidadeCabos,null,false);
                         mutuoDados(quantidadeCabos2,null,false);
+                        mutuoDados(quantidadeCabos2dois,null,false);
                         mutuoDados(quantidadeCabos3,null,false);
                         mutuoDados(quantidadeCabos4,null,false);
                         mutuoDados(quantidadeCabos5,null,false);
 
                         mutuoDados(null,tipoCabo,false);
-                        mutuoDados(null,tipoCabo2,false);
+                        mutuoDados(null,tipoCabo2dois,false);
                         mutuoDados(null,tipoCabo3,false);
                         mutuoDados(null,tipoCabo4,false);
                         mutuoDados(null,tipoCabo5,false);
 
-                        mutuoDados(nome,null,false);
-                        mutuoDados(nome2,null,false);
+                        nome.setVisibility(View.GONE);
+                        nome2.setVisibility(View.GONE);
                         mutuoDados(nome3,null,false);
                         mutuoDados(nome4,null,false);
                         mutuoDados(nome5,null,false);
@@ -1041,18 +1123,20 @@ public class CadastroFragment extends Fragment {
                         // region MutuoDados1
                         mutuoDados(quantidadeCabos,null,true);
                         mutuoDados(quantidadeCabos2,null,false);
+                        mutuoDados(quantidadeCabos2dois,null,false);
                         mutuoDados(quantidadeCabos3,null,false);
                         mutuoDados(quantidadeCabos4,null,false);
                         mutuoDados(quantidadeCabos5,null,false);
 
                         mutuoDados(null,tipoCabo,true);
                         mutuoDados(null,tipoCabo2,false);
+                        mutuoDados(null,tipoCabo2dois,false);
                         mutuoDados(null,tipoCabo3,false);
                         mutuoDados(null,tipoCabo4,false);
                         mutuoDados(null,tipoCabo5,false);
 
-                        mutuoDados(nome,null,true);
-                        mutuoDados(nome2,null,false);
+                        nome.setVisibility(View.VISIBLE);
+                        nome2.setVisibility(View.GONE);
                         mutuoDados(nome3,null,false);
                         mutuoDados(nome4,null,false);
                         mutuoDados(nome5,null,false);
@@ -1134,18 +1218,20 @@ public class CadastroFragment extends Fragment {
 
                         mutuoDados(quantidadeCabos,null,true);
                         mutuoDados(quantidadeCabos2,null,true);
+                        mutuoDados(quantidadeCabos2dois,null,true);
                         mutuoDados(quantidadeCabos3,null,false);
                         mutuoDados(quantidadeCabos4,null,false);
                         mutuoDados(quantidadeCabos5,null,false);
 
                         mutuoDados(null,tipoCabo,true);
                         mutuoDados(null,tipoCabo2,true);
+                        mutuoDados(null,tipoCabo2dois,true);
                         mutuoDados(null,tipoCabo3,false);
                         mutuoDados(null,tipoCabo4,false);
                         mutuoDados(null,tipoCabo5,false);
 
-                        mutuoDados(nome,null,true);
-                        mutuoDados(nome2,null,true);
+                        nome.setVisibility(View.VISIBLE);
+                        nome2.setVisibility(View.VISIBLE);
                         mutuoDados(nome3,null,false);
                         mutuoDados(nome4,null,false);
                         mutuoDados(nome5,null,false);
@@ -1227,18 +1313,20 @@ public class CadastroFragment extends Fragment {
 
                         mutuoDados(quantidadeCabos,null,true);
                         mutuoDados(quantidadeCabos2,null,true);
+                        mutuoDados(quantidadeCabos2dois,null,true);
                         mutuoDados(quantidadeCabos3,null,true);
                         mutuoDados(quantidadeCabos4,null,false);
                         mutuoDados(quantidadeCabos5,null,false);
 
                         mutuoDados(null,tipoCabo,true);
                         mutuoDados(null,tipoCabo2,true);
+                        mutuoDados(null,tipoCabo2dois,true);
                         mutuoDados(null,tipoCabo3,true);
                         mutuoDados(null,tipoCabo4,false);
                         mutuoDados(null,tipoCabo5,false);
 
-                        mutuoDados(nome,null,true);
-                        mutuoDados(nome2,null,true);
+                        nome.setVisibility(View.VISIBLE);
+                        nome2.setVisibility(View.VISIBLE);
                         mutuoDados(nome3,null,true);
                         mutuoDados(nome4,null,false);
                         mutuoDados(nome5,null,false);
@@ -1320,18 +1408,20 @@ public class CadastroFragment extends Fragment {
 
                         mutuoDados(quantidadeCabos,null,true);
                         mutuoDados(quantidadeCabos2,null,true);
+                        mutuoDados(quantidadeCabos2dois,null,true);
                         mutuoDados(quantidadeCabos3,null,true);
                         mutuoDados(quantidadeCabos4,null,true);
                         mutuoDados(quantidadeCabos5,null,false);
 
                         mutuoDados(null,tipoCabo,true);
                         mutuoDados(null,tipoCabo2,true);
+                        mutuoDados(null,tipoCabo2dois,true);
                         mutuoDados(null,tipoCabo3,true);
                         mutuoDados(null,tipoCabo4,true);
                         mutuoDados(null,tipoCabo5,false);
 
-                        mutuoDados(nome,null,true);
-                        mutuoDados(nome2,null,true);
+                        nome.setVisibility(View.VISIBLE);
+                        nome2.setVisibility(View.VISIBLE);
                         mutuoDados(nome3,null,true);
                         mutuoDados(nome4,null,true);
                         mutuoDados(nome5,null,false);
@@ -1412,18 +1502,20 @@ public class CadastroFragment extends Fragment {
 
                         mutuoDados(quantidadeCabos,null,true);
                         mutuoDados(quantidadeCabos2,null,true);
+                        mutuoDados(quantidadeCabos2dois,null,true);
                         mutuoDados(quantidadeCabos3,null,true);
                         mutuoDados(quantidadeCabos4,null,true);
                         mutuoDados(quantidadeCabos5,null,true);
 
                         mutuoDados(null,tipoCabo,true);
                         mutuoDados(null,tipoCabo2,true);
+                        mutuoDados(null,tipoCabo2dois,true);
                         mutuoDados(null,tipoCabo3,true);
                         mutuoDados(null,tipoCabo4,true);
                         mutuoDados(null,tipoCabo5,true);
 
-                        mutuoDados(nome,null,true);
-                        mutuoDados(nome2,null,true);
+                        nome.setVisibility(View.VISIBLE);
+                        nome2.setVisibility(View.VISIBLE);
                         mutuoDados(nome3,null,true);
                         mutuoDados(nome4,null,true);
                         mutuoDados(nome5,null,true);
@@ -1583,6 +1675,17 @@ public class CadastroFragment extends Fragment {
                     for (int i = 0; i < tipoCabo2.getAdapter().getCount(); i++) {
                         tipoCabo2.setSelection(i);
                         if (tipoCabo2.getSelectedItem().toString().equals(formularioAtual.getTipoCabo2())) {
+                            break;
+                        }
+                    }
+                }
+                quantidadeCabos2dois.setText(formularioAtual.getQuantidadeCabos2dois());
+                if (formularioAtual.getTipoCabo2dois().equals("-")) {
+                    tipoCabo2dois.setSelection(0);
+                }else {
+                    for (int i = 0; i < tipoCabo2dois.getAdapter().getCount(); i++) {
+                        tipoCabo2dois.setSelection(i);
+                        if (tipoCabo2dois.getSelectedItem().toString().equals(formularioAtual.getTipoCabo2dois())) {
                             break;
                         }
                     }
@@ -2009,10 +2112,10 @@ public class CadastroFragment extends Fragment {
                         } else {
                             formulario.setDanificado("Não");
                         }
-                        if (abalrroado.isChecked()) {
-                            formulario.setAbalrroado("Sim");
+                        if (abalroado.isChecked()) {
+                            formulario.setAbalroado("Sim");
                         } else {
-                            formulario.setAbalrroado("Não");
+                            formulario.setAbalroado("Não");
                         }
                         if (trincado.isChecked()) {
                             formulario.setTrincado("Sim");
@@ -2128,6 +2231,7 @@ public class CadastroFragment extends Fragment {
                         }
                         setLista(formulario,ramalSubt,"ramalSubt");
                         formulario.setObservacaoAtivos(Objects.requireNonNull(observacaoAtivos.getText()).toString());
+                        formulario.setOutros(Objects.requireNonNull(outros.getText()).toString());
 
                         //MUTUO
                         if (mutuo.isChecked()) {
@@ -2160,7 +2264,9 @@ public class CadastroFragment extends Fragment {
                         formulario.setObservacaoMutuo(Objects.requireNonNull(observacaoMutuo.getText()).toString());
 
                         formulario.setQuantidadeCabos2(Objects.requireNonNull(quantidadeCabos2.getText()).toString());
+                        formulario.setQuantidadeCabos2dois(Objects.requireNonNull(quantidadeCabos2dois.getText()).toString());
                         setLista(formulario,tipoCabo2,"tipoCabo2");
+                        setLista(formulario,tipoCabo2dois,"tipoCabo2dois");
                         formulario.setNome2(Objects.requireNonNull(nome2.getText()).toString());
                         setLista(formulario,finalidade2,"finalidade2");
                         setLista(formulario,ceans2,"ceans2");
@@ -2281,8 +2387,24 @@ public class CadastroFragment extends Fragment {
                         } else {
                             thisDayText = String.valueOf(thisDay);
                         }
+                        String timeStamp = new SimpleDateFormat("dd/MM/yy-HH:mm:ss").format(new Date());
+                        SimpleDateFormat readDate = new SimpleDateFormat("dd/MM/yy-HH:mm:ss");
+                        readDate.setTimeZone(TimeZone.getTimeZone("GMT"));
+                        Date date = null;
+                        try {
+                            date = readDate.parse(timeStamp);
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        SimpleDateFormat writeDate = new SimpleDateFormat("dd/MM/yyyy, HH:mm:ss");
+                        writeDate.setTimeZone(TimeZone.getTimeZone("GMT-04:00"));
+                        String s = writeDate.format(date);
+
+
+                        Log.i("DATA",s);
+
                         String data = thisDayText + "/" + thisMonthText + "/" + thisYearText;
-                        formulario.setData(data);
+                        formulario.setData(s);
                         if (formularioDAO.salvar(formulario)) {
                             CadastradosFragment cadastradosFragment = new CadastradosFragment();
 
@@ -2317,18 +2439,18 @@ public class CadastroFragment extends Fragment {
                     ferragemExposta.setChecked(false);
                     fletido.setChecked(false);
                     danificado.setChecked(false);
-                    abalrroado.setChecked(false);
+                    abalroado.setChecked(false);
                     trincado.setChecked(false);
                     ferragemExposta.setEnabled(false);
                     fletido.setEnabled(false);
                     danificado.setEnabled(false);
-                    abalrroado.setEnabled(false);
+                    abalroado.setEnabled(false);
                     trincado.setEnabled(false);
                 }else{
                     ferragemExposta.setEnabled(true);
                     fletido.setEnabled(true);
                     danificado.setEnabled(true);
-                    abalrroado.setEnabled(true);
+                    abalroado.setEnabled(true);
                     trincado.setEnabled(true);
                 }
 
@@ -2536,6 +2658,7 @@ public class CadastroFragment extends Fragment {
                     chFusivelReligador.setEnabled(true);
                     chBanco.setEnabled(true);
                     ramalSubt.setEnabled(true);
+                    outros.setEnabled(true);
 
                     trafoMono.setVisibility(View.VISIBLE);
                     trafoTrifasico.setVisibility(View.VISIBLE);
@@ -2548,6 +2671,7 @@ public class CadastroFragment extends Fragment {
                     chFusivelReligador.setVisibility(View.VISIBLE);
                     chBanco.setVisibility(View.VISIBLE);
                     ramalSubt.setVisibility(View.VISIBLE);
+                    outros.setVisibility(View.VISIBLE);
                 }else{
                     chkTrafoTrifasico.setChecked(false);
                     chkTrafoTrifasico.setEnabled(false);
@@ -2572,6 +2696,7 @@ public class CadastroFragment extends Fragment {
                     chBanco.setChecked(false);
                     ramalSubt.setSelection(0);
                     ramalSubt.setEnabled(false);
+                    outros.setEnabled(false);
 
                     trafoMono.setVisibility(View.INVISIBLE);
                     trafoTrifasico.setVisibility(View.GONE);
@@ -2584,6 +2709,7 @@ public class CadastroFragment extends Fragment {
                     chFusivelReligador.setVisibility(View.GONE);
                     chBanco.setVisibility(View.GONE);
                     ramalSubt.setVisibility(View.GONE);
+                    outros.setVisibility(View.GONE);
                 }
             }
         });
@@ -2645,18 +2771,20 @@ public class CadastroFragment extends Fragment {
                         // region MutuoDados0
                         mutuoDados(quantidadeCabos, null, false);
                         mutuoDados(quantidadeCabos2, null, false);
+                        mutuoDados(quantidadeCabos2dois, null, false);
                         mutuoDados(quantidadeCabos3, null, false);
                         mutuoDados(quantidadeCabos4, null, false);
                         mutuoDados(quantidadeCabos5, null, false);
 
                         mutuoDados(null, tipoCabo, false);
                         mutuoDados(null, tipoCabo2, false);
+                        mutuoDados(null, tipoCabo2dois, false);
                         mutuoDados(null, tipoCabo3, false);
                         mutuoDados(null, tipoCabo4, false);
                         mutuoDados(null, tipoCabo5, false);
 
-                        mutuoDados(nome, null, false);
-                        mutuoDados(nome2, null, false);
+                        nome.setVisibility(View.GONE);
+                        nome2.setVisibility(View.GONE);
                         mutuoDados(nome3, null, false);
                         mutuoDados(nome4, null, false);
                         mutuoDados(nome5, null, false);
@@ -2750,18 +2878,20 @@ public class CadastroFragment extends Fragment {
                         // region MutuoDados1
                         mutuoDados(quantidadeCabos, null, true);
                         mutuoDados(quantidadeCabos2, null, false);
+                        mutuoDados(quantidadeCabos2dois, null, false);
                         mutuoDados(quantidadeCabos3, null, false);
                         mutuoDados(quantidadeCabos4, null, false);
                         mutuoDados(quantidadeCabos5, null, false);
 
                         mutuoDados(null, tipoCabo, true);
                         mutuoDados(null, tipoCabo2, false);
+                        mutuoDados(null, tipoCabo2dois, false);
                         mutuoDados(null, tipoCabo3, false);
                         mutuoDados(null, tipoCabo4, false);
                         mutuoDados(null, tipoCabo5, false);
 
-                        mutuoDados(nome, null, true);
-                        mutuoDados(nome2, null, false);
+                        nome.setVisibility(View.VISIBLE);
+                        nome2.setVisibility(View.GONE);
                         mutuoDados(nome3, null, false);
                         mutuoDados(nome4, null, false);
                         mutuoDados(nome5, null, false);
@@ -2853,18 +2983,20 @@ public class CadastroFragment extends Fragment {
 
                         mutuoDados(quantidadeCabos, null, true);
                         mutuoDados(quantidadeCabos2, null, true);
+                        mutuoDados(quantidadeCabos2dois, null, true);
                         mutuoDados(quantidadeCabos3, null, false);
                         mutuoDados(quantidadeCabos4, null, false);
                         mutuoDados(quantidadeCabos5, null, false);
 
                         mutuoDados(null, tipoCabo, true);
                         mutuoDados(null, tipoCabo2, true);
+                        mutuoDados(null, tipoCabo2dois, true);
                         mutuoDados(null, tipoCabo3, false);
                         mutuoDados(null, tipoCabo4, false);
                         mutuoDados(null, tipoCabo5, false);
 
-                        mutuoDados(nome, null, true);
-                        mutuoDados(nome2, null, true);
+                        nome.setVisibility(View.VISIBLE);
+                        nome2.setVisibility(View.VISIBLE);
                         mutuoDados(nome3, null, false);
                         mutuoDados(nome4, null, false);
                         mutuoDados(nome5, null, false);
@@ -2955,18 +3087,20 @@ public class CadastroFragment extends Fragment {
 
                         mutuoDados(quantidadeCabos, null, true);
                         mutuoDados(quantidadeCabos2, null, true);
+                        mutuoDados(quantidadeCabos2dois, null, true);
                         mutuoDados(quantidadeCabos3, null, true);
                         mutuoDados(quantidadeCabos4, null, false);
                         mutuoDados(quantidadeCabos5, null, false);
 
                         mutuoDados(null, tipoCabo, true);
                         mutuoDados(null, tipoCabo2, true);
+                        mutuoDados(null, tipoCabo2dois, true);
                         mutuoDados(null, tipoCabo3, true);
                         mutuoDados(null, tipoCabo4, false);
                         mutuoDados(null, tipoCabo5, false);
 
-                        mutuoDados(nome, null, true);
-                        mutuoDados(nome2, null, true);
+                        nome.setVisibility(View.VISIBLE);
+                        nome2.setVisibility(View.VISIBLE);
                         mutuoDados(nome3, null, true);
                         mutuoDados(nome4, null, false);
                         mutuoDados(nome5, null, false);
@@ -3058,18 +3192,20 @@ public class CadastroFragment extends Fragment {
 
                         mutuoDados(quantidadeCabos, null, true);
                         mutuoDados(quantidadeCabos2, null, true);
+                        mutuoDados(quantidadeCabos2dois, null, true);
                         mutuoDados(quantidadeCabos3, null, true);
                         mutuoDados(quantidadeCabos4, null, true);
                         mutuoDados(quantidadeCabos5, null, false);
 
                         mutuoDados(null, tipoCabo, true);
                         mutuoDados(null, tipoCabo2, true);
+                        mutuoDados(null, tipoCabo2dois, true);
                         mutuoDados(null, tipoCabo3, true);
                         mutuoDados(null, tipoCabo4, true);
                         mutuoDados(null, tipoCabo5, false);
 
-                        mutuoDados(nome, null, true);
-                        mutuoDados(nome2, null, true);
+                        nome.setVisibility(View.VISIBLE);
+                        nome2.setVisibility(View.VISIBLE);
                         mutuoDados(nome3, null, true);
                         mutuoDados(nome4, null, true);
                         mutuoDados(nome5, null, false);
@@ -3162,18 +3298,20 @@ public class CadastroFragment extends Fragment {
 
                         mutuoDados(quantidadeCabos, null, true);
                         mutuoDados(quantidadeCabos2, null, true);
+                        mutuoDados(quantidadeCabos2dois, null, true);
                         mutuoDados(quantidadeCabos3, null, true);
                         mutuoDados(quantidadeCabos4, null, true);
                         mutuoDados(quantidadeCabos5, null, true);
 
                         mutuoDados(null, tipoCabo, true);
                         mutuoDados(null, tipoCabo2, true);
+                        mutuoDados(null, tipoCabo2dois, true);
                         mutuoDados(null, tipoCabo3, true);
                         mutuoDados(null, tipoCabo4, true);
                         mutuoDados(null, tipoCabo5, true);
 
-                        mutuoDados(nome, null, true);
-                        mutuoDados(nome2, null, true);
+                        nome.setVisibility(View.VISIBLE);
+                        nome2.setVisibility(View.VISIBLE);
                         mutuoDados(nome3, null, true);
                         mutuoDados(nome4, null, true);
                         mutuoDados(nome5, null, true);
@@ -3272,21 +3410,21 @@ public class CadastroFragment extends Fragment {
         buttonCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if((imgPath == null) || (imgPath2 == null) || (imgPath3 == null)){
+                    Toast.makeText(requireContext(), "Preencha os campos de fotos", Toast.LENGTH_SHORT).show();
+                }else {
                 FormularioDAO formularioDAO = new FormularioDAO(requireActivity().getApplicationContext());
                 final Formulario formulario = new Formulario();
-                Log.i("TAG", imgPath);
                 if (imgPath != null) {
                     formulario.setCaminhoImagem(imgPath);
                 } else {
                     formulario.setCaminhoImagem("");
                 }
-                Log.i("TAG2", imgPath2);
                 if (imgPath2 != null) {
                     formulario.setCaminhoImagem2(imgPath2);
                 } else {
                     formulario.setCaminhoImagem2("");
                 }
-                Log.i("TAG3", imgPath3);
                 if (imgPath3 != null) {
                     formulario.setCaminhoImagem3(imgPath3);
                 } else {
@@ -3353,10 +3491,10 @@ public class CadastroFragment extends Fragment {
                 } else {
                     formulario.setDanificado("Não");
                 }
-                if (abalrroado.isChecked()) {
-                    formulario.setAbalrroado("Sim");
+                if (abalroado.isChecked()) {
+                    formulario.setAbalroado("Sim");
                 } else {
-                    formulario.setAbalrroado("Não");
+                    formulario.setAbalroado("Não");
                 }
                 if (trincado.isChecked()) {
                     formulario.setTrincado("Sim");
@@ -3472,6 +3610,7 @@ public class CadastroFragment extends Fragment {
                 }
                 setLista(formulario,ramalSubt,"ramalSubt");
                 formulario.setObservacaoAtivos(Objects.requireNonNull(observacaoAtivos.getText()).toString());
+                formulario.setOutros(Objects.requireNonNull(outros.getText()).toString());
 
                 //MUTUO
                 if (mutuo.isChecked()) {
@@ -3505,6 +3644,8 @@ public class CadastroFragment extends Fragment {
 
                 formulario.setQuantidadeCabos2(Objects.requireNonNull(quantidadeCabos2.getText()).toString());
                 setLista(formulario,tipoCabo2,"tipoCabo2");
+                    formulario.setQuantidadeCabos2dois(Objects.requireNonNull(quantidadeCabos2dois.getText()).toString());
+                    setLista(formulario,tipoCabo2dois,"tipoCabo2dois");
                 formulario.setNome2(Objects.requireNonNull(nome2.getText()).toString());
                 setLista(formulario,finalidade2,"finalidade2");
                 setLista(formulario,ceans2,"ceans2");
@@ -3653,8 +3794,21 @@ public class CadastroFragment extends Fragment {
                         thisDayText = String.valueOf(thisDay);
                     }
                     String data = thisDayText + "/" + thisMonthText + "/" + thisYearText;
+                    String timeStamp = new SimpleDateFormat("dd/MM/yy-HH:mm:ss").format(new Date());
+                    SimpleDateFormat readDate = new SimpleDateFormat("dd/MM/yy-HH:mm:ss");
+                    readDate.setTimeZone(TimeZone.getTimeZone("GMT"));
+                    Date date = null;
+                    try {
+                        date = readDate.parse(timeStamp);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    SimpleDateFormat writeDate = new SimpleDateFormat("dd/MM/yyyy, HH:mm:ss");
+                    writeDate.setTimeZone(TimeZone.getTimeZone("GMT-04:00"));
+                    String s = writeDate.format(date);
+
                     //endregion
-                    formulario.setData(data);
+                    formulario.setData(s);
                     if (formularioDAO.salvar(formulario)) {
                         CadastradosFragment cadastradosFragment = new CadastradosFragment();
 
@@ -3667,7 +3821,7 @@ public class CadastroFragment extends Fragment {
                         Toast.makeText(requireActivity().getApplicationContext(), "Erro ao salvar formulário", Toast.LENGTH_SHORT).show();
                     }
                 }
-            }
+            }}
         });
 
         return root;

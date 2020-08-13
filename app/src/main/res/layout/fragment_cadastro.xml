@@ -612,6 +612,34 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lblCadastroMutuo2" />
 
+        <Spinner
+            android:id="@+id/spinCadastroMutuoTipoCabo2dois"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:entries="@array/TipoCaboMutuo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroMutuoQuantidadeCabos2dois" />
+
+        <EditText
+            android:id="@+id/textCadastroMutuoQuantidadeCabos2dois"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:enabled="false"
+            android:hint="Quantidade de Cabos 2"
+            android:inputType="textPersonName"
+            android:textColor="@color/textColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroMutuoTipoCabo2" />
+
         <EditText
             android:id="@+id/textCadastroNome2"
             android:layout_width="0dp"
@@ -621,12 +649,12 @@
             android:layout_marginEnd="16dp"
             android:ems="10"
             android:enabled="false"
-            android:hint="Nome da Empresa"
+            android:text="OI"
             android:inputType="textPersonName"
             android:textColor="@color/textColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/spinCadastroMutuoTipoCabo2" />
+            app:layout_constraintTop_toBottomOf="@+id/spinCadastroMutuoTipoCabo2dois" />
 
         <Spinner
             android:id="@+id/spinCadastroFinalidade2"
@@ -1184,7 +1212,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="48dp"
+            android:layout_marginTop="88dp"
             android:layout_marginEnd="16dp"
             android:ems="10"
             android:hint="Observação"
@@ -1242,7 +1270,7 @@
             android:layout_marginEnd="16dp"
             android:ems="10"
             android:enabled="false"
-            android:hint="Nome da Empresa"
+            android:text="SEM IDENTIFICAÇÃO"
             android:inputType="textPersonName"
             android:textColor="@color/textColor"
             app:layout_constraintEnd_toEndOf="parent"
@@ -1864,6 +1892,23 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_menu_camera" />
+
+        <EditText
+            android:id="@+id/textCadastroOutrosAtivos"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            android:ems="10"
+            android:enabled="false"
+            android:visibility="gone"
+            android:hint="Outros"
+            android:inputType="textPersonName"
+            android:textColor="@color/textColor"
+            app:layout_constraintBottom_toTopOf="@+id/textCadastroObservacaoAtivo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
