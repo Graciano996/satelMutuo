@@ -2,7 +2,10 @@ package com.example.satelprojetos.ui.cadastrados;
 
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -58,6 +61,7 @@ public class CadastradosFragment extends Fragment {
     private List<Formulario> listaFormulario = new ArrayList<>();
     private DatabaseReference referencia = FirebaseDatabase.getInstance().getReference();
     private FirebaseAuth autentificacao;
+    private ProgressDialog progressDialog;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -73,6 +77,12 @@ public class CadastradosFragment extends Fragment {
                         new RecyclerItemClickListener.OnItemClickListener() {
                             @Override
                             public void onItemClick(View view, int position) {
+                                progressDialog = new ProgressDialog(requireContext(),R.style.LightDialogTheme);
+                                progressDialog.setMessage("Carregando formulário..."); // Setting Message
+                                progressDialog.setTitle("Por favor Espere"); // Setting Title
+                                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
+                                progressDialog.show(); // Display Progress Dialog
+                                progressDialog.setCancelable(false);
                                 Formulario formularioSelecionado = listaFormulario.get(position);
                                 CadastroFragment cadastroFragment = new CadastroFragment();
                                 Bundle bundle = new Bundle();
@@ -85,6 +95,7 @@ public class CadastradosFragment extends Fragment {
                                 FragmentTransaction transaction = fm.beginTransaction();
                                 transaction.replace(R.id.nav_host_fragment, cadastroFragment).addToBackStack(null);
                                 transaction.commit();
+                                progressDialog.dismiss();
 
                             }
 
@@ -126,32 +137,23 @@ public class CadastradosFragment extends Fragment {
         btnEnviarCadastrados.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                FormularioDAO formularioDAO = new FormularioDAO(getActivity().getApplicationContext());
-                listaFormulario = formularioDAO.listar();
-                autentificacao = ConfiguracaoFirebase.getFirebaseAuth();
-                DatabaseReference formularios = referencia.child("usuarios").child(Base64Custom.codificarBase64(autentificacao.getCurrentUser().getEmail())).child("formulario");
-                for(int i=0; i<listaFormulario.size();i++){
-                    formularios.child(listaFormulario.get(i).getId().toString()).setValue(listaFormulario.get(i));
-                }
-                /*for(int a=0; a<listaFormulario.size();a++){
-                    EnviadoDAO enviadoDAO = new EnviadoDAO(getActivity().getApplicationContext());
-                                enviarParaGS(listaFormulario.get(a), autentificacao.getCurrentUser().getEmail(), a);
-                                Log.i("TAGB", "entrei no " + a);
-                                enviadoDAO.salvar(listaFormulario.get(a));
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
+                boolean connected = false;
+                ConnectivityManager connectivityManager = (ConnectivityManager) requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                        connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+                    FormularioDAO formularioDAO = new FormularioDAO(getActivity().getApplicationContext());
+                    listaFormulario = formularioDAO.listar();
+                    autentificacao = ConfiguracaoFirebase.getFirebaseAuth();
+                    DatabaseReference formularios = referencia.child("usuarios").child(Base64Custom.codificarBase64(autentificacao.getCurrentUser().getEmail())).child("formulario");
+                    for (int i = 0; i < listaFormulario.size(); i++) {
+                        formularios.child(listaFormulario.get(i).getId().toString()).setValue(listaFormulario.get(i));
                     }
-
-
-                }*/
-                enviarParaGS(listaFormulario, autentificacao.getCurrentUser().getEmail());
-
-
-                Toast.makeText(getActivity().getApplicationContext(), "Sucesso ao enviar formulários", Toast.LENGTH_SHORT).show();
-            }
+                    enviarParaGS(listaFormulario, autentificacao.getCurrentUser().getEmail());
+                    Toast.makeText(getActivity().getApplicationContext(), "Sucesso ao enviar formulários", Toast.LENGTH_SHORT).show();
+                    connected = true;
+                } else{
+                    Toast.makeText(getActivity().getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
+            }    }
         });
 
         return root;
@@ -166,7 +168,6 @@ public class CadastradosFragment extends Fragment {
         Log.i("TAG",String.valueOf(listaFormulario.size()));
         if(listaFormulario.size() <= 0){
             btnEnviarCadastrados.setEnabled(false);
-            Toast.makeText(requireActivity().getApplicationContext(), String.valueOf(listaFormulario.size()), Toast.LENGTH_SHORT).show();
         }
         else {
             btnEnviarCadastrados.setEnabled(true);
@@ -192,13 +193,18 @@ public class CadastradosFragment extends Fragment {
     public void enviarParaGS(final List<Formulario> formularioLista, final String email){
         final EnviadoDAO enviadoDAO = new EnviadoDAO(getActivity().getApplicationContext());
         final FormularioDAO formularioDAO = new FormularioDAO(getActivity().getApplicationContext());
-        final ProgressDialog loading = ProgressDialog.show(requireContext(),"Enviando dados para banco de dados","Por favor espere");
+        progressDialog = new ProgressDialog(requireContext(),R.style.LightDialogTheme);
+        progressDialog.setMessage("Enviado os dados para o banco de dados..."); // Setting Message
+        progressDialog.setTitle("Por favor Espere"); // Setting Title
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
+        progressDialog.show(); // Display Progress Dialog
+        progressDialog.setCancelable(false);
             StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbzZJUnvHaDYfO13T9t7NyhLcweYuuYp38D1n0JzH0Hs4FVR0mrO/exec",
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(String response) {
 
-                            loading.dismiss();
+                            progressDialog.dismiss();
                             carregarFormulariosCadastrados();
                             Toast.makeText(requireActivity().getApplicationContext(), response, Toast.LENGTH_LONG).show();
 
@@ -219,6 +225,7 @@ public class CadastradosFragment extends Fragment {
                     //here we pass params
                     Log.i("ERRO2", String.valueOf(formularioLista.size()));
                     parmas.put("action", "addItem");
+                    parmas.put("codigo",formularioLista.get(0).getCodigo());
                     parmas.put("email", email);
                     parmas.put("urlImagem", formularioLista.get(0).getUrlImagem());
                     parmas.put("urlImagem2", formularioLista.get(0).getUrlImagem2());

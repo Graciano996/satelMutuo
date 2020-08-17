@@ -1,10 +1,10 @@
 package com.example.satelprojetos.ui.mapa;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -17,12 +17,13 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -36,25 +37,23 @@ import com.android.volley.toolbox.Volley;
 import com.example.satelprojetos.R;
 import com.example.satelprojetos.helper.EnviadoDAO;
 import com.example.satelprojetos.helper.FormularioDAO;
+import com.example.satelprojetos.helper.MapaDAO;
 import com.example.satelprojetos.model.Formulario;
+import com.example.satelprojetos.model.Mapa;
+import com.example.satelprojetos.ui.cadastro.CadastroFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.maps.android.collections.MarkerManager;
 import com.google.maps.android.data.Feature;
-import com.google.maps.android.data.Geometry;
-import com.google.maps.android.data.kml.KmlContainer;
 import com.google.maps.android.data.kml.KmlLayer;
-import com.google.maps.android.data.kml.KmlLineString;
-import com.google.maps.android.data.kml.KmlPlacemark;
-import com.google.maps.android.data.kml.KmlPoint;
-import com.google.maps.android.geometry.Point;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -64,152 +63,210 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
-public class MapsFragment extends Fragment implements OnMapReadyCallback {
-
+public class MapsFragment extends Fragment {
     private List<Formulario> listaFormularioCadastro = new ArrayList<>();
     private List<Formulario> listaFormularioEnvio = new ArrayList<>();
     private List<String> listaLatitude = new ArrayList<>();
     private List<String> listaLongitude = new ArrayList<>();
     private List<String> listaCodigo = new ArrayList<>();
+    private List<String> listaCadastrado = new ArrayList<>();
     private GoogleMap mMap;
     private static final int REQUEST_CODE = 1;
     private LocationManager locationManager;
     private LocationListener locationListener;
+    private List<Mapa> listaMapa = new ArrayList<>();
     Geocoder geocoder;
     List<Address> addresses;
     List<LatLng> pathPoints;
-    ProgressDialog loading;
+    ProgressDialog progressDialog;
     android.location.Location lastKnownLocation;
     private Location localizacao;
+    private Marker minhaLocalizacao;
     KmlLayer kmlLayer;
+    MarkerManager.Collection markerCollection;
+    GoogleMap googleMap2;
 
-    SupportMapFragment mapFragment;
+    private OnMapReadyCallback callback = new OnMapReadyCallback() {
+        @Override
+        public void onMapReady(final GoogleMap googleMap) {
+            locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
+            googleMap2= googleMap;
+            boolean connected = false;
+            ConnectivityManager connectivityManager = (ConnectivityManager) requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+            if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                    connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+                //we are connected to a network
+                connected = true;
+            }
+            else
+                connected = false;
+            if(connected) {
+                MapaDAO mapaDAO = new MapaDAO(getActivity().getApplicationContext());
+                mapaDAO.deletarTudo();
+                getItems();
+                
+            }
+            else {
+                MapaDAO mapaDAO = new MapaDAO(getActivity().getApplicationContext());
+                listaMapa = mapaDAO.listar();
+                Log.i("TAG2",String.valueOf(listaMapa.size()));
+                try {
+                    for (int i = 0; i < listaMapa.size(); i++) {
+                        listaLatitude.add(listaMapa.get(i).getLatitude());
+                        listaLongitude.add(listaMapa.get(i).getLongitude());
+                        listaCodigo.add(listaMapa.get(i).getCodigo());
+                        listaCadastrado.add(listaMapa.get(i).getCadastrado());
+                    }
+                    Log.i("TAG3",String.valueOf(listaLatitude.size()));
+                }catch (Exception e){
+
+                }
+                for(int i=0; i<listaLatitude.size();i++){
+                    if(listaCadastrado.get(i).equals("SIM")){
+                        continue;
+                    }else {
+                        try {
+                            LatLng local = new LatLng(Double.parseDouble(listaLatitude.get(i)), Double.parseDouble(listaLongitude.get(i)));
+                            googleMap2.addMarker(new MarkerOptions()
+                                    .position(local)
+                                    .title(listaCodigo.get(i))
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                        } catch (Exception e) {
+
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < listaFormularioCadastro.size(); i++) {
+                LatLng local = new LatLng(Double.parseDouble(listaFormularioCadastro.get(i).getLatitude().replace(",", ".")), Double.parseDouble(listaFormularioCadastro.get(i).getLongitude().replace(",", ".")));
+                if(listaFormularioCadastro.get(i).getCodigo().equals("")){
+                    googleMap.addMarker(new MarkerOptions()
+                            .position(local)
+                            .title("SEM CÓDIGO")
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                }else{
+                    googleMap.addMarker(new MarkerOptions()
+                            .position(local)
+                            .title("C: " + listaFormularioCadastro.get(i).getCodigo())
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                }
+            }
+            for (int i = 0; i < listaFormularioEnvio.size(); i++) {
+                LatLng local = new LatLng(Double.parseDouble(listaFormularioEnvio.get(i).getLatitude().replace(",", ".")), Double.parseDouble(listaFormularioEnvio.get(i).getLongitude().replace(",", ".")));
+                        if(listaFormularioEnvio.get(i).getCodigo().equals("")){
+                            googleMap.addMarker(new MarkerOptions()
+                                    .position(local)
+                                    .title("SEM CÓDIGO")
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                }else{
+                            googleMap.addMarker(new MarkerOptions()
+                                    .position(local)
+                                    .title("E: " + listaFormularioEnvio.get(i).getCodigo())
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                        }
+
+            }
+            locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(Location location) {
+                    try{
+                        minhaLocalizacao.remove();
+                    }catch (Exception e){
+
+                    }
+                    localizacao = location;
+                    LatLng myLocal = new LatLng(localizacao.getLatitude(), localizacao.getLongitude());
+                    minhaLocalizacao = googleMap.addMarker(new MarkerOptions()
+                            .position(myLocal)
+                            .title("Meu Local")
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+
+                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(myLocal));
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {
+
+                }
+
+                @Override
+                public void onProviderEnabled(String provider) {
+                }
+
+                @Override
+                public void onProviderDisabled(String provider) {
+                    Toast.makeText(requireActivity().getApplicationContext(), "Por favor ative seu GPS", Toast.LENGTH_SHORT).show();
+                }
+            };
+            if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        5000,
+                        2,
+                        locationListener);
+                locationManager.requestLocationUpdates(
+                        LocationManager.NETWORK_PROVIDER,
+                        5000,
+                        2,
+                        locationListener);
+
+            }
+            googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    marker.showInfoWindow();
+                    return true;
+                }
+            });
+            googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                @Override
+                public void onInfoWindowClick(Marker marker) {
+                    if(marker.getTitle().length()< 8 || marker.getTitle().equals("Meu Local")|| marker.getTitle().length()>8){
+
+                    }else {
+                        String codigoEnergisa = marker.getTitle();
+                        CadastroFragment cadastroFragment = new CadastroFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("codigoEnergisa", codigoEnergisa);
+                        cadastroFragment.setArguments(bundle);
+                        NavigationView navigationView = requireActivity().findViewById(R.id.nav_view);
+                        navigationView.setCheckedItem(R.id.nav_cadastro);
+                        FragmentManager fm = getParentFragmentManager();
+                        FragmentTransaction transaction = fm.beginTransaction();
+                        transaction.replace(R.id.nav_host_fragment, cadastroFragment).addToBackStack(null);
+                        transaction.commit();
+                    }
+                }
+            });
+        }
+
+    };
+
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_maps, container, false);
+    }
 
     @Override
-
-    public View onCreateView(@NonNull LayoutInflater inflater,
-                             ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.activity_maps, container, false);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
-        getItems();
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        SupportMapFragment mapFragment =
+                (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         FormularioDAO formularioDAO = new FormularioDAO(getActivity().getApplicationContext());
         listaFormularioCadastro = formularioDAO.listar();
         EnviadoDAO enviadoDAO = new EnviadoDAO(getActivity().getApplicationContext());
         listaFormularioEnvio = enviadoDAO.listar();
         verificarPermissaoLocaliza();
-        if (mapFragment == null) {
-            FragmentManager fm = getFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            mapFragment = SupportMapFragment.newInstance();
-            ft.replace(R.id.map, mapFragment).commit();
+        if (mapFragment != null) {
+            mapFragment.getMapAsync(callback);
         }
-        mapFragment.getMapAsync(this);
-
-        return root;
     }
-
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
-        InputStream kmlInputStream = getResources().openRawResource(R.raw.doc);
-        int a = 0;
-        try {
-            kmlLayer = new KmlLayer(mMap, kmlInputStream, requireContext());
-            kmlLayer.addLayerToMap();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        for (int i = 0; i < listaFormularioCadastro.size(); i++) {
-            Log.i("TESTE", "Loop");
-            LatLng local = new LatLng(Double.parseDouble(listaFormularioCadastro.get(i).getLatitude().replace(",", ".")), Double.parseDouble(listaFormularioCadastro.get(i).getLongitude().replace(",", ".")));
-            mMap.addMarker(new MarkerOptions()
-                    .position(local)
-                    .title(String.valueOf(i))
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-        }
-        for (int i = 0; i < listaFormularioEnvio.size(); i++) {
-            Log.i("TESTE", "Loop");
-            LatLng local = new LatLng(Double.parseDouble(listaFormularioEnvio.get(i).getLatitude().replace(",", ".")), Double.parseDouble(listaFormularioEnvio.get(i).getLongitude().replace(",", ".")));
-            mMap.addMarker(new MarkerOptions()
-                    .position(local)
-                    .title(String.valueOf(i))
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-        }
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public  boolean onMarkerClick(Marker marker) {
-                Log.i("MARKER","FUNCIONOU");
-                return true;
-            }
-        });
-        kmlLayer.setOnFeatureClickListener(new KmlLayer.OnFeatureClickListener() {
-            @Override
-            public void onFeatureClick(Feature feature) {
-                feature.getGeometry();
-
-                Log.i("KmlClick", "Feature clicked: Lat:");
-                //Log.i("KmlClick", "Feature clicked: " + mMap.getCameraPosition().target);
-                ;
-            }
-        });
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(Location location) {
-                Log.i("TESTE", "ENTREI AQUI2");
-                localizacao = location;
-                LatLng myLocal = new LatLng(localizacao.getLatitude(), localizacao.getLongitude());
-                mMap.addMarker(new MarkerOptions()
-                        .position(myLocal)
-                        .title("201979475")
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
-                mMap.moveCamera(CameraUpdateFactory.newLatLng(myLocal));
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-                Log.i("TESTE", "ENTREI AQUI3");
-            }
-
-            @Override
-            public void onProviderEnabled(String provider) {
-                Log.i("TESTE", "ENTREI AQUI4");
-            }
-
-            @Override
-            public void onProviderDisabled(String provider) {
-                Toast.makeText(requireActivity().getApplicationContext(), "Por favor ative seu GPS", Toast.LENGTH_SHORT).show();
-            }
-        };
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            Log.i("TESTE", "ENTREI AQUI");
-            locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER,
-                    10000,
-                    10,
-                    locationListener);
-
-        }
-        geocoder = new Geocoder(requireContext(), Locale.getDefault());
-    }
-
 
     public Boolean verificarPermissaoLocaliza() {
         String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,
@@ -228,10 +285,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
             return false;
         }
     }
-
     private void getItems() {
 
-        loading = ProgressDialog.show(requireContext(), "Loading", "por favor espere", false, true);
+        progressDialog = new ProgressDialog(requireContext(),R.style.LightDialogTheme);
+        progressDialog.setMessage("Carregando dados..."); // Setting Message
+        progressDialog.setTitle("Por favor Espere"); // Setting Title
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
+        progressDialog.show(); // Display Progress Dialog
+        progressDialog.setCancelable(false);
 
         StringRequest stringRequest = new StringRequest(Request.Method.GET, "https://script.google.com/macros/s/AKfycbzZJUnvHaDYfO13T9t7NyhLcweYuuYp38D1n0JzH0Hs4FVR0mrO/exec?action=getItems&email=" + FirebaseAuth.getInstance().getCurrentUser().getEmail(),
                 new Response.Listener<String>() {
@@ -274,34 +335,82 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback {
                 String latitude = jo.getString("latitude");
                 String longitude = jo.getString("longitude");
                 String codigo = jo.getString("codigo");
+                String cadastrado = jo.getString("cadastrado");
 
-
-                /*HashMap<String, String> item = new HashMap<>();
-                item.put("latitude", latitude);
-                HashMap<String, String> item2 = new HashMap<>();
-                item2.put("latitude", latitude);
-                HashMap<String, String> item3 = new HashMap<>();
-
-                item3.put("latitude", latitude);*/
                 listaLatitude.add(latitude);
                 listaLongitude.add(longitude);
                 listaCodigo.add(codigo);
+                listaCadastrado.add(cadastrado);
 
 
 
             }
-            for(int i=0; i<listaLatitude.size();i++){
-                LatLng local = new LatLng(Double.parseDouble(listaLatitude.get(i)),Double.parseDouble(listaLongitude.get(i)));
-                mMap.addMarker(new MarkerOptions()
-                        .position(local)
-                        .title(listaCodigo.get(i))
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-            }
+            MapaDAO mapaDAO = new MapaDAO(getActivity().getApplicationContext());
+            Log.i("TAG", String.valueOf(listaLatitude.size()));
+            if (mapaDAO.listar().size() == 0) {
+                for (int i = 0; i < listaLatitude.size(); i++) {
+                    if (listaCadastrado.get(i).equals("SIM")) {
+                        continue;
+                    } else {
+                        try {
+                            Mapa mapa = new Mapa();
+                            mapa.setLatitude(listaLatitude.get(i));
+                            mapa.setLongitude(listaLongitude.get(i));
+                            mapa.setCodigo(listaCodigo.get(i));
+                            Log.i("TAG", "Entrei " + i);
+                            mapa.setCadastrado(listaCadastrado.get(i));
+                            mapaDAO.salvar(mapa);
+
+                            LatLng local = new LatLng(Double.parseDouble(listaLatitude.get(i)), Double.parseDouble(listaLongitude.get(i)));
+                            googleMap2.addMarker(new MarkerOptions()
+                                    .position(local)
+                                    .title(listaCodigo.get(i))
+                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                        } catch (Exception e) {
+
+                        }
+                    }
+                }
+                }else{
+                    for (int i = 0; i < listaLatitude.size(); i++) {
+                        if (listaCadastrado.get(i).equals("SIM")) {
+                            Mapa mapa = new Mapa();
+                            mapa.setLatitude(listaLatitude.get(i));
+                            mapa.setLongitude(listaLongitude.get(i));
+                            mapa.setCodigo(listaCodigo.get(i));
+                            Log.i("TAG", "Entrei2 " + mapa.getCodigo()+" " + i);
+                            mapa.setCadastrado(listaCadastrado.get(i));
+                            mapaDAO.atualizar(mapa);
+                        } else {
+                            try {
+                                Mapa mapa = new Mapa();
+                                mapa.setLatitude(listaLatitude.get(i));
+                                mapa.setLongitude(listaLongitude.get(i));
+                                mapa.setCodigo(listaCodigo.get(i));
+                                Log.i("TAG", "Entrei2 " + mapa.getCodigo()+" " + i);
+                                mapa.setCadastrado(listaCadastrado.get(i));
+                                mapaDAO.atualizar(mapa);
+
+                                LatLng local = new LatLng(Double.parseDouble(listaLatitude.get(i)), Double.parseDouble(listaLongitude.get(i)));
+                                googleMap2.addMarker(new MarkerOptions()
+                                        .position(local)
+                                        .title(listaCodigo.get(i))
+                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                            } catch (Exception e) {
+
+                            }
+                        }
+                    }
+                }
+
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        loading.dismiss();
+        progressDialog.dismiss();
     }
+
+
 }
+

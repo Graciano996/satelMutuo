@@ -12,6 +12,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public static String DB_NAME = "DB_FORMULARIO";
     public static String TABLE_FORMULARIO = "formulario";
     public static String TABLE_ENVIADO = "enviado";
+    public static String TABLE_MAPA = "mapa";
 
 
     public DbHelper(@Nullable Context context) {
@@ -21,7 +22,7 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String sql = "CREATE TABLE IF NOT EXISTS " + TABLE_FORMULARIO + " (id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    " data TEXT NOT NULL, endereco TEXT NOT NULL, nome TEXT NOT NULL, municipio TEXT NOT NULL," +
+                    "codigo TEXT NOT NULL ,data TEXT NOT NULL, endereco TEXT NOT NULL, nome TEXT NOT NULL, municipio TEXT NOT NULL," +
                 " alturaCarga TEXT NOT NULL, " +
                 " latitude TEXT NOT NULL, longitude TEXT NOT NULL, tipoPoste TEXT NOT NULL ,normal TEXT NOT NULL," +
                 " ferragemExposta TEXT NOT NULL, fletido TEXT NOT NULL, danificado TEXT NOT NULL, " +
@@ -68,7 +69,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 " color TEXT NOT NULL, color2 TEXT NOT NULL, color3 TEXT NOT NULL);";
 
         String sqlEnviado = "CREATE TABLE IF NOT EXISTS " + TABLE_ENVIADO + " (id INTEGER PRIMARY KEY AUTOINCREMENT," +
-                " data TEXT NOT NULL, endereco TEXT NOT NULL, nome TEXT NOT NULL, municipio TEXT NOT NULL," +
+                " codigo TEXT NOT NULL , data TEXT NOT NULL, endereco TEXT NOT NULL, nome TEXT NOT NULL, municipio TEXT NOT NULL," +
                 " alturaCarga TEXT NOT NULL, " +
                 " latitude TEXT NOT NULL, longitude TEXT NOT NULL, tipoPoste TEXT NOT NULL ,normal TEXT NOT NULL," +
                 " ferragemExposta TEXT NOT NULL, fletido TEXT NOT NULL, danificado TEXT NOT NULL, " +
@@ -114,10 +115,14 @@ public class DbHelper extends SQLiteOpenHelper {
                 " urlImagem TEXT NOT NULL, urlImagem2 TEXT NOT NULL, urlImagem3 TEXT NOT NULL," +
                 " color TEXT NOT NULL, color2 TEXT NOT NULL, color3 TEXT NOT NULL);";
 
+        String sqlMapa = "CREATE TABLE IF NOT EXISTS " + TABLE_MAPA + " (id INTEGER PRIMARY KEY AUTOINCREMENT," +
+        " codigo TEXT NOT NULL , latitude TEXT NOT NULL, longitude TEXT NOT NULL, cadastrado TEXT NOT NULL);";
+
         try{
             db.execSQL(sql);
             db.execSQL(sqlEnviado);
-            Log.i("INFO DB", "Sucesso ao criar a tabela");
+            db.execSQL(sqlMapa);
+            Log.i("INFO DB", "Sucesso ao criar a tabela mapa");
         }catch (Exception e){
             Log.i("INFO DB", "Erro ao criar tabela" + e.getMessage());
         }

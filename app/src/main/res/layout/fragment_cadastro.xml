@@ -18,6 +18,20 @@
         android:onClick="onClick"
         tools:context=".ui.cadastro.CadastroFragment">
 
+        <EditText
+            android:id="@+id/textCadastroCodigo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:ems="10"
+            android:hint="Código da Energisa"
+            android:inputType="textPersonName"
+            android:textColor="@color/textColor"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <Button
             android:id="@+id/btnUpload3"
             android:layout_width="150dp"
@@ -1890,7 +1904,7 @@
             android:layout_marginTop="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textCadastroCodigo"
             app:srcCompat="@drawable/ic_menu_camera" />
 
         <EditText

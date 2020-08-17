@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.satelprojetos.R;
+import com.example.satelprojetos.config.ConfiguracaoFirebase;
 import com.example.satelprojetos.helper.FormularioDAO;
 import com.example.satelprojetos.ui.cadastro.CadastroFragment;
 import com.google.android.material.navigation.NavigationView;
@@ -111,6 +112,7 @@ public class DrawerActivity extends AppCompatActivity {
             dialog.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    ConfiguracaoFirebase.getFirebaseAuth().signOut();
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);

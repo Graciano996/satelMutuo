@@ -29,6 +29,7 @@ public class EnviadoDAO implements IFormularioDAO {
         cv.put("color2", formulario.getColor2());
         cv.put("color3", formulario.getColor3());
 
+        cv.put("codigo",formulario.getCodigo());
         cv.put("caminhoImagem", formulario.getCaminhoImagem());
         cv.put("caminhoImagem2", formulario.getCaminhoImagem2());
         cv.put("caminhoImagem3", formulario.getCaminhoImagem3());
@@ -197,6 +198,7 @@ public class EnviadoDAO implements IFormularioDAO {
         cv.put("color2", formulario.getColor2());
         cv.put("color3", formulario.getColor3());
 
+        cv.put("codigo",formulario.getCodigo());
         cv.put("caminhoImagem", formulario.getCaminhoImagem());
         cv.put("caminhoImagem2", formulario.getCaminhoImagem2());
         cv.put("caminhoImagem3", formulario.getCaminhoImagem3());
@@ -389,6 +391,7 @@ public class EnviadoDAO implements IFormularioDAO {
         while (c.moveToNext()){
             Long id = c.getLong(c.getColumnIndex("id"));
 
+            String codigo = c.getString(c.getColumnIndex("codigo"));
             String color = c.getString((c.getColumnIndex("color")));
             String color2 = c.getString((c.getColumnIndex("color2")));
             String color3 = c.getString((c.getColumnIndex("color3")));
@@ -548,6 +551,7 @@ public class EnviadoDAO implements IFormularioDAO {
             formulario.setColor2(color2);
             formulario.setColor3(color3);
 
+            formulario.setCodigo(codigo);
             formulario.setCaminhoImagem(caminhoImagem);
             formulario.setCaminhoImagem2(caminhoImagem2);
             formulario.setCaminhoImagem3(caminhoImagem3);

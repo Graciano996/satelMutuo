@@ -2,6 +2,7 @@ package com.example.satelprojetos.ui.cadastro;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -96,9 +97,10 @@ public class CadastroFragment extends Fragment {
     private LocationListener locationListener;
     private StorageReference storageReference;
     private FirebaseAuth autentificacao;
+    private ProgressDialog progressDialog;
     Geocoder geocoder;
     List<Address> addresses;
-    private EditText endereco, latitude, longitude, observacaoFisicas,
+    private EditText codigo, endereco, latitude, longitude, observacaoFisicas,
             observacaoAtivos, quantidadeLampada, quantidadeLampada2, quantidadeLampada3,
             potReator, potReator2, potReator3, quantidade24H, quantidade24H2, quantidade24H3,
             observacaoVegetacao, observacaoIP,outros,
@@ -130,6 +132,7 @@ public class CadastroFragment extends Fragment {
     private Uri urlFoto, urlFoto2, urlFoto3;
     private Boolean novoUpload = false, novoUpload2 = false, novoUpload3 = false;
     private Location localizacao;
+    private String codigoEnergisa ="";
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -137,6 +140,7 @@ public class CadastroFragment extends Fragment {
 
 
         final View root = inflater.inflate(R.layout.fragment_cadastro, container, false);
+        codigo = root.findViewById(R.id.textCadastroCodigo);
         foto = root.findViewById(R.id.imageCadastroFoto);
         foto2 = root.findViewById(R.id.imageCadastroFoto2);
         foto3 = root.findViewById(R.id.imageCadastroFoto3);
@@ -171,8 +175,13 @@ public class CadastroFragment extends Fragment {
                 Log.i("TESTE","ENTREI AQUI");
                 locationManager.requestLocationUpdates(
                         LocationManager.GPS_PROVIDER,
-                        10000,
+                        5000,
                         10,
+                        locationListener);
+                locationManager.requestLocationUpdates(
+                        LocationManager.NETWORK_PROVIDER,
+                        5000,
+                        5,
                         locationListener);
 
             }
@@ -191,19 +200,20 @@ public class CadastroFragment extends Fragment {
                     longitude.setText(String.format("%.5f",localizacao.getLongitude()));
                     try {
                         addresses = geocoder.getFromLocation(localizacao.getLatitude(), localizacao.getLongitude(), 1);
-                    } catch (IOException e) {
+                        endereco.setText(addresses.get(0).getAddressLine(0));
+                        String municipioTexto = addresses.get(0).getAdminArea();
+                        for (int i = 0; i < municipio.getAdapter().getCount(); i++) {
+                            municipio.setSelection(i);
+                            if (municipio.getSelectedItem().toString().equals(municipioTexto)) {
+                                break;
+                            }
+                    }} catch (IOException e) {
                         e.printStackTrace();
                     }
-                    endereco.setText(addresses.get(0).getAddressLine(0));
-                    String municipioTexto = addresses.get(0).getAdminArea();
-                    for (int i = 0; i < municipio.getAdapter().getCount(); i++) {
-                        municipio.setSelection(i);
-                        if (municipio.getSelectedItem().toString().equals(municipioTexto)) {
-                            break;
-                        }
+
                 }}
-            }
-        });
+            });
+
 
 
 
@@ -291,9 +301,12 @@ public class CadastroFragment extends Fragment {
                     Toast.makeText(requireActivity().getApplicationContext(), "Escolha primeiro uma foto para fazer o upload", Toast.LENGTH_SHORT).show();
                 }else {
                     if(isNetworkAvailable()) {
-                        final AlertDialog optionDialog = new AlertDialog.Builder(requireContext(), R.style.LightDialogTheme).create();
-                        optionDialog.setMessage("Por favor espere o fim do upload");
-                        optionDialog.show();
+                        progressDialog = new ProgressDialog(requireContext(),R.style.LightDialogTheme);
+                        progressDialog.setMessage("Fazendo upload..."); // Setting Message
+                        progressDialog.setTitle("Por favor Espere"); // Setting Title
+                        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
+                        progressDialog.show(); // Display Progress Dialog
+                        progressDialog.setCancelable(false);
                         String nomeFoto = UUID.randomUUID().toString();
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         imagem.compress(Bitmap.CompressFormat.JPEG, 70, baos);
@@ -307,7 +320,7 @@ public class CadastroFragment extends Fragment {
                         uploadTask.addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
-                                optionDialog.dismiss();
+                                progressDialog.dismiss();
                                 Toast.makeText(requireActivity().getApplicationContext(), "Erro ao fazer upload verifique a conexão com a internet", Toast.LENGTH_SHORT).show();
                             }
                         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -318,7 +331,7 @@ public class CadastroFragment extends Fragment {
                                     @Override
                                     public void onComplete(@NonNull Task<Uri> task) {
                                         urlFoto = task.getResult();
-                                        optionDialog.dismiss();
+                                        progressDialog.dismiss();
                                         novoUpload = true;
                                     }
                                 });
@@ -343,9 +356,12 @@ public class CadastroFragment extends Fragment {
                 if(imagem2 == null){
                     Toast.makeText(requireActivity().getApplicationContext(), "Escolha primeiro uma foto para fazer o upload", Toast.LENGTH_SHORT).show();
                 }else{
-                    final AlertDialog optionDialog = new AlertDialog.Builder(requireContext(),R.style.LightDialogTheme).create();
-                    optionDialog.setMessage("Por favor espere o fim do upload");
-                    optionDialog.show();
+                    progressDialog = new ProgressDialog(requireContext(),R.style.LightDialogTheme);
+                    progressDialog.setMessage("Fazendo upload..."); // Setting Message
+                    progressDialog.setTitle("Por favor Espere"); // Setting Title
+                    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
+                    progressDialog.show(); // Display Progress Dialog
+                    progressDialog.setCancelable(false);
                     String nomeFoto = UUID.randomUUID().toString();
                     ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
                     imagem2.compress(Bitmap.CompressFormat.JPEG, 70, baos2);
@@ -359,7 +375,7 @@ public class CadastroFragment extends Fragment {
                     uploadTask2.addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            optionDialog.dismiss();
+                            progressDialog.dismiss();
                             Toast.makeText(requireActivity().getApplicationContext(), "Erro ao fazer upload verifique a conexão com a internet", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -369,7 +385,7 @@ public class CadastroFragment extends Fragment {
                                 @Override
                                 public void onComplete(@NonNull Task<Uri> task) {
                                     urlFoto2 = task.getResult();
-                                    optionDialog.dismiss();
+                                    progressDialog.dismiss();
                                     novoUpload2 = true;
 
                                 }
@@ -387,9 +403,12 @@ public class CadastroFragment extends Fragment {
                 if(imagem3 == null){
                     Toast.makeText(requireActivity().getApplicationContext(), "Escolha primeiro uma foto para fazer o upload", Toast.LENGTH_SHORT).show();
                 }else{
-                    final AlertDialog optionDialog = new AlertDialog.Builder(requireContext(),R.style.LightDialogTheme).create();
-                    optionDialog.setMessage("Por favor espere o fim do upload");
-                    optionDialog.show();
+                    progressDialog = new ProgressDialog(requireContext(),R.style.LightDialogTheme);
+                    progressDialog.setMessage("Fazendo upload..."); // Setting Message
+                    progressDialog.setTitle("Por favor Espere"); // Setting Title
+                    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
+                    progressDialog.show(); // Display Progress Dialog
+                    progressDialog.setCancelable(false);
                     ByteArrayOutputStream baos3 = new ByteArrayOutputStream();
                     imagem3.compress(Bitmap.CompressFormat.JPEG, 70, baos3);
                     byte[] dadosImagem3 = baos3.toByteArray();
@@ -402,7 +421,7 @@ public class CadastroFragment extends Fragment {
                     uploadTask3.addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            optionDialog.dismiss();
+                            progressDialog.dismiss();
                             Toast.makeText(requireActivity().getApplicationContext(), "Erro ao fazer upload verifique a conexão com a internet", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -412,7 +431,7 @@ public class CadastroFragment extends Fragment {
                                 @Override
                                 public void onComplete(@NonNull Task<Uri> task) {
                                     urlFoto3 = task.getResult();
-                                    optionDialog.dismiss();
+                                    progressDialog.dismiss();
                                     novoUpload3 = true;
 
                                 }
@@ -666,7 +685,16 @@ public class CadastroFragment extends Fragment {
         quedaArvore = root.findViewById(R.id.chkCadastroQuedaArvore);
         localArvore = root.findViewById(R.id.spinCadastroLocalArvore);
         observacaoVegetacao = root.findViewById(R.id.textCadastroObservacaoVegetacao);
+        try {
+            assert this.getArguments() != null;
+            codigoEnergisa = (String) this.getArguments().getSerializable("codigoEnergisa");
+            if (codigoEnergisa != null) {
+                codigo.setText(codigoEnergisa);
+            }
+        }
+        catch (Exception e){
 
+        }
         Button buttonCadastrar = root.findViewById(R.id.btnCadastroSalvar);
         try {
             assert this.getArguments() != null;
@@ -674,6 +702,7 @@ public class CadastroFragment extends Fragment {
             if(formularioAtual != null){
                 //LOCALIZAÇÃO
                 controle = true;
+                codigo.setText(formularioAtual.getCodigo());
                 imgPath = formularioAtual.getCaminhoImagem();
                 foto.setImageBitmap(BitmapFactory.decodeFile(imgPath));
                 imagem = BitmapFactory.decodeFile(imgPath);
@@ -2024,9 +2053,15 @@ public class CadastroFragment extends Fragment {
                     @Override
                     public void onClick(View v) {
                         //region pegar dados
+                        progressDialog = new ProgressDialog(requireContext(),R.style.LightDialogTheme);
+                        progressDialog.setMessage("Salvando..."); // Setting Message
+                        progressDialog.setTitle("Por favor Espere"); // Setting Title
+                        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
+                        progressDialog.show(); // Display Progress Dialog
+                        progressDialog.setCancelable(false);
                         FormularioDAO formularioDAO = new FormularioDAO(requireActivity().getApplicationContext());
                         Formulario formulario = new Formulario();
-
+                        formulario.setCodigo(Objects.requireNonNull(codigo.getText()).toString());
                         Log.i("TAG", imgPath);
                         if (imgPath != null) {
                             formulario.setCaminhoImagem(imgPath);
@@ -2413,8 +2448,10 @@ public class CadastroFragment extends Fragment {
                             transaction.replace(R.id.nav_host_fragment, cadastradosFragment);
                             transaction.commit();
                             Toast.makeText(requireActivity().getApplicationContext(), "Sucesso ao salvar formulário", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                         } else {
                             Toast.makeText(requireActivity().getApplicationContext(), "Erro ao salvar formulário", Toast.LENGTH_SHORT).show();
+                            progressDialog.dismiss();
                         }
                         //endregion
                         //endregion
@@ -3410,11 +3447,19 @@ public class CadastroFragment extends Fragment {
         buttonCadastrar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressDialog = new ProgressDialog(requireContext(),R.style.LightDialogTheme);
+                progressDialog.setMessage("Salvando..."); // Setting Message
+                progressDialog.setTitle("Por favor Espere"); // Setting Title
+                progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
+                progressDialog.show(); // Display Progress Dialog
+                progressDialog.setCancelable(false);
                 if((imgPath == null) || (imgPath2 == null) || (imgPath3 == null)){
                     Toast.makeText(requireContext(), "Preencha os campos de fotos", Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
                 }else {
                 FormularioDAO formularioDAO = new FormularioDAO(requireActivity().getApplicationContext());
                 final Formulario formulario = new Formulario();
+                    formulario.setCodigo(Objects.requireNonNull(codigo.getText()).toString());
                 if (imgPath != null) {
                     formulario.setCaminhoImagem(imgPath);
                 } else {
@@ -3769,8 +3814,10 @@ public class CadastroFragment extends Fragment {
                         transaction.replace(R.id.nav_host_fragment, cadastradosFragment);
                         transaction.commit();
                         Toast.makeText(requireActivity().getApplicationContext(), "Sucesso ao atualizar formulário", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
                     } else {
                         Toast.makeText(requireActivity().getApplicationContext(), "Erro ao atualizar formulário", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
                     }
                 } else {
                     String thisDayText, thisMonthText, thisYearText;
@@ -3817,8 +3864,10 @@ public class CadastroFragment extends Fragment {
                         transaction.replace(R.id.nav_host_fragment, cadastradosFragment);
                         transaction.commit();
                         Toast.makeText(requireActivity().getApplicationContext(), "Sucesso ao salvar formulário", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
                     } else {
                         Toast.makeText(requireActivity().getApplicationContext(), "Erro ao salvar formulário", Toast.LENGTH_SHORT).show();
+                        progressDialog.dismiss();
                     }
                 }
             }}

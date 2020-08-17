@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.satelprojetos.R;
@@ -37,17 +39,25 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth autentificacao;
     private Usuario usuario;
     private Button btnLogin;
+    ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         btnLogin = findViewById(R.id.button);
+        autentificacao = ConfiguracaoFirebase.getFirebaseAuth();
+        if(autentificacao.getCurrentUser() != null){
+            Intent intent = new Intent(getApplicationContext(), DrawerActivity.class);
+            intent.putExtra("ID", autentificacao.getCurrentUser().getEmail());
+            Log.i("TESTE", autentificacao.getCurrentUser().getEmail());
+            startActivity(intent);
+        }
 
 
     }
     public void abrirDrawer(View view){
-        Log.i("TESTE", "oi");
         emailUsuario = findViewById(R.id.editTextTextPersonName);
         String email = emailUsuario.getText().toString();
         senhaUsuario = findViewById(R.id.editTextTextPassword);
@@ -69,6 +79,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void validarLogin(){
+        progressDialog = new ProgressDialog(MainActivity.this,R.style.LightDialogTheme);
+        progressDialog.setMessage("Carregando..."); // Setting Message
+        progressDialog.setTitle("Por favor Espere"); // Setting Title
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
+        progressDialog.show(); // Display Progress Dialog
+        progressDialog.setCancelable(false);
         btnLogin.setEnabled(false);
         autentificacao = ConfiguracaoFirebase.getFirebaseAuth();
         autentificacao.signInWithEmailAndPassword(
@@ -82,7 +98,6 @@ public class MainActivity extends AppCompatActivity {
                     intent.putExtra("ID", autentificacao.getCurrentUser().getEmail());
                     Log.i("TESTE", autentificacao.getCurrentUser().getEmail());
                     startActivity(intent);
-                    Toast.makeText(MainActivity.this, "Sucesso ao fazer login", Toast.LENGTH_SHORT).show();
                 }else {
                     String excecao = "Erro ao fazer Login, por favor verifique sua conexão";
                     try{
@@ -98,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this, excecao, Toast.LENGTH_SHORT).show();
                     btnLogin.setEnabled(true);
                 }
-
+progressDialog.dismiss();
             }
         });
     }

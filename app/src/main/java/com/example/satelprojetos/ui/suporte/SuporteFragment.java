@@ -21,8 +21,7 @@ public class SuporteFragment extends Fragment {
         suporteViewModel =
                 ViewModelProviders.of(this).get(SuporteViewModel.class);
         View root = inflater.inflate(R.layout.fragment_suporte, container, false);
-        final TextView textView = root.findViewById(R.id.text_slideshow);
-        textView.setText("Fragment de Suporte");
+
         return root;
     }
 

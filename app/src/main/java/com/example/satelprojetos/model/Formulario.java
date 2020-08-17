@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class Formulario implements Serializable {
     private Long id;
+    private String codigo;
     private String color;
     private String color2;
     private String color3;
@@ -142,6 +143,14 @@ public class Formulario implements Serializable {
     private String quedaArvore;
     private String localArvore;
     private String observacaoVegetacao;
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
 
     public String getQuantidadeCabos2dois() {
         return quantidadeCabos2dois;
