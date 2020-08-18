@@ -29,6 +29,7 @@ public class MapaDAO {
         cv.put("longitude", mapa.getLongitude());
         cv.put("codigo", mapa.getCodigo());
         cv.put("cadastrado", mapa.getCadastrado());
+        cv.put("existe", mapa.getExiste());
 
 
         try{
@@ -48,6 +49,7 @@ public class MapaDAO {
         cv.put("longitude", mapa.getLongitude());
         cv.put("codigo", mapa.getCodigo());
         cv.put("cadastrado", mapa.getCadastrado());
+        cv.put("existe", mapa.getExiste());
 
         String[] args = {mapa.getCodigo()};
 
@@ -102,12 +104,14 @@ public class MapaDAO {
             String longitude = c.getString((c.getColumnIndex("longitude")));
             String codigo = c.getString((c.getColumnIndex("codigo")));
             String cadastrado = c.getString((c.getColumnIndex("cadastrado")));
+            String existe = c.getString(c.getColumnIndex("existe"));
 
             Mapa mapa = new Mapa();
             mapa.setLatitude(latitude);
             mapa.setLongitude(longitude);
             mapa.setCodigo(codigo);
             mapa.setCadastrado(cadastrado);
+            mapa.setExiste(existe);
 
 
             mapas.add(mapa);

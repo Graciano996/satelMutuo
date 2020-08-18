@@ -116,7 +116,7 @@ public class DbHelper extends SQLiteOpenHelper {
                 " color TEXT NOT NULL, color2 TEXT NOT NULL, color3 TEXT NOT NULL);";
 
         String sqlMapa = "CREATE TABLE IF NOT EXISTS " + TABLE_MAPA + " (id INTEGER PRIMARY KEY AUTOINCREMENT," +
-        " codigo TEXT NOT NULL , latitude TEXT NOT NULL, longitude TEXT NOT NULL, cadastrado TEXT NOT NULL);";
+        " codigo TEXT NOT NULL , latitude TEXT NOT NULL, longitude TEXT NOT NULL, cadastrado TEXT NOT NULL, existe TEXT NOT NULL);";
 
         try{
             db.execSQL(sql);

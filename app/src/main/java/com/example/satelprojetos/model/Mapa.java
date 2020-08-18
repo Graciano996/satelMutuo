@@ -5,6 +5,7 @@ public class Mapa {
     private String longitude;
     private String codigo;
     private String cadastrado;
+    private String existe;
 
     public String getLatitude() {
         return latitude;
@@ -36,5 +37,13 @@ public class Mapa {
 
     public void setCadastrado(String cadastrado) {
         this.cadastrado = cadastrado;
+    }
+
+    public String getExiste() {
+        return existe;
+    }
+
+    public void setExiste(String existe) {
+        this.existe = existe;
     }
 }

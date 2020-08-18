@@ -9,8 +9,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
@@ -63,8 +65,10 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class MapsFragment extends Fragment {
     private List<Formulario> listaFormularioCadastro = new ArrayList<>();
@@ -73,6 +77,7 @@ public class MapsFragment extends Fragment {
     private List<String> listaLongitude = new ArrayList<>();
     private List<String> listaCodigo = new ArrayList<>();
     private List<String> listaCadastrado = new ArrayList<>();
+    private List<String> listaExiste = new ArrayList<>();
     private GoogleMap mMap;
     private static final int REQUEST_CODE = 1;
     private LocationManager locationManager;
@@ -93,41 +98,53 @@ public class MapsFragment extends Fragment {
         @Override
         public void onMapReady(final GoogleMap googleMap) {
             locationManager = (LocationManager) requireActivity().getSystemService(Context.LOCATION_SERVICE);
-            googleMap2= googleMap;
+            googleMap2 = googleMap;
             boolean connected = false;
+            try {
+                googleMap.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(localizacao.getLatitude(),localizacao.getLongitude())));
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(localizacao.getLatitude(),localizacao.getLongitude()), 15.0f));
+            }catch (Exception e){
+
+            }
             ConnectivityManager connectivityManager = (ConnectivityManager) requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-            if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+            if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
                     connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
                 //we are connected to a network
                 connected = true;
-            }
-            else
+            } else
                 connected = false;
-            if(connected) {
+            if (connected) {
                 MapaDAO mapaDAO = new MapaDAO(getActivity().getApplicationContext());
                 mapaDAO.deletarTudo();
                 getItems();
-                
-            }
-            else {
+
+            } else {
                 MapaDAO mapaDAO = new MapaDAO(getActivity().getApplicationContext());
                 listaMapa = mapaDAO.listar();
-                Log.i("TAG2",String.valueOf(listaMapa.size()));
+                Log.i("TAG2", String.valueOf(listaMapa.size()));
                 try {
                     for (int i = 0; i < listaMapa.size(); i++) {
                         listaLatitude.add(listaMapa.get(i).getLatitude());
                         listaLongitude.add(listaMapa.get(i).getLongitude());
                         listaCodigo.add(listaMapa.get(i).getCodigo());
                         listaCadastrado.add(listaMapa.get(i).getCadastrado());
+                        listaExiste.add(listaMapa.get(i).getExiste());
                     }
-                    Log.i("TAG3",String.valueOf(listaLatitude.size()));
-                }catch (Exception e){
+                    Log.i("TAG3", String.valueOf(listaLatitude.size()));
+                } catch (Exception e) {
 
                 }
-                for(int i=0; i<listaLatitude.size();i++){
-                    if(listaCadastrado.get(i).equals("SIM")){
+                for (int i = 0; i < listaLatitude.size(); i++) {
+                    if(listaExiste.get(i).equals("NAO")){
                         continue;
-                    }else {
+                    }
+                    else if (listaCadastrado.get(i).equals("SIM")) {
+                        LatLng local = new LatLng(Double.parseDouble(listaLatitude.get(i)), Double.parseDouble(listaLongitude.get(i)));
+                        googleMap2.addMarker(new MarkerOptions()
+                                .position(local)
+                                .title(listaCodigo.get(i))
+                                .icon(BitmapDescriptorFactory.defaultMarker(50)));
+                    }else{
                         try {
                             LatLng local = new LatLng(Double.parseDouble(listaLatitude.get(i)), Double.parseDouble(listaLongitude.get(i)));
                             googleMap2.addMarker(new MarkerOptions()
@@ -140,51 +157,59 @@ public class MapsFragment extends Fragment {
                     }
                 }
             }
-            for (int i = 0; i < listaFormularioCadastro.size(); i++) {
-                LatLng local = new LatLng(Double.parseDouble(listaFormularioCadastro.get(i).getLatitude().replace(",", ".")), Double.parseDouble(listaFormularioCadastro.get(i).getLongitude().replace(",", ".")));
-                if(listaFormularioCadastro.get(i).getCodigo().equals("")){
-                    googleMap.addMarker(new MarkerOptions()
-                            .position(local)
-                            .title("SEM CÓDIGO")
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-                }else{
-                    googleMap.addMarker(new MarkerOptions()
-                            .position(local)
-                            .title("C: " + listaFormularioCadastro.get(i).getCodigo())
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-                }
+            try {
+                for (int i = 0; i < listaFormularioCadastro.size(); i++) {
+                    LatLng local = new LatLng(Double.parseDouble(listaFormularioCadastro.get(i).getLatitude().replace(",", ".")), Double.parseDouble(listaFormularioCadastro.get(i).getLongitude().replace(",", ".")));
+                    if (listaFormularioCadastro.get(i).getCodigo().equals("")) {
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(local)
+                                .title("SEM CÓDIGO")
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                    } else {
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(local)
+                                .title("C: " + listaFormularioCadastro.get(i).getCodigo())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+                    }
             }
-            for (int i = 0; i < listaFormularioEnvio.size(); i++) {
-                LatLng local = new LatLng(Double.parseDouble(listaFormularioEnvio.get(i).getLatitude().replace(",", ".")), Double.parseDouble(listaFormularioEnvio.get(i).getLongitude().replace(",", ".")));
-                        if(listaFormularioEnvio.get(i).getCodigo().equals("")){
-                            googleMap.addMarker(new MarkerOptions()
-                                    .position(local)
-                                    .title("SEM CÓDIGO")
-                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-                }else{
-                            googleMap.addMarker(new MarkerOptions()
-                                    .position(local)
-                                    .title("E: " + listaFormularioEnvio.get(i).getCodigo())
-                                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-                        }
+
+            }catch (Exception e){
 
             }
+            try {
+                for (int i = 0; i < listaFormularioEnvio.size(); i++) {
+                    LatLng local = new LatLng(Double.parseDouble(listaFormularioEnvio.get(i).getLatitude().replace(",", ".")), Double.parseDouble(listaFormularioEnvio.get(i).getLongitude().replace(",", ".")));
+                    if (listaFormularioEnvio.get(i).getCodigo().equals("")) {
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(local)
+                                .title("SEM CÓDIGO")
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    } else {
+                        googleMap.addMarker(new MarkerOptions()
+                                .position(local)
+                                .title("E: " + listaFormularioEnvio.get(i).getCodigo())
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
+                    }
+
+                }
+            }catch (Exception e){
+
+            }
+
             locationListener = new LocationListener() {
                 @Override
                 public void onLocationChanged(Location location) {
-                    try{
+                    try {
                         minhaLocalizacao.remove();
-                    }catch (Exception e){
+                    } catch (Exception e) {
 
                     }
                     localizacao = location;
                     LatLng myLocal = new LatLng(localizacao.getLatitude(), localizacao.getLongitude());
-                    minhaLocalizacao = googleMap.addMarker(new MarkerOptions()
+                    /*minhaLocalizacao = googleMap.addMarker(new MarkerOptions()
                             .position(myLocal)
                             .title("Meu Local")
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
-
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(myLocal));
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));*/
                 }
 
                 @Override
@@ -212,6 +237,7 @@ public class MapsFragment extends Fragment {
                         5000,
                         2,
                         locationListener);
+                googleMap.setMyLocationEnabled(true);
 
             }
             googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
@@ -223,21 +249,47 @@ public class MapsFragment extends Fragment {
             });
             googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                 @Override
-                public void onInfoWindowClick(Marker marker) {
+                public void onInfoWindowClick(final Marker marker) {
                     if(marker.getTitle().length()< 8 || marker.getTitle().equals("Meu Local")|| marker.getTitle().length()>8){
 
                     }else {
-                        String codigoEnergisa = marker.getTitle();
-                        CadastroFragment cadastroFragment = new CadastroFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("codigoEnergisa", codigoEnergisa);
-                        cadastroFragment.setArguments(bundle);
-                        NavigationView navigationView = requireActivity().findViewById(R.id.nav_view);
-                        navigationView.setCheckedItem(R.id.nav_cadastro);
-                        FragmentManager fm = getParentFragmentManager();
-                        FragmentTransaction transaction = fm.beginTransaction();
-                        transaction.replace(R.id.nav_host_fragment, cadastroFragment).addToBackStack(null);
-                        transaction.commit();
+                        final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity(), R.style.LightDialogTheme);
+                        dialog.setPositiveButton("Excluir", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                String codigoEnergisa = marker.getTitle();
+                                ConnectivityManager connectivityManager2 = (ConnectivityManager) requireActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                                if (connectivityManager2.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                                        connectivityManager2.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+                                    enviarParaGS(codigoEnergisa,FirebaseAuth.getInstance().getCurrentUser().getEmail());
+
+                                } else {
+
+                                    Toast.makeText(getActivity().getApplicationContext(), "Para utilizar essa opção é necessário conexão com a internet", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+                        });
+                        dialog.setNegativeButton("Cadastrar", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String codigoEnergisa = marker.getTitle();
+                                CadastroFragment cadastroFragment = new CadastroFragment();
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("codigoEnergisa", codigoEnergisa);
+                                cadastroFragment.setArguments(bundle);
+                                NavigationView navigationView = requireActivity().findViewById(R.id.nav_view);
+                                navigationView.setCheckedItem(R.id.nav_cadastro);
+                                FragmentManager fm = getParentFragmentManager();
+                                FragmentTransaction transaction = fm.beginTransaction();
+                                transaction.replace(R.id.nav_host_fragment, cadastroFragment).addToBackStack(null);
+                                transaction.commit();
+                            }
+                        });
+                        dialog.create();
+                        dialog.show();
+
                     }
                 }
             });
@@ -336,11 +388,13 @@ public class MapsFragment extends Fragment {
                 String longitude = jo.getString("longitude");
                 String codigo = jo.getString("codigo");
                 String cadastrado = jo.getString("cadastrado");
+                String existe = jo.getString("existe");
 
                 listaLatitude.add(latitude);
                 listaLongitude.add(longitude);
                 listaCodigo.add(codigo);
                 listaCadastrado.add(cadastrado);
+                listaExiste.add(existe);
 
 
 
@@ -349,9 +403,17 @@ public class MapsFragment extends Fragment {
             Log.i("TAG", String.valueOf(listaLatitude.size()));
             if (mapaDAO.listar().size() == 0) {
                 for (int i = 0; i < listaLatitude.size(); i++) {
-                    if (listaCadastrado.get(i).equals("SIM")) {
+                    if (listaExiste.get(i).equals("NAO")) {
                         continue;
-                    } else {
+                    }
+                    else if (listaCadastrado.get(i).equals("SIM")) {
+                        LatLng local = new LatLng(Double.parseDouble(listaLatitude.get(i)), Double.parseDouble(listaLongitude.get(i)));
+                        googleMap2.addMarker(new MarkerOptions()
+                                .position(local)
+                                .title(listaCodigo.get(i))
+                                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+                    }
+                    else {
                         try {
                             Mapa mapa = new Mapa();
                             mapa.setLatitude(listaLatitude.get(i));
@@ -359,6 +421,7 @@ public class MapsFragment extends Fragment {
                             mapa.setCodigo(listaCodigo.get(i));
                             Log.i("TAG", "Entrei " + i);
                             mapa.setCadastrado(listaCadastrado.get(i));
+                            mapa.setExiste(listaExiste.get(i));
                             mapaDAO.salvar(mapa);
 
                             LatLng local = new LatLng(Double.parseDouble(listaLatitude.get(i)), Double.parseDouble(listaLongitude.get(i)));
@@ -373,15 +436,32 @@ public class MapsFragment extends Fragment {
                 }
                 }else{
                     for (int i = 0; i < listaLatitude.size(); i++) {
-                        if (listaCadastrado.get(i).equals("SIM")) {
+                        if (listaExiste.get(i).equals("NAO")) {
                             Mapa mapa = new Mapa();
                             mapa.setLatitude(listaLatitude.get(i));
                             mapa.setLongitude(listaLongitude.get(i));
                             mapa.setCodigo(listaCodigo.get(i));
                             Log.i("TAG", "Entrei2 " + mapa.getCodigo()+" " + i);
                             mapa.setCadastrado(listaCadastrado.get(i));
+                            mapa.setExiste(listaExiste.get(i));
                             mapaDAO.atualizar(mapa);
-                        } else {
+                        }
+                        else if (listaCadastrado.get(i).equals("SIM")) {
+                            Mapa mapa = new Mapa();
+                            mapa.setLatitude(listaLatitude.get(i));
+                            mapa.setLongitude(listaLongitude.get(i));
+                            mapa.setCodigo(listaCodigo.get(i));
+                            Log.i("TAG", "Entrei2 " + mapa.getCodigo()+" " + i);
+                            mapa.setCadastrado(listaCadastrado.get(i));
+                            mapa.setExiste(listaExiste.get(i));
+                            mapaDAO.atualizar(mapa);
+                            LatLng local = new LatLng(Double.parseDouble(listaLatitude.get(i)), Double.parseDouble(listaLongitude.get(i)));
+                            googleMap2.addMarker(new MarkerOptions()
+                                    .position(local)
+                                    .title(listaCodigo.get(i))
+                                    .icon(BitmapDescriptorFactory.defaultMarker(50)));
+                        }
+                        else {
                             try {
                                 Mapa mapa = new Mapa();
                                 mapa.setLatitude(listaLatitude.get(i));
@@ -389,6 +469,7 @@ public class MapsFragment extends Fragment {
                                 mapa.setCodigo(listaCodigo.get(i));
                                 Log.i("TAG", "Entrei2 " + mapa.getCodigo()+" " + i);
                                 mapa.setCadastrado(listaCadastrado.get(i));
+                                mapa.setExiste(listaExiste.get(i));
                                 mapaDAO.atualizar(mapa);
 
                                 LatLng local = new LatLng(Double.parseDouble(listaLatitude.get(i)), Double.parseDouble(listaLongitude.get(i)));
@@ -410,6 +491,63 @@ public class MapsFragment extends Fragment {
 
         progressDialog.dismiss();
     }
+
+
+    public void enviarParaGS(final String codigo, final String email){
+        final EnviadoDAO enviadoDAO = new EnviadoDAO(getActivity().getApplicationContext());
+        final FormularioDAO formularioDAO = new FormularioDAO(getActivity().getApplicationContext());
+        progressDialog = new ProgressDialog(requireContext(),R.style.LightDialogTheme);
+        progressDialog.setMessage("Excluindo..."); // Setting Message
+        progressDialog.setTitle("Por favor Espere"); // Setting Title
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
+        progressDialog.show(); // Display Progress Dialog
+        progressDialog.setCancelable(false);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "https://script.google.com/macros/s/AKfycbzZJUnvHaDYfO13T9t7NyhLcweYuuYp38D1n0JzH0Hs4FVR0mrO/exec",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                        progressDialog.dismiss();
+                        //getItems();
+                        Toast.makeText(requireActivity().getApplicationContext(), response, Toast.LENGTH_LONG).show();
+                        MapsFragment mapsFragment = new MapsFragment();
+                        NavigationView navigationView = requireActivity().findViewById(R.id.nav_view);
+                        navigationView.setCheckedItem(R.id.nav_mapa);
+                        FragmentManager fm = getParentFragmentManager();
+                        FragmentTransaction transaction = fm.beginTransaction();
+                        transaction.replace(R.id.nav_host_fragment, mapsFragment).addToBackStack(null);
+                        transaction.commit();
+                    }
+                },
+                new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() {
+                Map<String, String> parmas = new HashMap<>();
+                //here we pass params
+                parmas.put("action", "removeItem");
+                parmas.put("email",email);
+                parmas.put("codigo", codigo);
+
+                return parmas;
+            }
+        };
+
+        int socketTimeOut = 50000;// u can change this .. here it is 50 seconds
+
+        RetryPolicy retryPolicy = new DefaultRetryPolicy(socketTimeOut, 0, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        stringRequest.setRetryPolicy(retryPolicy);
+        RequestQueue queue = Volley.newRequestQueue(requireContext());
+
+        queue.add(stringRequest);
+    }
+
+
 
 
 }

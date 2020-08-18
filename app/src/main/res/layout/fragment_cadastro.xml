@@ -40,7 +40,7 @@
             android:layout_marginEnd="16dp"
             android:background="@color/design_default_color_secondary_variant"
             android:padding="5dp"
-            android:text="Upload Foto 3"
+            android:text="Upload de Foto 3"
             android:textColor="@color/textColor"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageCadastroFoto3" />

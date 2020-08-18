@@ -16,9 +16,11 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.ExifInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Environment;
@@ -72,9 +74,12 @@ import com.google.firebase.storage.UploadTask;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
 import java.net.URLStreamHandlerFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -84,6 +89,7 @@ import java.util.TimeZone;
 import java.util.UUID;
 
 import static android.app.Activity.RESULT_OK;
+import static com.bumptech.glide.load.resource.bitmap.TransformationUtils.rotateImage;
 
 public class CadastroFragment extends Fragment {
     private static final int REQUEST_CODE = 1;
@@ -126,11 +132,15 @@ public class CadastroFragment extends Fragment {
     private Boolean controle = false;
     private TextView mutuo2, mutuo3, mutuo4, mutuo5;
     private ImageView foto, foto2, foto3;
+    private List<ImageView> listaLatitude = new ArrayList<>();
     private String imgPath, imgPath2, imgPath3, imgPathFile;
     private File photoFile = null;
     private Bitmap imagem, imagem2, imagem3;
+    private List<Bitmap> imagemF = new ArrayList<>();
+    private List<Uri> urlF = new ArrayList<>();
     private Uri urlFoto, urlFoto2, urlFoto3;
     private Boolean novoUpload = false, novoUpload2 = false, novoUpload3 = false;
+    private List<Boolean> novoU = new ArrayList<>();
     private Location localizacao;
     private String codigoEnergisa ="";
 
@@ -176,12 +186,12 @@ public class CadastroFragment extends Fragment {
                 locationManager.requestLocationUpdates(
                         LocationManager.GPS_PROVIDER,
                         5000,
-                        10,
+                        2,
                         locationListener);
                 locationManager.requestLocationUpdates(
                         LocationManager.NETWORK_PROVIDER,
                         5000,
-                        5,
+                        2,
                         locationListener);
 
             }
@@ -308,10 +318,22 @@ public class CadastroFragment extends Fragment {
                         progressDialog.show(); // Display Progress Dialog
                         progressDialog.setCancelable(false);
                         String nomeFoto = UUID.randomUUID().toString();
+                        Bitmap imagemCorrigida;
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        imagem.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+                        try {
+                            imagemCorrigida = rotateImageIfRequired(requireContext(),imagem,imgPath);
+                        } catch (IOException e) {
+                            imagemCorrigida = imagem;
+                            e.printStackTrace();
+                        }
+                        imagemCorrigida.compress(Bitmap.CompressFormat.JPEG, 70, baos);
                         byte[] dadosImagem = baos.toByteArray();
-
+                        String pastaNome;
+                        if(codigo.getText().equals("") || codigo == null){
+                            pastaNome = ("SEM CODIGO");
+                        }else{
+                            pastaNome = codigo.getText().toString();
+                        }
                         final StorageReference imageRef = storageReference
                                 .child("imagens")
                                 .child(Base64Custom.codificarBase64(autentificacao.getCurrentUser().getEmail()))
@@ -366,10 +388,23 @@ public class CadastroFragment extends Fragment {
                     ByteArrayOutputStream baos2 = new ByteArrayOutputStream();
                     imagem2.compress(Bitmap.CompressFormat.JPEG, 70, baos2);
                     byte[] dadosImagem2 = baos2.toByteArray();
-
+                    Bitmap imagemCorrigida;
+                    try {
+                        imagemCorrigida = rotateImageIfRequired(requireContext(),imagem2,imgPath2);
+                    } catch (IOException e) {
+                        imagemCorrigida = imagem2;
+                        e.printStackTrace();
+                    }
+                    String pastaNome;
+                    if(codigo.getText().equals("") || codigo == null){
+                        pastaNome = ("SEM CODIGO");
+                    }else{
+                        pastaNome = codigo.getText().toString();
+                    }
                     final StorageReference imageRef2 = storageReference
                             .child("imagens")
                             .child(Base64Custom.codificarBase64(autentificacao.getCurrentUser().getEmail()))
+                            .child(pastaNome)
                             .child(nomeFoto +".jpeg");
                     UploadTask uploadTask2 = imageRef2.putBytes(dadosImagem2);
                     uploadTask2.addOnFailureListener(new OnFailureListener() {
@@ -412,10 +447,24 @@ public class CadastroFragment extends Fragment {
                     ByteArrayOutputStream baos3 = new ByteArrayOutputStream();
                     imagem3.compress(Bitmap.CompressFormat.JPEG, 70, baos3);
                     byte[] dadosImagem3 = baos3.toByteArray();
+                    Bitmap imagemCorrigida;
+                    try {
+                        imagemCorrigida = rotateImageIfRequired(requireContext(),imagem3,imgPath3);
+                    } catch (IOException e) {
+                        imagemCorrigida = imagem3;
+                        e.printStackTrace();
+                    }
                     String nomeFoto = UUID.randomUUID().toString();
+                    String pastaNome;
+                    if(codigo.getText().equals("") || codigo == null){
+                        pastaNome = ("SEM CODIGO");
+                    }else{
+                        pastaNome = codigo.getText().toString();
+                    }
                     final StorageReference imageRef3 = storageReference
                             .child("imagens")
                             .child(Base64Custom.codificarBase64(autentificacao.getCurrentUser().getEmail()))
+                            .child(pastaNome)
                             .child(nomeFoto +".jpeg");
                     UploadTask uploadTask3 = imageRef3.putBytes(dadosImagem3);
                     uploadTask3.addOnFailureListener(new OnFailureListener() {
@@ -3453,8 +3502,8 @@ public class CadastroFragment extends Fragment {
                 progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER); // Progress Dialog Style Spinner
                 progressDialog.show(); // Display Progress Dialog
                 progressDialog.setCancelable(false);
-                if((imgPath == null) || (imgPath2 == null) || (imgPath3 == null)){
-                    Toast.makeText(requireContext(), "Preencha os campos de fotos", Toast.LENGTH_SHORT).show();
+                if((imgPath == null) && (imgPath2 == null) && (imgPath3 == null)){
+                    Toast.makeText(requireContext(), "Preencha pelo menos uma foto", Toast.LENGTH_SHORT).show();
                     progressDialog.dismiss();
                 }else {
                 FormularioDAO formularioDAO = new FormularioDAO(requireActivity().getApplicationContext());
@@ -3971,13 +4020,13 @@ public class CadastroFragment extends Fragment {
                         imgPath = photoFile.getAbsolutePath();
                         Log.i("TAHA", imgPath);
                         imagem = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                        foto.setImageBitmap(imagem);
+                        foto.setImageBitmap(rotateImageIfRequired(requireContext(),imagem,photoFile.getAbsolutePath()));
                         break;
                     case IMAGE_PICK_CODE:
                         Log.i("TAH2", data.getData().toString());
                         localImagemSelecionada = data.getData();
                         imagem = MediaStore.Images.Media.getBitmap(requireActivity().getApplicationContext().getContentResolver(),localImagemSelecionada);
-                        foto.setImageBitmap(imagem);
+                        //foto.setImageBitmap(imagem);
                         String[] filePathColumn = { MediaStore.Images.Media.DATA };
                         // Get the cursor
                         cursor = requireActivity().getApplicationContext().getContentResolver().query(localImagemSelecionada,
@@ -3989,12 +4038,12 @@ public class CadastroFragment extends Fragment {
                         imgPath = cursor.getString(columnIndex);
                         cursor.close();
                         // Set the Image in ImageView after decoding the String
-                        foto.setImageBitmap(BitmapFactory.decodeFile(imgPath));
+                        foto.setImageBitmap(rotateImageIfRequired(requireContext(),imagem,imgPath));
                         break;
                     case IMAGE_CAPTURE_CODE2:
                         imgPath2 = photoFile.getAbsolutePath();
                         imagem2 = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                        foto2.setImageBitmap(imagem2);
+                        foto2.setImageBitmap(rotateImageIfRequired(requireContext(),imagem2,imgPath2));
                         break;
                     case IMAGE_PICK_CODE2:
                         Log.i("TAH2", data.getData().toString());
@@ -4013,14 +4062,14 @@ public class CadastroFragment extends Fragment {
                         imgPath2 = cursor.getString(columnIndex);
                         cursor.close();
                         // Set the Image in ImageView after decoding the String
-                        foto2.setImageBitmap(BitmapFactory.decodeFile(imgPath2));
+                        foto2.setImageBitmap(rotateImageIfRequired(requireContext(),imagem2,imgPath2));
                         break;
 
                     case IMAGE_CAPTURE_CODE3:
                         imgPath3 = photoFile.getAbsolutePath();
                         Log.i("TAHC", imgPath3);
                         imagem3 = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
-                        foto3.setImageBitmap(imagem3);
+                        foto3.setImageBitmap(rotateImageIfRequired(requireContext(),imagem3,imgPath3));
                         break;
                     case IMAGE_PICK_CODE3:
                         Log.i("TAH2", data.getData().toString());
@@ -4038,14 +4087,13 @@ public class CadastroFragment extends Fragment {
                         imgPath3 = cursor.getString(columnIndex);
                         cursor.close();
                         // Set the Image in ImageView after decoding the String
-                        foto3.setImageBitmap(BitmapFactory.decodeFile(imgPath3));
+                        foto3.setImageBitmap(rotateImageIfRequired(requireContext(),imagem3,imgPath3));
                         break;
                 }
 
             }catch (Exception e){
                 e.printStackTrace();
             }
-
 
         }
 
@@ -4111,4 +4159,68 @@ public class CadastroFragment extends Fragment {
              NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
              return activeNetworkInfo != null && activeNetworkInfo.isConnected();
          }
+
+         /*private void uploadFoto(Bitmap imagem, final Uri urlFoto){
+             for(final int i = 0; i<20;i++){
+             String nomeFoto = UUID.randomUUID().toString();
+             ByteArrayOutputStream baos = new ByteArrayOutputStream();
+             imagem.compress(Bitmap.CompressFormat.JPEG, 70, baos);
+             byte[] dadosImagem = baos.toByteArray();
+             String pastaNome;
+             if(codigo.getText().equals("") || codigo == null){
+                 pastaNome = ("SEM CODIGO");
+             }else{
+                 pastaNome = codigo.getText().toString();
+             }
+             final StorageReference imageRef = storageReference
+                     .child("imagens")
+                     .child(Base64Custom.codificarBase64(autentificacao.getCurrentUser().getEmail()))
+                     .child(pastaNome)
+                     .child(nomeFoto + ".jpeg");
+             UploadTask uploadTask = imageRef.putBytes(dadosImagem);
+             uploadTask.addOnFailureListener(new OnFailureListener() {
+                 @Override
+                 public void onFailure(@NonNull Exception e) {
+                 }
+             }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                 @Override
+                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                     imageRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                         @Override
+                         public void onComplete(@NonNull Task<Uri> task) {
+                             urlF.get(i) = task.getResult();
+
+                         }
+                     });
+                 }
+             }).addOnCanceledListener(new OnCanceledListener() {
+                 @Override
+                 public void onCanceled() {
+                     Log.i("ERRO", "EERO3");
+                 }
+             });
+
+         }}*/
+
+    private static Bitmap rotateImageIfRequired(Context context,Bitmap img, String filePath) throws IOException {
+        ExifInterface ei;
+            ei = new ExifInterface(filePath);
+
+        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+Log.i("TAGX", String.valueOf(orientation));
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_90:
+
+                return rotateImage(img, 90);
+            case ExifInterface.ORIENTATION_ROTATE_180:
+
+                return rotateImage(img, 180);
+            case ExifInterface.ORIENTATION_ROTATE_270:
+
+                return rotateImage(img, 270);
+            default:
+
+                return img;
+        }
+    }
      }
