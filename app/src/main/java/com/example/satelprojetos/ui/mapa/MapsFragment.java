@@ -229,13 +229,13 @@ public class MapsFragment extends Fragment {
             if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                 locationManager.requestLocationUpdates(
                         LocationManager.GPS_PROVIDER,
-                        5000,
-                        2,
+                        1000,
+                        1,
                         locationListener);
                 locationManager.requestLocationUpdates(
                         LocationManager.NETWORK_PROVIDER,
-                        5000,
-                        2,
+                        1000,
+                        1,
                         locationListener);
                 googleMap.setMyLocationEnabled(true);
 
@@ -250,7 +250,7 @@ public class MapsFragment extends Fragment {
             googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                 @Override
                 public void onInfoWindowClick(final Marker marker) {
-                    if(marker.getTitle().length()< 8 || marker.getTitle().equals("Meu Local")|| marker.getTitle().length()>8){
+                    if(marker.getTitle().equals("Meu Local")|| marker.getTitle().contains("E") || marker.getTitle().contains("C")){
 
                     }else {
                         final AlertDialog.Builder dialog = new AlertDialog.Builder(getActivity(), R.style.LightDialogTheme);
